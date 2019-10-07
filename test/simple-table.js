@@ -54,4 +54,10 @@ function testExtension(parent, context) {
   };
 }
 
-module.exports = { simpleTableEffectsFactory, arraysTableEffectsFactory, simpleTableCreator, arrayTableCreator, testExtension };
+module.exports = {
+  simpleTableEffectsFactory,
+  arraysTableEffectsFactory,
+  simpleTableCreator,
+  arrayTableCreator,
+  testExtension
+};

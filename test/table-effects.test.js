@@ -8,13 +8,12 @@ describe("simpleTable", () => {
 
   beforeAll(async () => {
     schemaName = `simpleTest-${Date.now()}`;
-    // eslint-disable-next-line global-require
     const {
       simpleTableCreator,
       simpleTableEffectsFactory,
       arrayTableCreator,
       arraysTableEffectsFactory
-    } = require("./simple-table");
+    } = require("./simple-table"); // eslint-disable-line global-require
     await createSchema({ schemaName, tableCreators: [simpleTableCreator, arrayTableCreator] });
     simpleTable = (await simpleTableEffectsFactory(schemaName))();
     arrayTable = (await arraysTableEffectsFactory(schemaName))();

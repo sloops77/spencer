@@ -2,7 +2,7 @@ const pino = require("pino");
 const { get: getEnv } = require("env-var");
 const importCwd = require("import-cwd");
 
-const logConfig = importCwd("./pinorc") || {};
+const logConfig = importCwd.silent("./pinorc") || {};
 
 const nodeEnv = getEnv("NODE_ENV", "development").asString();
 const debug = getEnv("DEBUG", ["test", "development"].includes(nodeEnv).toString()).asBool();
