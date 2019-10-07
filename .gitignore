@@ -1,0 +1,12 @@
+.vscode
+coverage/
+examples
+node_modules
+reports
+yarn-error.log
+.idea
+.DS_Store
+**/*.iml
+dist
+junit.xml
+working-images

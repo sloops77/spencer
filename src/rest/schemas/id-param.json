@@ -1,0 +1,10 @@
+{
+  "type": "object",
+  "$id": "id-param",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "object",
+  "$id": "error",
+  "properties": {
+    "error": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "statusCode": {
+      "type": "integer"
+    }
+  },
+  "additionalProperties": true
+}

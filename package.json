@@ -1,0 +1,42 @@
+{
+  "name": "spencer",
+  "version": "0.1.0",
+  "main": "src/index.js",
+  "dependencies": {
+    "env-var": "~4.0.0",
+    "fastify-plugin": "^1.6.0",
+    "import-cwd": "^3.0.0",
+    "json-schema-traverse": "~0.4.1",
+    "knex": "~0.19.3",
+    "lodash": "~4.17.11",
+    "pg": "~7.11.0",
+    "pino": "^5.12.6",
+    "uuid": "~3.3.2"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.123",
+    "@types/node": "^11.11.3",
+    "await-sleep": "^0.0.1",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.3.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.0",
+    "jest": "24.8.0",
+    "nodemon": "^1.19.0",
+    "prettier": "^1.17.1",
+    "typescript": "^3.4.5"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "start:dev": "nodemon --watch src --watch node_modules --exec node src/index.js",
+    "lint": "eslint src test",
+    "test": "jest test --runInBand --coverage",
+    "schema:create:dev": "NODE_ENV=development node scripts/create-schema",
+    "schema:create:test": "NODE_ENV=test node scripts/create-schema",
+    "schema:create:production": "NODE_ENV=production node scripts/create-schema",
+    "schema:drop:dev": "NODE_ENV=development node scripts/drop-schema",
+    "schema:drop:test": "NODE_ENV=test node scripts/drop-schema",
+    "schema:drop:production": "NODE_ENV=production node scripts/drop-schema"
+  }
+}
