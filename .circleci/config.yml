@@ -41,10 +41,10 @@ jobs:
           command: yarn test:ci
 
       - store_artifacts:
-          path: coverage
+          path: reports/coverage
       - store_test_results:
           path: reports/junit
       - store_artifacts:
           path: reports/junit
       - codecov/upload:
-          file: coverage/lcov.info
+          file: reports/coverage/lcov.info
