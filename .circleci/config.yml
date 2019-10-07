@@ -48,8 +48,3 @@ jobs:
           path: reports/junit
       - codecov/upload:
           file: coverage/lcov.info
-workflows:
-  version: 2
-  build:
-    jobs:
-      - build:
