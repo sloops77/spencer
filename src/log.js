@@ -2,7 +2,7 @@ const pino = require("pino");
 const { get: getEnv } = require("env-var");
 const importCwd = require("import-cwd");
 
-const logConfig = importCwd.silent("./pinorc") || {};
+const spenceConfig = importCwd.silent("./spencerc") || {};
 
 const nodeEnv = getEnv("NODE_ENV", "development").asString();
 const debug = getEnv("DEBUG", ["test", "development"].includes(nodeEnv).toString()).asBool();
@@ -11,6 +11,6 @@ const prettyPrint = debug ? { colorize: true, translateTime: true, ignore: "host
 const log = pino({
   level: debug ? "debug" : "info",
   prettyPrint,
-  ...logConfig
+  ...spenceConfig.logger
 });
 module.exports = log;
