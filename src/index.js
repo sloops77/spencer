@@ -26,5 +26,5 @@ module.exports = {
   tablesPreHandler: require("./hooks/tables-pre-handler"),
   softDeleteExtension: require("./table-effects/soft-delete-extension"),
   multiTenantExtension: require("./table-effects/multi-tenant-extension"),
-  findersExtension: require("./table-effects/finders-extension")
+  findConnectionsExtension: require("./table-effects/find-connections-extension")
 };

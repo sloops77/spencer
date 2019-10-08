@@ -1,4 +1,4 @@
-function findersExtension(parent) {
+function findConnectionsExtension(parent) {
   return {
     async findOneByConnection({ kind, id }, selection) {
       return parent.findOne({ filter: `connections @> '[${JSON.stringify({ kind, id: id || "" })}]'` }, selection);
@@ -7,4 +7,4 @@ function findersExtension(parent) {
   };
 }
 
-module.exports = findersExtension;
+module.exports = findConnectionsExtension;
