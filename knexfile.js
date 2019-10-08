@@ -2,7 +2,7 @@ module.exports = {
   development: {
     client: "pg",
     connection: {
-      database: "spencer-framework_development",
+      database: "spence_development",
       user: "postgres",
       password: ""
     },
@@ -17,7 +17,7 @@ module.exports = {
   test: {
     client: "pg",
     connection: {
-      database: "spencer-framework_test",
+      database: "spence_test",
       user: "postgres",
       password: ""
     },
@@ -32,7 +32,7 @@ module.exports = {
   staging: {
     client: "pg",
     connection: {
-      database: "spencer-framework_staging",
+      database: "spence_staging",
       user: "postgres",
       password: "12345"
     },
