@@ -8,7 +8,7 @@ function tableEffectsFactory({ extensions, ...tableConfig }) {
     return tableRegistry[tableConfig.name];
   }
 
-  const tableEffects = initTableEffects(initTable(tableConfig), extensions);
+  const tableEffects = initTableEffects(initTable(tableConfig), extensions, tableConfig.transformCase);
   tableRegistry[tableConfig.name] = tableEffects;
   return tableEffects;
 }

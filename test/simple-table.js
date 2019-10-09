@@ -1,44 +1,44 @@
 const { tableEffectsFactory } = require("../src");
 const knex = require("../src/tables");
 
-function simpleTableEffectsFactory(schemaName, extensions) {
+function simpleTableEffectsFactory(config) {
   return tableEffectsFactory({
     name: "simples",
     entityName: "simple",
-    schemaName,
-    extensions
+    ...config
   });
 }
 
-function simpleTableCreator(schema) {
-  return schema.createTable("simples", table => {
-    table.text("id").primary();
-    table.text("val");
-    table
-      .timestamp("createdAt")
-      .defaultTo(knex.fn.now())
-      .notNullable();
-  });
+function simpleTableCreator(snakeCase) {
+  return schema =>
+    schema.createTable("simples", table => {
+      table.text("id").primary();
+      table.text(snakeCase ? "a_val" : "aVal");
+      table
+        .timestamp(snakeCase ? "created_at" : "createdAt")
+        .defaultTo(knex.fn.now())
+        .notNullable();
+    });
 }
 
-function arraysTableEffectsFactory(schemaName, extensions) {
+function arraysTableEffectsFactory(config) {
   return tableEffectsFactory({
     name: "arrays",
     entityName: "array",
-    schemaName,
-    extensions
+    ...config
   });
 }
 
-function arrayTableCreator(schema) {
-  return schema.createTable("arrays", table => {
-    table.text("id").primary();
-    table.jsonb("vals");
-    table
-      .timestamp("createdAt")
-      .defaultTo(knex.fn.now())
-      .notNullable();
-  });
+function arrayTableCreator(snakeCase) {
+  return schema =>
+    schema.createTable("arrays", table => {
+      table.text("id").primary();
+      table.jsonb(snakeCase ? "many_vals" : "manyVals");
+      table
+        .timestamp(snakeCase ? "created_at" : "createdAt")
+        .defaultTo(knex.fn.now())
+        .notNullable();
+    });
 }
 
 function testExtension(parent, context) {

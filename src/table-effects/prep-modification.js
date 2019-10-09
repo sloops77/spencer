@@ -1,8 +1,9 @@
 const _ = require("lodash/fp");
 
 const mapValuesWithKey = _.mapValues.convert({ cap: false });
+const dbifyObject = _.mapKeys(_.snakeCase); // could use _.noop as well. Performance test?
 
-function init(table) {
+function init(table, transformCase) {
   async function detectJsonColumns() {
     const columnInfo = await table.columnInfo;
     return _.flow(
@@ -15,7 +16,8 @@ function init(table) {
 
   async function prepModification(val) {
     const jsonColumnNames = await cachedDetectJsonColumns();
-    return mapValuesWithKey((v, k) => (_.includes(k, jsonColumnNames) ? JSON.stringify(v) : v), val);
+    const dbifiedVal = transformCase ? dbifyObject(val) : val;
+    return mapValuesWithKey((v, k) => (_.includes(k, jsonColumnNames) ? JSON.stringify(v) : v), dbifiedVal);
   }
 
   return prepModification;

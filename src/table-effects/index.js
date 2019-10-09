@@ -4,10 +4,15 @@ const { publish } = require("../events/events");
 const newError = require("../new-error");
 const initPrepModification = require("./prep-modification");
 
-function init(table, extensions = []) {
-  return _.memoize((context = {}) => {
-    const prepModification = initPrepModification(table);
+function init(table, extensions = [], transformCase) {
+  const prepModification = initPrepModification(table, transformCase);
+  const dbifyString = transformCase ? _.snakeCase : _.identity;
+  const dbifySelection = transformCase ? _.map(dbifyString) : _.identity;
+  const apifyObject = _.mapKeys(_.camelCase);
+  const apifyResult = transformCase ? result => (result == null ? result : apifyObject(result)) : _.identity;
+  const apifyResultArray = transformCase ? _.map(apifyResult) : _.identity;
 
+  return _.memoize((context = {}) => {
     function buildFinderQuery({ filter, params = [] }) {
       const query = table();
       if (_.isEmpty(filter)) {
@@ -17,12 +22,12 @@ function init(table, extensions = []) {
     }
 
     async function insert(val, selection) {
-      const returning = selection || (await applied.defaultColumnsSelection);
+      const returning = (selection && dbifySelection(selection)) || (await applied.defaultColumnsSelection);
       const insertVal = await table()
         .returning(returning)
         .insert(await applied.prepModification(val));
 
-      const result = _.first(insertVal);
+      const result = apifyResult(_.first(insertVal));
       publish(table.entityName, `created`, { state: result, changes: { kind: "new", val } }, context);
       return result;
     }
@@ -34,14 +39,14 @@ function init(table, extensions = []) {
     async function findById(id, selection) {
       const query = applied.buildFinderQuery({ filter: "id = ?", params: [id] });
 
-      const returning = selection || (await applied.defaultColumnsSelection);
+      const returning = (selection && dbifySelection(selection)) || (await applied.defaultColumnsSelection);
       const result = await query.first(returning);
 
       if (_.isEmpty(result)) {
         throw newError(`${table.entityName} ${id} not found`, 404);
       }
 
-      return result;
+      return apifyResult(result);
     }
 
     async function count({ filter, params = [] }) {
@@ -54,14 +59,17 @@ function init(table, extensions = []) {
       selection
     ) {
       let query = applied.buildFinderQuery({ filter, params });
-      const returning = selection || (await applied.defaultColumnsSelection);
+      const returning = (selection && dbifySelection(selection)) || (await applied.defaultColumnsSelection);
       query = query.select(returning);
 
       _.forEach(([column, dir]) => {
-        query = query.orderBy(column, dir);
+        query = query.orderBy(dbifyString(column), dir);
       }, orderBy);
 
-      return query.limit(parseInt(limit, 10) || 200).offset(parseInt(offset, 10) || 0);
+      return query
+        .limit(parseInt(limit, 10) || 200)
+        .offset(parseInt(offset, 10) || 0)
+        .then(apifyResultArray);
     }
 
     async function findOne({ filter, params = [] }, selection) {
@@ -71,11 +79,11 @@ function init(table, extensions = []) {
 
     async function upsert(id, val, selection) {
       const insertStmt = table()
-        .insert(val)
+        .insert(await applied.prepModification(val))
         .toString();
 
       const updateStmt = table()
-        .update(_.omit(["id"], val))
+        .update(_.omit(["id"], await applied.prepModification(val)))
         .whereRaw(`id = ?`, [id]);
 
       const query = `${insertStmt.toString()} ON CONFLICT (id) DO UPDATE SET ${updateStmt
@@ -87,8 +95,11 @@ function init(table, extensions = []) {
       return findById(id, selection);
     }
 
+    // eslint-disable-next-line complexity
     async function doUpdateById(id, updateStatement, selection = "id", tx = null) {
-      let query = applied.buildFinderQuery({ filter: "id = ?", params: [id] }).returning(selection);
+      let query = applied
+        .buildFinderQuery({ filter: "id = ?", params: [id] })
+        .returning(selection && dbifySelection(selection));
 
       if (tx != null) {
         query = query.transacting(tx);
@@ -100,11 +111,11 @@ function init(table, extensions = []) {
         throw newError(`${table.entityName} ${id} not found`, 404);
       }
 
-      return (selection && _.first(result)) || result;
+      return (selection && apifyResult(_.first(result))) || result;
     }
 
     async function updateUsingFilter(filter, val, selection, tx = null) {
-      const returning = selection || (await applied.defaultColumnsSelection);
+      const returning = (selection && dbifySelection(selection)) || (await applied.defaultColumnsSelection);
       let query = applied.buildFinderQuery(filter).returning(returning);
 
       if (tx != null) {
@@ -112,7 +123,9 @@ function init(table, extensions = []) {
       }
 
       const updateStatement = await applied.prepModification(val);
-      const result = await query.update(_.isFunction(updateStatement) ? updateStatement() : updateStatement);
+      const result = apifyResult(
+        await query.update(_.isFunction(updateStatement) ? updateStatement() : updateStatement)
+      );
 
       publish(table.entityName, `updated`, { state: result, changes: { kind: "patch", val } }, context);
       return result;
@@ -126,10 +139,11 @@ function init(table, extensions = []) {
     }
 
     async function addToArray(id, field, val, selection = [field]) {
+      const columnName = dbifyString(field);
       const result = await doUpdateById(
         id,
         {
-          [field]: table.knex.raw(`?? || ?`, [field, JSON.stringify(val)])
+          [columnName]: table.knex.raw(`?? || ?`, [columnName, JSON.stringify(val)])
         },
         selection
       );
@@ -143,14 +157,15 @@ function init(table, extensions = []) {
     }
 
     async function deleteFromArray(id, field, val, selection = [field]) {
+      const columnName = dbifyString(field);
       const result = await doUpdateById(
         id,
         {
-          [field]: table.knex.raw(
+          [dbifyString(field)]: table.knex.raw(
             `to_jsonb(array_remove(ARRAY(SELECT jsonb_array_elements(??)), '${
               _.isPlainObject(val) ? JSON.stringify(val) : val
             }'))`,
-            [field]
+            [columnName]
           )
         },
         selection
@@ -165,13 +180,14 @@ function init(table, extensions = []) {
     }
 
     async function addToObject(id, field, val, selection = [field]) {
+      const columnName = dbifyString(field);
       if (!_.isPlainObject(val)) {
         throw new Error(`val=${JSON.stringify(val)} is a ${typeof val}. It should be a plain object`);
       }
       const result = await doUpdateById(
         id,
         {
-          [field]: table.knex.raw(`?? || ?`, [field, JSON.stringify(val)])
+          [columnName]: table.knex.raw(`?? || ?`, [columnName, JSON.stringify(val)])
         },
         selection
       );
@@ -185,11 +201,15 @@ function init(table, extensions = []) {
     }
 
     async function deleteFromObject(id, field, keys, selection = [field]) {
+      const columnName = dbifyString(field);
       const typeSuffix = _.isArray(keys) ? "::text[]" : "";
       const result = await doUpdateById(
         id,
         {
-          [field]: table.knex.raw(`?? - ?${typeSuffix}`, [field, _.isPlainObject(keys) ? JSON.stringify(keys) : keys])
+          [columnName]: table.knex.raw(`?? - ?${typeSuffix}`, [
+            columnName,
+            _.isPlainObject(keys) ? JSON.stringify(keys) : keys
+          ])
         },
         selection
       );
