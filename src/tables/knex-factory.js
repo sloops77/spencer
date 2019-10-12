@@ -1,3 +1,4 @@
+const { types } = require("pg");
 const initKnex = require("knex");
 const pick = require("lodash/fp/pick");
 const pickBy = require("lodash/fp/pickBy");
@@ -6,6 +7,11 @@ const log = require("../log");
 const { nodeEnv, connection } = require("../env");
 
 const compactObj = pickBy(x => !isNil(x));
+
+const DATE_OID = 1082;
+const parseDate = value => value;
+
+types.setTypeParser(DATE_OID, parseDate);
 
 const pool =
   nodeEnv !== "test"
