@@ -9,7 +9,7 @@ jobs:
       - image: circleci/postgres:11.5
         environment:
           POSTGRES_USER: postgres
-          POSTGRES_DB: spencer-framework_test
+          POSTGRES_DB: spence_test
 
     working_directory: ~/repo
 
