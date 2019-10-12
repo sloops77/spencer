@@ -60,14 +60,14 @@ describe.each([["snake"], ["camel"]])("simple table %s", columnCase => {
   it("should be able to find by filter", async () => {
     const val = { id: Date.now().toString(), aVal: "unique" };
     await simpleTable.insert(val);
-    await expect(simpleTable.find({ filter: `${columnCase === "snake" ? "a_val" : '"aVal"'} = 'unique'` })).resolves.toEqual([
-      { ...val, createdAt: expect.any(Date) }
-    ]);
+    await expect(
+      simpleTable.find({ filter: `${columnCase === "snake" ? "a_val" : '"aVal"'} = 'unique'` })
+    ).resolves.toEqual([{ ...val, createdAt: expect.any(Date) }]);
   });
   it("find by filter should error if cannot be found", async () => {
-    await expect(simpleTable.find({ filter: `${columnCase === "snake" ? "a_val" : '"aVal"'} = 'notfound'` })).resolves.toEqual(
-      []
-    );
+    await expect(
+      simpleTable.find({ filter: `${columnCase === "snake" ? "a_val" : '"aVal"'} = 'notfound'` })
+    ).resolves.toEqual([]);
   });
   it("should be able to update by filter", async () => {
     const val = { id: Date.now().toString(), aVal: "foo" };
