@@ -4,3 +4,5 @@ test
 .prettierrc.js
 jestfile.config.js
 knexfile.js
+reports
+.idea
