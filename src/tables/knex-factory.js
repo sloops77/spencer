@@ -28,7 +28,7 @@ const knexFactory = () =>
   initKnex({
     client: "pg",
     connection,
-    debug: false,
+    debug:true,
     pool,
     postProcessResponse: result => {
       // TODO: add special case for raw results (depends on dialect)

@@ -4,6 +4,16 @@ const { publish } = require("../events/events");
 const newError = require("../new-error");
 const initPrepModification = require("./prep-modification");
 
+function renderArrayRemoveValue(value) {
+  if (_.isPlainObject(value)) {
+    return JSON.stringify(value);
+  }
+  if (_.isString(value)) {
+    return `"${value}"`;
+  }
+  return value;
+}
+
 function init(table, extensions = [], transformCase) {
   const prepModification = initPrepModification(table, transformCase);
   const dbifyString = transformCase ? _.snakeCase : _.identity;
@@ -21,11 +31,17 @@ function init(table, extensions = [], transformCase) {
       return query.whereRaw(filter, _.castArray(params));
     }
 
-    async function insert(val, selection) {
-      const returning = (selection && dbifySelection(selection)) || (await applied.defaultColumnsSelection);
-      const insertVal = await table()
+    async function insert(val, selection, tx) {
+      const returning = selection || (await applied.defaultColumnsSelection);
+      let statement = table()
         .returning(returning)
         .insert(await applied.prepModification(val));
+
+      if (tx != null) {
+        statement = statement.transacting(tx);
+      }
+
+      const insertVal = await statement;
 
       const result = apifyResult(_.first(insertVal));
       publish(table.entityName, `created`, { state: result, changes: { kind: "new", val } }, context);
@@ -158,13 +174,18 @@ function init(table, extensions = [], transformCase) {
 
     async function deleteFromArray(id, field, val, selection = [field]) {
       const columnName = dbifyString(field);
+      function wrapRemovals(array, inner, idx = 0) {
+        if (idx === array.length) {
+          return inner;
+        }
+
+        return wrapRemovals(array, `array_remove(${inner}, '${renderArrayRemoveValue(array[idx])}')`, idx + 1);
+      }
       const result = await doUpdateById(
         id,
         {
           [dbifyString(field)]: table.knex.raw(
-            `to_jsonb(array_remove(ARRAY(SELECT jsonb_array_elements(??)), '${
-              _.isPlainObject(val) ? JSON.stringify(val) : val
-            }'))`,
+            `to_jsonb(${wrapRemovals(_.castArray(val), `ARRAY(SELECT jsonb_array_elements(??))`)})`,
             [columnName]
           )
         },

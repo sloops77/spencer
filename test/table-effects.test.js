@@ -87,7 +87,7 @@ describe.each([["snake"], ["camel"]])("simple table %s", columnCase => {
   it("delete should error if cannot be found", async () => {
     // await expect(simpleTable.del("1")).rejects.toEqual(new Error("simple 1 not found"));
   });
-  it("add to array primitives", async () => {
+  it("add to array integer primitives", async () => {
     const val = { id: Date.now().toString(), manyVals: [] };
     await arrayTable.insert(val);
     await expect(arrayTable.addToArray(val.id, "manyVals", [1, 3])).resolves.toEqual([1, 3]);
@@ -95,12 +95,27 @@ describe.each([["snake"], ["camel"]])("simple table %s", columnCase => {
     await expect(arrayTable.addToArray(val.id, "manyVals", 11)).resolves.toEqual([1, 3, 7, 9, 11]);
   });
 
-  it("delete from array items", async () => {
+  it("delete from array integer primitives", async () => {
     const val = { id: Date.now().toString(), manyVals: [1, 3, 5, 7, 9, 11] };
     await arrayTable.insert(val);
     await expect(arrayTable.deleteFromArray(val.id, "manyVals", 7)).resolves.toEqual([1, 3, 5, 9, 11]);
-    // await expect(arrayTable.deleteFromArray(val.id, "manyVals", [1, 9])).resolves.toEqual([3, 5, 11]);
-    // await expect(arrayTable.deleteFromArray(val.id, "manyVals", [11, 2, 2, 5])).resolves.toEqual([3]);
+    await expect(arrayTable.deleteFromArray(val.id, "manyVals", [1, 9])).resolves.toEqual([3, 5, 11]);
+    await expect(arrayTable.deleteFromArray(val.id, "manyVals", [11, 2, 2, 5])).resolves.toEqual([3]);
+  });
+
+  it("add to array string primitives", async () => {
+    const val = { id: Date.now().toString(), manyVals: [] };
+    await arrayTable.insert(val);
+    await expect(arrayTable.addToArray(val.id, "manyVals", ["a", "b"])).resolves.toEqual(["a", "b"]);
+    await expect(arrayTable.addToArray(val.id, "manyVals", ["c", "d"])).resolves.toEqual(["a", "b", "c", "d"]);
+    await expect(arrayTable.addToArray(val.id, "manyVals", "e")).resolves.toEqual(["a", "b", "c", "d", "e"]);
+  });
+
+  it("delete from array string primitives", async () => {
+    const val = { id: Date.now().toString(), manyVals: ["a", "b", "c", "d", "e"] };
+    await arrayTable.insert(val);
+    await expect(arrayTable.deleteFromArray(val.id, "manyVals", "c")).resolves.toEqual(["a", "b", "d", "e"]);
+    await expect(arrayTable.deleteFromArray(val.id, "manyVals", ["d", "e"])).resolves.toEqual(["a", "b"]);
   });
 
   it("add to array objects", async () => {
