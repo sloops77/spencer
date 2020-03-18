@@ -111,6 +111,26 @@ function init(table, extensions = [], transformCase) {
       return findById(id, selection);
     }
 
+    async function findOrInsert(val, naturalKey, selection) {
+      const preppedVal = await applied.prepModification(val);
+      const returning = (selection && dbifySelection(selection)) || (await applied.defaultColumnsSelection);
+      const dbifiedNaturalKeys = dbifySelection(naturalKey);
+
+      const insertStmt = `${table()
+        .insert(preppedVal)
+        .toString()} ON CONFLICT DO NOTHING RETURNING ${returning.map(v => `"${v}"`).join(",")}`;
+      const insertedVal = await table.knex.raw(insertStmt);
+      if (insertedVal != null && insertedVal.rowCount === 1) {
+        return apifyResult(_.first(insertedVal.rows));
+      }
+
+      return table()
+        .where(_.pick(dbifiedNaturalKeys, preppedVal))
+        .select(returning)
+        .first()
+        .then(apifyResult);
+    }
+
     // eslint-disable-next-line complexity
     async function doUpdateById(id, updateStatement, selection = "id", tx = null) {
       let query = applied
@@ -269,6 +289,7 @@ function init(table, extensions = [], transformCase) {
       insert,
       insertMany,
       upsert,
+      findOrInsert,
       findById,
       find,
       findOne,

@@ -53,6 +53,17 @@ describe.each([["snake"], ["camel"]])("simple table %s", columnCase => {
     const result = await simpleTable.upsert(val.id, { ...val, aVal: "boo" });
     expect(result).toEqual({ ...val, aVal: "boo", createdAt: expect.any(Date) });
   });
+  it("findOrInsert should insert if doesnt exist already", async () => {
+    const val = { id: Date.now().toString(), aVal: "foo" };
+    const result = await simpleTable.findOrInsert(val, ["id"]);
+    expect(result).toEqual({ ...val, createdAt: expect.any(Date) });
+  });
+  it("findOrInsert should find if it does exist already", async () => {
+    const val = { id: Date.now().toString(), aVal: "foo" };
+    await simpleTable.insert(val);
+    const result = await simpleTable.findOrInsert({ ...val, aVal: "boo" }, ["id"]);
+    expect(result).toEqual({ ...val, aVal: "foo", createdAt: expect.any(Date) });
+  });
 
   it("should error if cannot be found", async () => {
     await expect(simpleTable.findById("1")).rejects.toEqual(new Error("simple 1 not found"));
