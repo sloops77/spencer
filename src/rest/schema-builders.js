@@ -30,11 +30,11 @@ function init(tag) {
     return { params: idParam, body, response: responses({ 200: result }) };
   }
 
-  function findMany(result) {
-    return {
+  function findMany(result, overrides = {}) {
+    return _.defaultsDeep(overrides, {
       querystring: { limit: { type: "number" }, offset: { type: "number" } },
       response: responses({ 200: { type: "array", items: result } }),
-    };
+    });
   }
 
   return _.mapValues((fn) => _.flow(fn, tagify), { insertOne, findOne, updateOne, deleteOne, findMany });

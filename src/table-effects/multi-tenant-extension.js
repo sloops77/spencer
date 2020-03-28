@@ -14,8 +14,8 @@ function multiTenantExtension(parent, { tenant }) {
 
   return {
     ...baseExtension,
-    insert(val, selection) {
-      return parent.insert({ tenant, ...val }, selection);
+    insert(val, ...args) {
+      return parent.insert({ tenant, ...val }, ...args);
     },
     buildFinderQuery(...args) {
       const query = parent.buildFinderQuery(...args);

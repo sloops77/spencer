@@ -16,7 +16,15 @@ function renderArrayRemoveValue(value) {
 
 function init(table, extensions = [], transformCase) {
   const prepModification = initPrepModification(table, transformCase);
-  const dbifyString = transformCase ? _.snakeCase : _.identity;
+  const dbifyString = transformCase
+    ? (str) => {
+        const names = str.split(".");
+        if (names.length === 1) {
+          return _.snakeCase(str);
+        }
+        return [...names.slice(0, -1), _.snakeCase(names[names.length - 1])].join(".");
+      }
+    : _.identity;
   const dbifySelection = transformCase ? _.map(dbifyString) : _.identity;
   const apifyObject = _.mapKeys(_.camelCase);
   const apifyResult = transformCase ? (result) => (result == null ? result : apifyObject(result)) : _.identity;
@@ -48,12 +56,32 @@ function init(table, extensions = [], transformCase) {
       return result;
     }
 
-    async function insertMany(vals, selection) {
-      return Promise.all(_.map((val) => applied.insert(val, selection), vals));
+    async function insertMany(vals, selection, tx) {
+      return Promise.all(_.map((val) => applied.insert(val, selection, tx), vals));
     }
 
-    async function findById(id, selection) {
-      const query = applied.buildFinderQuery({ filter: "id = ?", params: [id] });
+    async function findOrInsert(val, naturalKey, selection) {
+      const preppedVal = await applied.prepModification(val);
+      const returning = (selection && dbifySelection(selection)) || (await applied.defaultColumnsSelection);
+      const dbifiedNaturalKeys = dbifySelection(naturalKey);
+
+      const insertStmt = `${table().insert(preppedVal).toString()} ON CONFLICT DO NOTHING RETURNING ${returning
+        .map((v) => `"${v}"`)
+        .join(",")}`;
+      const insertedVal = await table.knex.raw(insertStmt);
+      if (insertedVal != null && insertedVal.rowCount === 1) {
+        return apifyResult(_.first(insertedVal.rows));
+      }
+
+      return table().where(_.pick(dbifiedNaturalKeys, preppedVal)).select(returning).first().then(apifyResult);
+    }
+
+    async function findById(id, selection, tx) {
+      let query = applied.buildFinderQuery({ filter: "id = ?", params: [id] });
+
+      if (tx != null) {
+        query = query.transacting(tx);
+      }
 
       const returning = (selection && dbifySelection(selection)) || (await applied.defaultColumnsSelection);
       const result = await query.first(returning);
@@ -77,11 +105,12 @@ function init(table, extensions = [], transformCase) {
         limit,
         offset,
         orderBy = [
-          ["createdAt", "desc"],
-          ["id", "asc"],
+          [`${table.tableName}.createdAt`, "desc"],
+          [`${table.tableName}.id`, "asc"],
         ],
       },
-      selection
+      selection,
+      decorator = _.identity
     ) {
       let query = applied.buildFinderQuery({ filter, params });
       const returning = (selection && dbifySelection(selection)) || (await applied.defaultColumnsSelection);
@@ -91,14 +120,14 @@ function init(table, extensions = [], transformCase) {
         query = query.orderBy(dbifyString(column), dir);
       }, orderBy);
 
-      return query
+      return decorator(query)
         .limit(parseInt(limit, 10) || 200)
         .offset(parseInt(offset, 10) || 0)
         .then(apifyResultArray);
     }
 
-    async function findOne({ filter, params = [] }, selection) {
-      const array = await applied.find({ filter, params, limit: 1, offset: 0 }, selection);
+    async function findOne({ filter, params = [], orderBy }, selection) {
+      const array = await applied.find({ filter, params, limit: 1, offset: 0, orderBy }, selection);
       return _.first(array);
     }
 
@@ -118,22 +147,6 @@ function init(table, extensions = [], transformCase) {
 
       await table.knex.raw(query);
       return findById(id, selection);
-    }
-
-    async function findOrInsert(val, naturalKey, selection) {
-      const preppedVal = await applied.prepModification(val);
-      const returning = (selection && dbifySelection(selection)) || (await applied.defaultColumnsSelection);
-      const dbifiedNaturalKeys = dbifySelection(naturalKey);
-
-      const insertStmt = `${table().insert(preppedVal).toString()} ON CONFLICT DO NOTHING RETURNING ${returning
-        .map((v) => `"${v}"`)
-        .join(",")}`;
-      const insertedVal = await table.knex.raw(insertStmt);
-      if (insertedVal != null && insertedVal.rowCount === 1) {
-        return apifyResult(_.first(insertedVal.rows));
-      }
-
-      return table().where(_.pick(dbifiedNaturalKeys, preppedVal)).select(returning).first().then(apifyResult);
     }
 
     // eslint-disable-next-line complexity
@@ -169,6 +182,12 @@ function init(table, extensions = [], transformCase) {
       );
 
       publish(table.entityName, `updated`, { state: result, changes: { kind: "patch", val } }, context);
+      return result;
+    }
+
+    async function touch(id, selection, tx) {
+      const returning = selection || (await applied.defaultColumnsSelection);
+      const result = await doUpdateById(id, { updatedAt: new Date() }, returning, tx);
       return result;
     }
 
@@ -298,6 +317,7 @@ function init(table, extensions = [], transformCase) {
       findById,
       find,
       findOne,
+      touch,
       update,
       updateUsingFilter,
       del,
