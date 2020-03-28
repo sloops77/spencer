@@ -47,7 +47,7 @@ describe("table registry", () => {
     const contexts = [{ foo: "1" }, { foo: "2" }, { foo: "3" }];
     const registeredTablesArray = _.map(addContext, contexts);
     const results = await Promise.all(
-      _.map(tables => tables.simples.insert({ id: uuidv1(), aVal: "foo" }), registeredTablesArray)
+      _.map((tables) => tables.simples.insert({ id: uuidv1(), aVal: "foo" }), registeredTablesArray)
     );
 
     expect(results).toHaveLength(3);

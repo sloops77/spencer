@@ -6,7 +6,7 @@ afterAll(async () => {
   await knex.destroy();
 });
 
-describe.each([["snake"], ["camel"]])("simple table %s", columnCase => {
+describe.each([["snake"], ["camel"]])("simple table %s", (columnCase) => {
   let simpleTable = null;
   let arrayTable = null;
   let schemaName = null;
@@ -17,11 +17,11 @@ describe.each([["snake"], ["camel"]])("simple table %s", columnCase => {
       simpleTableCreator,
       simpleTableEffectsFactory,
       arrayTableCreator,
-      arraysTableEffectsFactory
+      arraysTableEffectsFactory,
     } = require("./simple-table"); // eslint-disable-line global-require
     await createSchema({
       schemaName,
-      tableCreators: [simpleTableCreator(columnCase === "snake"), arrayTableCreator(columnCase === "snake")]
+      tableCreators: [simpleTableCreator(columnCase === "snake"), arrayTableCreator(columnCase === "snake")],
     });
     simpleTable = (await simpleTableEffectsFactory({ schemaName, transformCase: columnCase === "snake" }))();
     arrayTable = (await arraysTableEffectsFactory({ schemaName, transformCase: columnCase === "snake" }))();
@@ -132,23 +132,35 @@ describe.each([["snake"], ["camel"]])("simple table %s", columnCase => {
   it("add to array objects", async () => {
     const val = { id: Date.now().toString(), manyVals: [] };
     await arrayTable.insert(val);
-    await expect(arrayTable.addToArray(val.id, "manyVals", [{ id: 1, a: "1" }, { id: 2, a: "2" }])).resolves.toEqual([
+    await expect(
+      arrayTable.addToArray(val.id, "manyVals", [
+        { id: 1, a: "1" },
+        { id: 2, a: "2" },
+      ])
+    ).resolves.toEqual([
       { id: 1, a: "1" },
-      { id: 2, a: "2" }
+      { id: 2, a: "2" },
     ]);
     await expect(arrayTable.addToArray(val.id, "manyVals", { id: 3, a: "3" })).resolves.toEqual([
       { id: 1, a: "1" },
       { id: 2, a: "2" },
-      { id: 3, a: "3" }
+      { id: 3, a: "3" },
     ]);
   });
 
   it("delete from array objects", async () => {
-    const val = { id: Date.now().toString(), manyVals: [{ id: 1, a: "1" }, { id: 2, a: "2" }, { id: 3, a: "3" }] };
+    const val = {
+      id: Date.now().toString(),
+      manyVals: [
+        { id: 1, a: "1" },
+        { id: 2, a: "2" },
+        { id: 3, a: "3" },
+      ],
+    };
     await arrayTable.insert(val);
     await expect(arrayTable.deleteFromArray(val.id, "manyVals", { id: 1, a: "1" })).resolves.toEqual([
       { id: 2, a: "2" },
-      { id: 3, a: "3" }
+      { id: 3, a: "3" },
     ]);
   });
 });

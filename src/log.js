@@ -4,8 +4,8 @@ const importCwd = require("import-cwd");
 
 const spenceConfig = importCwd.silent("./spencerc") || {};
 
-const nodeEnv = getEnv("NODE_ENV", "development").asString();
-const debug = getEnv("DEBUG", ["test", "development"].includes(nodeEnv).toString()).asBool();
+const nodeEnv = getEnv("NODE_ENV").default("development").asString();
+const debug = getEnv("DEBUG").default(["test", "development"].includes(nodeEnv).toString()).asBool();
 const prettyPrint = debug ? { colorize: true, translateTime: true, ignore: "hostname,pid" } : false;
 
 const log = pino({
