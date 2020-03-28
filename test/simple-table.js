@@ -41,6 +41,27 @@ function arrayTableCreator(snakeCase) {
     });
 }
 
+function examplesTableEffectsFactory(config) {
+  return tableEffectsFactory({
+    name: "examples",
+    entityName: "example",
+    ...config,
+  });
+}
+
+function exampleTableCreator(snakeCase) {
+  return (schema) =>
+    schema.createTable("examples", (table) => {
+      table.bigIncrements("id").primary();
+      table.text(snakeCase ? "a_val" : "aVal");
+      table.jsonb(snakeCase ? "many_vals" : "manyVals");
+      table
+        .timestamp(snakeCase ? "created_at" : "createdAt")
+        .defaultTo(knex.fn.now())
+        .notNullable();
+    });
+}
+
 function testExtension(parent, context) {
   const callCounterRef = { current: 0 };
   return {
@@ -57,7 +78,9 @@ function testExtension(parent, context) {
 module.exports = {
   simpleTableEffectsFactory,
   arraysTableEffectsFactory,
+  examplesTableEffectsFactory,
   simpleTableCreator,
   arrayTableCreator,
+  exampleTableCreator,
   testExtension,
 };
