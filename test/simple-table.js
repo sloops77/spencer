@@ -41,7 +41,6 @@ function arrayTableCreator(snakeCase) {
     });
 }
 
-
 function examplesTableEffectsFactory(config) {
   return tableEffectsFactory({
     name: "examples",

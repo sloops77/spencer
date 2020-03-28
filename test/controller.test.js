@@ -1,12 +1,8 @@
-const _ = require("lodash/fp");
 const initController = require("../src/rest/controller");
 const { createSchema, dropSchema } = require("../src/tables/db");
 const { clearTableRegistry } = require("../src/table-effects/table-registry");
 const initFastify = require("./helpers/fastify");
 const { NUMERIC_FORMAT, ISO_DATETIME_FORMAT } = require("./helpers/regexes");
-// const newArtifactEventSchema = require("./schemas/new-artifact-event");
-// const artifactEventSchema = require("./schemas/artifact-event");
-// require("../artifact-events/artifact-events-table");
 
 const newSimpleSchema = {
   $schema: "http://json-schema.org/draft-07/schema#",
@@ -38,7 +34,6 @@ const simpleSchema = {
 
 describe("controller", () => {
   let schemaName = null;
-  let simpleTable = null;
   let simpleController = null;
   let fastify = null;
 
@@ -51,7 +46,7 @@ describe("controller", () => {
       schemaName,
       tableCreators: [exampleTableCreator(false)],
     });
-    simpleTable = (await examplesTableEffectsFactory({ schemaName, transformCase: false }))();
+    (await examplesTableEffectsFactory({ schemaName, transformCase: false }))();
 
     simpleController = initController({
       tag: "",
