@@ -97,7 +97,7 @@ function init(
     const addRoute = initAddRoute(
       router,
       { createSchema, updateSchema, replySchema },
-      tableEffects || tableName,
+      tableEffects,
       schemaBuilders
     );
     const schemas = _.uniqBy("$id", _.compact([createSchema, updateSchema, replySchema]));
