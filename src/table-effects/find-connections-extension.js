@@ -3,7 +3,7 @@ function findConnectionsExtension(parent) {
     async findOneByConnection({ kind, id }, selection) {
       return parent.findOne({ filter: `connections @> '[${JSON.stringify({ kind, id: id || "" })}]'` }, selection);
     },
-    extensions: parent.extensions.concat(["finders"])
+    extensions: parent.extensions.concat(["finders"]),
   };
 }
 

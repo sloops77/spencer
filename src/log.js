@@ -11,6 +11,6 @@ const prettyPrint = debug ? { colorize: true, translateTime: true, ignore: "host
 const log = pino({
   level: debug ? "debug" : "info",
   prettyPrint,
-  ...spenceConfig.logger
+  ...spenceConfig.logger,
 });
 module.exports = log;

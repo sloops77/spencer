@@ -23,7 +23,7 @@ const config = {
   dbName,
   dbNamePrefix,
   connection,
-  source
+  source,
 };
 log.info(config, `Spencer Config`);
 
