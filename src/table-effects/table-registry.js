@@ -21,12 +21,12 @@ function clearTableRegistry() {
 }
 
 function addContext(context) {
-  return _.mapValues(tableEffects => tableEffects(context), tableRegistry);
+  return _.mapValues((tableEffects) => tableEffects(context), tableRegistry);
 }
 
 module.exports = {
   tableRegistry,
   clearTableRegistry,
   tableEffectsFactory,
-  addContext
+  addContext,
 };

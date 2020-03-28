@@ -3,9 +3,9 @@ const _ = require("lodash/fp");
 function multiTenantExtension(parent, { tenant }) {
   const baseExtension = {
     get defaultColumnsSelection() {
-      return parent.defaultColumnsSelection.then(array => _.pull("tenant", array));
+      return parent.defaultColumnsSelection.then((array) => _.pull("tenant", array));
     },
-    extensions: parent.extensions.concat(["multiTenant"])
+    extensions: parent.extensions.concat(["multiTenant"]),
   };
 
   if (!tenant) {
@@ -20,7 +20,7 @@ function multiTenantExtension(parent, { tenant }) {
     buildFinderQuery(...args) {
       const query = parent.buildFinderQuery(...args);
       return query.where({ tenant });
-    }
+    },
   };
 }
 

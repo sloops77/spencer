@@ -7,15 +7,16 @@ const log = require("./log");
 const packageJson = importCwd.silent("./package.json");
 const spenceConfig = importCwd.silent("./spencerc") || {};
 
-const nodeEnv = getEnv("NODE_ENV", "development").asString();
-const debug = getEnv("DEBUG", ["test", "development"].includes(nodeEnv).toString()).asBool();
-const dbNamePrefix = getEnv(
-  "DB_NAME_PREFIX",
-  _.get("dbNamePrefix", spenceConfig) || _.get("name", packageJson)
-).asString();
-const dbName = getEnv("DB_NAME", nodeEnv !== "production" ? `${dbNamePrefix}_${nodeEnv}` : dbNamePrefix).asString();
-const connection = getEnv("DATABASE_URL", `postgresql://postgres@localhost:5432/${dbName}`).asString();
-const source = getEnv("NODE_SOURCE", "spencer-node").asString();
+const nodeEnv = getEnv("NODE_ENV").default("development").asString();
+const debug = getEnv("DEBUG").default(["test", "development"].includes(nodeEnv).toString()).asBool();
+const dbNamePrefix = getEnv("DB_NAME_PREFIX")
+  .default(_.get("dbNamePrefix", spenceConfig) || _.get("name", packageJson))
+  .asString();
+const dbName = getEnv("DB_NAME")
+  .default(nodeEnv !== "production" ? `${dbNamePrefix}_${nodeEnv}` : dbNamePrefix)
+  .asString();
+const connection = getEnv("DATABASE_URL").default(`postgresql://postgres@localhost:5432/${dbName}`).asString();
+const source = getEnv("NODE_SOURCE").default("spencer-node").asString();
 
 const config = {
   nodeEnv,
@@ -23,7 +24,7 @@ const config = {
   dbName,
   dbNamePrefix,
   connection,
-  source
+  source,
 };
 log.info(config, `Spencer Config`);
 

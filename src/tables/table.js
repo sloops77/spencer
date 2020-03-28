@@ -12,7 +12,7 @@ function buildColumnInfoFromSchema(schema) {
       }
 
       columnInfo[args[args.length - 1]] = "string";
-    }
+    },
   });
   return Promise.resolve(columnInfo);
 }
@@ -21,8 +21,8 @@ async function buildColumnInfoFromDb(table, ignoreColumns) {
   const rawColumnInfo = await table().columnInfo();
   return _.fromPairs(
     _.flow(
-      _.reject(columnName => ignoreColumns.includes(columnName)),
-      _.map(columnName => [columnName, rawColumnInfo[columnName].type])
+      _.reject((columnName) => ignoreColumns.includes(columnName)),
+      _.map((columnName) => [columnName, rawColumnInfo[columnName].type])
     )(_.keys(rawColumnInfo))
   );
 }
@@ -44,7 +44,7 @@ function init({ name, schemaName = "public", entityName, jsonSchema, ignoreColum
     knex,
     get columnNames() {
       return columnInfo.then(_.keys);
-    }
+    },
   });
 }
 

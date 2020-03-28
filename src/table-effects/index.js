@@ -19,7 +19,7 @@ function init(table, extensions = [], transformCase) {
   const dbifyString = transformCase ? _.snakeCase : _.identity;
   const dbifySelection = transformCase ? _.map(dbifyString) : _.identity;
   const apifyObject = _.mapKeys(_.camelCase);
-  const apifyResult = transformCase ? result => (result == null ? result : apifyObject(result)) : _.identity;
+  const apifyResult = transformCase ? (result) => (result == null ? result : apifyObject(result)) : _.identity;
   const apifyResultArray = transformCase ? _.map(apifyResult) : _.identity;
 
   return _.memoize((context = {}) => {
@@ -49,7 +49,7 @@ function init(table, extensions = [], transformCase) {
     }
 
     async function insertMany(vals, selection) {
-      return Promise.all(_.map(val => applied.insert(val, selection), vals));
+      return Promise.all(_.map((val) => applied.insert(val, selection), vals));
     }
 
     async function findById(id, selection) {
@@ -71,7 +71,16 @@ function init(table, extensions = [], transformCase) {
     }
 
     async function find(
-      { filter, params = [], limit, offset, orderBy = [["createdAt", "desc"], ["id", "asc"]] },
+      {
+        filter,
+        params = [],
+        limit,
+        offset,
+        orderBy = [
+          ["createdAt", "desc"],
+          ["id", "asc"],
+        ],
+      },
       selection
     ) {
       let query = applied.buildFinderQuery({ filter, params });
@@ -109,6 +118,22 @@ function init(table, extensions = [], transformCase) {
 
       await table.knex.raw(query);
       return findById(id, selection);
+    }
+
+    async function findOrInsert(val, naturalKey, selection) {
+      const preppedVal = await applied.prepModification(val);
+      const returning = (selection && dbifySelection(selection)) || (await applied.defaultColumnsSelection);
+      const dbifiedNaturalKeys = dbifySelection(naturalKey);
+
+      const insertStmt = `${table().insert(preppedVal).toString()} ON CONFLICT DO NOTHING RETURNING ${returning
+        .map((v) => `"${v}"`)
+        .join(",")}`;
+      const insertedVal = await table.knex.raw(insertStmt);
+      if (insertedVal != null && insertedVal.rowCount === 1) {
+        return apifyResult(_.first(insertedVal.rows));
+      }
+
+      return table().where(_.pick(dbifiedNaturalKeys, preppedVal)).select(returning).first().then(apifyResult);
     }
 
     // eslint-disable-next-line complexity
@@ -159,7 +184,7 @@ function init(table, extensions = [], transformCase) {
       const result = await doUpdateById(
         id,
         {
-          [columnName]: table.knex.raw(`?? || ?`, [columnName, JSON.stringify(val)])
+          [columnName]: table.knex.raw(`?? || ?`, [columnName, JSON.stringify(val)]),
         },
         selection
       );
@@ -187,7 +212,7 @@ function init(table, extensions = [], transformCase) {
           [dbifyString(field)]: table.knex.raw(
             `to_jsonb(${wrapRemovals(_.castArray(val), `ARRAY(SELECT jsonb_array_elements(??))`)})`,
             [columnName]
-          )
+          ),
         },
         selection
       );
@@ -208,7 +233,7 @@ function init(table, extensions = [], transformCase) {
       const result = await doUpdateById(
         id,
         {
-          [columnName]: table.knex.raw(`?? || ?`, [columnName, JSON.stringify(val)])
+          [columnName]: table.knex.raw(`?? || ?`, [columnName, JSON.stringify(val)]),
         },
         selection
       );
@@ -229,8 +254,8 @@ function init(table, extensions = [], transformCase) {
         {
           [columnName]: table.knex.raw(`?? - ?${typeSuffix}`, [
             columnName,
-            _.isPlainObject(keys) ? JSON.stringify(keys) : keys
-          ])
+            _.isPlainObject(keys) ? JSON.stringify(keys) : keys,
+          ]),
         },
         selection
       );
@@ -245,7 +270,7 @@ function init(table, extensions = [], transformCase) {
 
     async function del(id) {
       const query = applied.buildFinderQuery({ filter: "id = ?", params: [id] });
-      return query.delete().then(result => {
+      return query.delete().then((result) => {
         if (result === 0) {
           throw newError(`${table.entityName} ${id} not found`, 404);
         }
@@ -260,7 +285,7 @@ function init(table, extensions = [], transformCase) {
       const affectedIds = _.map("id", await find({ filter, params }, ["id"]));
       const query = applied.buildFinderQuery({ filter, params });
       return query.delete().then(() => {
-        _.forEach(id => publish(table.entityName, `deleted`, { id }, context), affectedIds);
+        _.forEach((id) => publish(table.entityName, `deleted`, { id }, context), affectedIds);
         return affectedIds;
       });
     }
@@ -269,6 +294,7 @@ function init(table, extensions = [], transformCase) {
       insert,
       insertMany,
       upsert,
+      findOrInsert,
       findById,
       find,
       findOne,
@@ -287,7 +313,7 @@ function init(table, extensions = [], transformCase) {
       get defaultColumnsSelection() {
         return table.columnNames;
       },
-      extensions: []
+      extensions: [],
     };
 
     const applied = _.reduce(

@@ -7,7 +7,7 @@ function softDeleteExtension(parent) {
       );
       return parent.del(id);
     },
-    extensions: parent.extensions.concat(["softDelete"])
+    extensions: parent.extensions.concat(["softDelete"]),
   };
 }
 

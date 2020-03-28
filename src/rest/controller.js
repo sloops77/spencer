@@ -56,7 +56,7 @@ function init(
     routes = [],
     schemas: { create: createSchema, update: updateSchema, reply: replySchema },
     tableEffects: tableEffectsParam,
-    tableName
+    tableName,
   },
   extend
 ) {
@@ -94,14 +94,9 @@ function init(
       return tableEffectsParam || req.tables[tableName];
     }
 
-    const addRoute = initAddRoute(
-      router,
-      { createSchema, updateSchema, replySchema },
-      tableEffects || tableName,
-      schemaBuilders
-    );
+    const addRoute = initAddRoute(router, { createSchema, updateSchema, replySchema }, tableEffects, schemaBuilders);
     const schemas = _.uniqBy("$id", _.compact([createSchema, updateSchema, replySchema]));
-    _.forEach(s => router.addSchema(s), schemas);
+    _.forEach((s) => router.addSchema(s), schemas);
     _.forEach(addRoute, normalizedRoutes);
     if (extend != null) {
       extend(router, _.assign(opts, { tableEffects, schemaBuilders }), next);

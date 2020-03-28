@@ -22,7 +22,7 @@ function init(tag) {
   function deleteOne() {
     return {
       params: idParam,
-      response: responses({ 204: { type: "null", description: "Successfully deleted item" } })
+      response: responses({ 204: { type: "null", description: "Successfully deleted item" } }),
     };
   }
 
@@ -33,18 +33,11 @@ function init(tag) {
   function findMany(result) {
     return {
       querystring: { limit: { type: "number" }, offset: { type: "number" } },
-      response: responses({ 200: { type: "array", items: result } })
+      response: responses({ 200: { type: "array", items: result } }),
     };
   }
 
-  return _.mapValues(
-    fn =>
-      _.flow(
-        fn,
-        tagify
-      ),
-    { insertOne, findOne, updateOne, deleteOne, findMany }
-  );
+  return _.mapValues((fn) => _.flow(fn, tagify), { insertOne, findOne, updateOne, deleteOne, findMany });
 }
 
 module.exports = init;

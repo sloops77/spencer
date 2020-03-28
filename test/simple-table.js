@@ -5,13 +5,13 @@ function simpleTableEffectsFactory(config) {
   return tableEffectsFactory({
     name: "simples",
     entityName: "simple",
-    ...config
+    ...config,
   });
 }
 
 function simpleTableCreator(snakeCase) {
-  return schema =>
-    schema.createTable("simples", table => {
+  return (schema) =>
+    schema.createTable("simples", (table) => {
       table.text("id").primary();
       table.text(snakeCase ? "a_val" : "aVal");
       table
@@ -25,13 +25,13 @@ function arraysTableEffectsFactory(config) {
   return tableEffectsFactory({
     name: "arrays",
     entityName: "array",
-    ...config
+    ...config,
   });
 }
 
 function arrayTableCreator(snakeCase) {
-  return schema =>
-    schema.createTable("arrays", table => {
+  return (schema) =>
+    schema.createTable("arrays", (table) => {
       table.text("id").primary();
       table.jsonb(snakeCase ? "many_vals" : "manyVals");
       table
@@ -50,7 +50,7 @@ function testExtension(parent, context) {
       return parent.insert(val, selection);
     },
     callCounterRef,
-    contextRef: { current: context }
+    contextRef: { current: context },
   };
 }
 
@@ -59,5 +59,5 @@ module.exports = {
   arraysTableEffectsFactory,
   simpleTableCreator,
   arrayTableCreator,
-  testExtension
+  testExtension,
 };

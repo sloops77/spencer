@@ -19,7 +19,7 @@ function tenantPreHandler(app, { rootDomain }, next) {
     }
   }
 
-  app.addHook("preHandler", async req => {
+  app.addHook("preHandler", async (req) => {
     const { hostname } = req;
     const tenant = getTenant(hostname);
     req.tenant = tenant;

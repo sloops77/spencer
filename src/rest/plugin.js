@@ -8,7 +8,7 @@ function loader(app) {
   const files = fs.readdirSync(normalizedPath);
   return _.flow(
     _.filter(_.endsWith(".json")),
-    _.forEach(p => {
+    _.forEach((p) => {
       // eslint-disable-next-line global-require,import/no-dynamic-require
       const schema = require(`./schemas/${p}`);
       app.addSchema(schema);
