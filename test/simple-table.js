@@ -52,7 +52,7 @@ function examplesTableEffectsFactory(config) {
 function exampleTableCreator(snakeCase) {
   return (schema) =>
     schema.createTable("examples", (table) => {
-      table.bigIncrements("id").primary();
+      table.uuid("id").defaultTo(knex.raw("uuid_generate_v4()")).primary();
       table.text(snakeCase ? "a_val" : "aVal");
       table.jsonb(snakeCase ? "many_vals" : "manyVals");
       table

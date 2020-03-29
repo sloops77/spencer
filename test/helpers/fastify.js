@@ -16,8 +16,8 @@ function fastify(routes, defaultHeaders = {}) {
   initEvents({
     log,
     errorHandler: (event, context, error) => {
-      log.error(error);
       log.error({ context, event }, `Error Context`);
+      log.error(error);
     },
   });
 

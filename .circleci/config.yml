@@ -37,6 +37,10 @@ jobs:
           command: yarn lint:ci
 
       - run:
+          name: "Create Schema"
+          command: yarn db:prepare:test
+
+      - run:
           name: "Test"
           command: yarn test:ci
 
