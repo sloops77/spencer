@@ -1,3 +1,4 @@
+const _ = require("lodash/fp");
 const initController = require("../src/rest/controller");
 const { createSchema, dropSchema } = require("../src/tables/db");
 const knex = require("../src/tables/index");
@@ -59,7 +60,9 @@ describe("controller", () => {
     fastify = initFastify({ "/examples": simpleController }, {});
   });
 
-  beforeEach(async () => {});
+  beforeEach(async () => {
+    await knex(`${schemaName}.examples`).truncate();
+  });
 
   afterAll(async () => {
     await fastify.close();
@@ -81,5 +84,50 @@ describe("controller", () => {
       createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
       aVal: "test",
     });
+  });
+
+  it("find simples", async () => {
+    const createResponse = await fastify.injectJson({
+      method: "POST",
+      url: "/examples",
+      payload: {
+        aVal: "test",
+      },
+    });
+
+    const findResponse = await fastify.injectJson({
+      method: "GET",
+      url: `/examples/${createResponse.json.id}`,
+    });
+
+    expect(findResponse.json).toEqual({
+      id: expect.stringMatching(NUMERIC_FORMAT),
+      createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
+      aVal: "test",
+    });
+  });
+
+  it("find all simples", async () => {
+    const createResponses = _.map(
+      "json",
+      await Promise.all([
+        fastify.injectJson({
+          method: "POST",
+          url: "/examples",
+          payload: {
+            aVal: "test",
+          },
+        }),
+        fastify.injectJson({
+          method: "POST",
+          url: "/examples",
+          payload: {
+            aVal: "toast",
+          },
+        }),
+      ])
+    );
+    const findResponse = await fastify.injectJson({ method: "GET", url: `/examples` });
+    expect(findResponse.json).toEqual([createResponses[1], createResponses[0]]);
   });
 });

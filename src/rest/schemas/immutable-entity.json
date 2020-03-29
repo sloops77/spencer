@@ -4,7 +4,8 @@
   "$id": "immutable-entity",
   "properties": {
     "id": {
-      "type": "string"
+      "type": "string",
+      "format": "uuid"
     },
     "createdAt": {
       "type": "string",

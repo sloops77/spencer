@@ -34,15 +34,19 @@
     "typescript": "~3.8.3"
   },
   "scripts": {
+    "db:migrate:dev": "knex migrate:latest --env development",
+    "db:migrate:test": "knex migrate:latest --env test",
+    "db:migrate:production": "knex migrate:latest --env production",
+    "db:prepare:test": "NODE_ENV=test yarn db:migrate:test",
     "lint": "eslint src test --fix",
     "lint:ci": "eslint src test --format junit -o ./reports/junit/lint-results.xml",
-    "test": "jest test --runInBand --coverage",
-    "test:ci": "JEST_JUNIT_OUTPUT_NAME='./reports/junit/test-results.xml' jest --config ./jest.config.js --runInBand --coverage --reporters=default --reporters=jest-junit",
     "schema:create:dev": "NODE_ENV=development node scripts/create-schema",
     "schema:create:test": "NODE_ENV=test node scripts/create-schema",
     "schema:create:production": "NODE_ENV=production node scripts/create-schema",
     "schema:drop:dev": "NODE_ENV=development node scripts/drop-schema",
     "schema:drop:test": "NODE_ENV=test node scripts/drop-schema",
-    "schema:drop:production": "NODE_ENV=production node scripts/drop-schema"
+    "schema:drop:production": "NODE_ENV=production node scripts/drop-schema",
+    "test": "jest test --runInBand --coverage",
+    "test:ci": "JEST_JUNIT_OUTPUT_NAME='./reports/junit/test-results.xml' jest --config ./jest.config.js --runInBand --coverage --reporters=default --reporters=jest-junit"
   }
 }
