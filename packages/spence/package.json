@@ -4,8 +4,8 @@
   "main": "src/index.js",
   "dependencies": {
     "env-var": "~6.0.4",
-    "fastify-plugin": "^1.6.1",
-    "import-cwd": "^3.0.0",
+    "fastify-plugin": "~1.6.1",
+    "import-cwd": "~3.0.0",
     "json-schema-traverse": "~0.4.1",
     "knex": "~0.20.13",
     "lodash": "~4.17.15",
@@ -15,10 +15,10 @@
     "uuid": "~7.0.2"
   },
   "peerDependencies": {
-    "fastify": "^2.13.0"
+    "fastify": "~2.13.0"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.149",
+    "@types/lodash": "~4.14.149",
     "@types/node": "~13.9.5",
     "await-sleep": "~0.0.1",
     "eslint": "~6.8.0",
@@ -26,7 +26,7 @@
     "eslint-config-prettier": "~6.10.1",
     "eslint-plugin-import": "~2.20.1",
     "eslint-plugin-prettier": "~3.1.2",
-    "fastify": "^2.13.0",
+    "fastify": "~2.13.0",
     "jest": "25.2.3",
     "jest-junit": "~10.0.0",
     "pino-pretty": "~3.6.1",
