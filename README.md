@@ -1,5 +1,5 @@
 # spencer
-Xtremely Fast and Opinionated API Framework For Fastify
+Opinionated API Framework For Fastify and Postgres for FAST coding and EXTREME extensibility
 
 [![CircleCI](https://circleci.com/gh/sloops77/spencer.svg?style=svg)](https://circleci.com/gh/sloops77/spencer)
 [![codecov](https://codecov.io/gh/sloops77/spencer/branch/master/graph/badge.svg)](https://codecov.io/gh/sloops77/spencer)
