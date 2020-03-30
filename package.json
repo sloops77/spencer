@@ -1,52 +1,29 @@
 {
   "name": "spence",
   "version": "0.1.4",
-  "main": "src/index.js",
-  "dependencies": {
-    "env-var": "~6.0.4",
-    "fastify-plugin": "^1.6.1",
-    "import-cwd": "^3.0.0",
-    "json-schema-traverse": "~0.4.1",
-    "knex": "~0.20.13",
-    "lodash": "~4.17.15",
-    "pg": "~7.18.2",
-    "pg-types": "~3.0.0",
-    "pino": "~6.0.0",
-    "uuid": "~7.0.2"
-  },
-  "peerDependencies": {
-    "fastify": "^2.13.0"
-  },
+  "private": true,
+  "dependencies": {},
+  "workspaces": ["packages/*"],
+  "peerDependencies": {},
   "devDependencies": {
-    "@types/lodash": "^4.14.149",
-    "@types/node": "~13.9.5",
-    "await-sleep": "~0.0.1",
-    "eslint": "~6.8.0",
-    "eslint-config-airbnb-base": "~14.1.0",
-    "eslint-config-prettier": "~6.10.1",
-    "eslint-plugin-import": "~2.20.1",
-    "eslint-plugin-prettier": "~3.1.2",
-    "fastify": "^2.13.0",
-    "jest": "25.2.3",
     "jest-junit": "~10.0.0",
-    "pino-pretty": "~3.6.1",
-    "prettier": "~2.0.2",
-    "typescript": "~3.8.3"
+    "lerna": "^3.20.2",
+    "pino-pretty": "~3.6.1"
   },
   "scripts": {
     "db:migrate:dev": "knex migrate:latest --env development",
-    "db:migrate:test": "knex migrate:latest --env test",
+    "db:migrate:test": "knex migrate:latest --env packages/spence/test",
     "db:migrate:production": "knex migrate:latest --env production",
     "db:prepare:test": "NODE_ENV=test yarn db:migrate:test",
-    "lint": "eslint src test --fix",
-    "lint:ci": "eslint src test --format junit -o ./reports/junit/lint-results.xml",
+    "lint": "eslint packages/spence/src packages/spence/test --fix",
+    "lint:ci": "eslint packages/spence/src packages/spence/test --format junit -o ./reports/junit/lint-results.xml",
     "schema:create:dev": "NODE_ENV=development node scripts/create-schema",
     "schema:create:test": "NODE_ENV=test node scripts/create-schema",
     "schema:create:production": "NODE_ENV=production node scripts/create-schema",
     "schema:drop:dev": "NODE_ENV=development node scripts/drop-schema",
     "schema:drop:test": "NODE_ENV=test node scripts/drop-schema",
     "schema:drop:production": "NODE_ENV=production node scripts/drop-schema",
-    "test": "jest test --runInBand --coverage",
+    "test": "jest packages/spence/test --runInBand --coverage",
     "test:ci": "JEST_JUNIT_OUTPUT_NAME='./reports/junit/test-results.xml' jest --config ./jest.config.js --runInBand --coverage --reporters=default --reporters=jest-junit"
   }
 }
