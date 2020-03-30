@@ -1,7 +1,7 @@
 {
   "name": "@spence/spence-factories",
   "version": "0.2.0",
-  "main": "src/index.js",
+  "main": "src/factory.js",
   "dependencies": {
     "lodash": "~4.17.15",
     "uuid": "~7.0.2"

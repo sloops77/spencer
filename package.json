@@ -23,7 +23,7 @@
     "schema:drop:dev": "NODE_ENV=development node scripts/drop-schema",
     "schema:drop:test": "NODE_ENV=test node scripts/drop-schema",
     "schema:drop:production": "NODE_ENV=production node scripts/drop-schema",
-    "test": "jest packages/spence/test --runInBand --coverage",
-    "test:ci": "JEST_JUNIT_OUTPUT_NAME='./reports/junit/test-results.xml' jest --config ./jest.config.js --runInBand --coverage --reporters=default --reporters=jest-junit"
+    "test": "jest --config ./jest.config.js --runInBand --coverage --reporters=default",
+    "test:ci": "JEST_JUNIT_OUTPUT_NAME='./reports/junit/test-results.xml' jest --config ./jest.config.js --projects packages/* --runInBand --coverage --reporters=default --reporters=jest-junit"
   }
 }
