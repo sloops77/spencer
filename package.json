@@ -13,9 +13,9 @@
   "scripts": {
     "bootstrap": "yarn install --frozen-lockfile",
     "db:migrate:dev": "NODE_ENV=development knex migrate:latest --env development",
-    "db:migrate:test": "NODE_ENV=test knex migrate:latest --env packages/spence/test",
+    "db:migrate:test": "NODE_ENV=test knex migrate:latest --env test",
     "db:migrate:production": "NODE_ENV=production knex migrate:latest --env production",
-    "db:prepare:test": "NODE_ENV=test yarn db:migrate:test",
+    "db:prepare:test": "yarn db:migrate:test",
     "lint": "eslint packages/spence/src packages/spence/test --fix",
     "lint:ci": "eslint packages/spence/src packages/spence/test --format junit -o ./reports/junit/lint-results.xml",
     "schema:create:dev": "NODE_ENV=development node scripts/create-schema",
