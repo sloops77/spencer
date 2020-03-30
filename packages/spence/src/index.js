@@ -6,7 +6,7 @@ const { tableEffectsFactory, addContext } = require("./table-effects/table-regis
 
 module.exports = {
   log: require("./log"),
-  knex: require("./tables/index"),
+  knex: require("./tables"),
   initTable,
   initTableEffects,
   tableEffectsFactory,

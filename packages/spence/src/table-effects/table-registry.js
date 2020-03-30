@@ -1,6 +1,6 @@
 const _ = require("lodash/fp");
 const initTable = require("../tables/table");
-const initTableEffects = require(".");
+const initTableEffects = require("./index");
 
 const tableRegistry = {};
 function tableEffectsFactory({ extensions, ...tableConfig }) {

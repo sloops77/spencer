@@ -1,7 +1,7 @@
 const _ = require("lodash/fp");
 const initController = require("../src/rest/controller");
 const { createSchema, dropSchema } = require("../src/tables/db");
-const knex = require("../src/tables/index");
+const knex = require("../src/tables");
 const { clearTableRegistry } = require("../src/table-effects/table-registry");
 const initFastify = require("./helpers/fastify");
 const { NUMERIC_FORMAT, ISO_DATETIME_FORMAT } = require("./helpers/regexes");

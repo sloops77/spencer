@@ -1,3 +1,3 @@
-const parentEslintRc = { ...require("../.eslintrc.js") };
+const parentEslintRc = { ...require("../../../.eslintrc.js") };
 parentEslintRc.rules["max-lines"] = ["off"];
 module.exports = parentEslintRc;

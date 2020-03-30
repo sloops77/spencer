@@ -1,5 +1,7 @@
 module.exports = {
-  testEnvironment: "node",
-  collectCoverageFrom: ["src/**/*.{js,jsx}", "!src/index.js", "!test/**", "!node_modules/**"],
-  coverageDirectory: "reports/coverage/"
+  roots: [],
+  projects: ["<rootDir>/packages/*/jest.config.js"],
+  coverageDirectory: "<rootDir>/coverage/",
+  collectCoverage: true,
+  verbose: true,
 };
