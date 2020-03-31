@@ -77,8 +77,8 @@ const del = {
   },
   handler({ tableEffects }) {
     return async (req, reply) => {
-      const result = await tableEffects(req).del(req.params.id, req.body);
-      reply.code(204).send(result);
+      await tableEffects(req).del(req.params.id, req.body);
+      reply.code(204).send();
     };
   },
 };
