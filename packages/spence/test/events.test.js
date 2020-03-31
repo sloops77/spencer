@@ -18,14 +18,36 @@ describe("events", () => {
     expect(errorHandler).not.toHaveBeenCalled();
   });
   it("publishing should send an event to multiple subscribers", async () => {
-    const subscriber = jest.fn();
-    subscribe(`simple`, `created`, subscriber);
+    const subscribers = [jest.fn(), jest.fn(() => 1), jest.fn(() => Promise.resolve(1))];
+    subscribe(`simple`, `created`, subscribers[0]);
+    subscribe(`simple`, `created`, subscribers[1]);
+    subscribe(`simple`, `created`, subscribers[2]);
     const payload = { aVal: "test" };
     const context = { userId: uuidv1() };
     const result = await publish(`simple`, `created`, payload, context);
     expect(result).toEqual(undefined);
     expect(errorHandler).not.toHaveBeenCalled();
-    expect(subscriber).toHaveBeenCalledWith({
+    expect(subscribers[0]).toHaveBeenCalledWith({
+      payload,
+      meta: {
+        ...context,
+        eventName: "created",
+        id: expect.stringMatching(UUID_FORMAT),
+        source: "spencer-node",
+        topic: "simple",
+      },
+    });
+    expect(subscribers[1]).toHaveBeenCalledWith({
+      payload,
+      meta: {
+        ...context,
+        eventName: "created",
+        id: expect.stringMatching(UUID_FORMAT),
+        source: "spencer-node",
+        topic: "simple",
+      },
+    });
+    expect(subscribers[3]).toHaveBeenCalledWith({
       payload,
       meta: {
         ...context,
@@ -84,6 +106,28 @@ describe("events", () => {
   it("reconnecting should reenable sending events to subscribers", async () => {
     disconnect(`simple.created`);
     connect(`simple.created`);
+    const subscriber = jest.fn();
+    subscribe(`simple`, `created`, subscriber);
+    const payload = { aVal: "test" };
+    const context = { userId: uuidv1() };
+    const result = await publish(`simple`, `created`, payload, context);
+    expect(result).toEqual(undefined);
+    expect(errorHandler).not.toHaveBeenCalled();
+    expect(subscriber).toHaveBeenCalledWith({
+      payload,
+      meta: {
+        ...context,
+        eventName: "created",
+        id: expect.stringMatching(UUID_FORMAT),
+        source: "spencer-node",
+        topic: "simple",
+      },
+    });
+  });
+
+  it("reconnecting using * reenable sending events to subscribers", async () => {
+    disconnect(`simple.created`);
+    connect(`*`);
     const subscriber = jest.fn();
     subscribe(`simple`, `created`, subscriber);
     const payload = { aVal: "test" };

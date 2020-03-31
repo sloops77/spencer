@@ -42,7 +42,7 @@ async function publish(topic, eventName, payload, context) {
 
 function logSubscribe(event) {
   return (returnVal) => {
-    if (!_.isEmpty(returnVal)) {
+    if (returnVal != null) {
       log.info({ event: _.omit(["meta.tables"], event), returnVal }, `subscribe result log`);
     }
     return returnVal;
