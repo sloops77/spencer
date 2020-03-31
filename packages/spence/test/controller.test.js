@@ -1,5 +1,6 @@
 const _ = require("lodash/fp");
 const initController = require("../src/rest/controller");
+const { create, getAll, getById, del, update } = require("../src/rest/rest-handlers");
 const { createSchema, dropSchema } = require("../src/tables/db");
 const knex = require("../src/tables");
 const { clearTableRegistry } = require("../src/table-effects/table-registry");
@@ -50,12 +51,17 @@ describe("controller", () => {
     });
     (await examplesTableEffectsFactory({ schemaName, transformCase: false }))();
 
-    simpleController = initController({
-      tag: "",
-      routes: ["create", "get", "all"],
-      schemas: { create: newSimpleSchema, reply: simpleSchema },
-      tableName: "examples",
-    });
+    simpleController = initController(
+      {
+        tag: "examples",
+        schemas: { create: newSimpleSchema, reply: simpleSchema },
+        tableName: "examples",
+      },
+      (router, controllerOptions, next) => {
+        router.restRoutes(create, getAll, getById, update, del);
+        next();
+      }
+    );
 
     fastify = initFastify({ "/examples": simpleController }, {});
   });
@@ -129,5 +135,45 @@ describe("controller", () => {
     );
     const findResponse = await fastify.injectJson({ method: "GET", url: `/examples` });
     expect(findResponse.json).toEqual([createResponses[1], createResponses[0]]);
+  });
+
+  it("update simples", async () => {
+    const createResponses = _.map(
+      "json",
+      await Promise.all([
+        fastify.injectJson({
+          method: "POST",
+          url: "/examples",
+          payload: {
+            aVal: "test",
+          },
+        }),
+      ])
+    );
+    const updateResponse = await fastify.injectJson({
+      method: "PATCH",
+      url: `/examples/${createResponses[0].id}`,
+      payload: { aVal: "not-test" },
+    });
+    expect(updateResponse.json).toEqual({ ...createResponses[0], aVal: "not-test" });
+  });
+
+  it("del simples", async () => {
+    const createResponses = _.map(
+      "json",
+      await Promise.all([
+        fastify.injectJson({
+          method: "POST",
+          url: "/examples",
+          payload: {
+            aVal: "test",
+          },
+        }),
+      ])
+    );
+    const delResponse = await fastify.injectJson({ method: "DELETE", url: `/examples/${createResponses[0].id}` });
+    expect(delResponse.statusCode).toEqual(204);
+    const findResponse = await fastify.injectJson({ method: "GET", url: `/examples` });
+    expect(findResponse.json).toEqual([]);
   });
 });
