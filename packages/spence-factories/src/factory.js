@@ -19,15 +19,28 @@ function newFactoryType(baseFactory, dependencies) {
 }
 
 function createdFactoryType(baseFactory, dependencies) {
-  return (overrides = {}) => ({
-    id: uuidv1(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    ...baseFactory(
+  return (overrides = {}) => {
+    const objOrP = baseFactory(
       overrides,
       ..._.map((dependency) => dependency[`created${dependency.capitalizedName}`], dependencies)
-    ),
-  });
+    );
+
+    if (objOrP.then) {
+      return objOrP.then((obj) => ({
+        id: uuidv1(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        ...obj,
+      }));
+    }
+
+    return {
+      id: uuidv1(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      ...objOrP,
+    };
+  };
 }
 
 function persistFactoryType(baseFactory, table, dependencies) {

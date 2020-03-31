@@ -106,6 +106,18 @@ describe("test factories", () => {
       });
     });
 
+    it("when persisting it should create the simple, then the complex", async () => {
+      const { createdComplex } = complexFactory;
+      const complex = await createdComplex();
+      expect(complex).toEqual({
+        id: expect.stringMatching(UUID_FORMAT),
+        aComplexVal: "test",
+        createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
+        updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
+        simpleId: expect.stringMatching(UUID_FORMAT),
+      });
+    });
+
     it("when persisting it should persist the simple, then the complex", async () => {
       const { persistComplex } = complexFactory;
       expect(await persistComplex()).toEqual({
