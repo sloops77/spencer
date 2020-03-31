@@ -1,11 +1,11 @@
 const _ = require("lodash/fp");
+const uuidv1 = require("uuid/v1");
 const {
   simpleUuidTableCreator,
   simpleUuidTableEffectsFactory,
   complexTableCreator,
   complexTableEffectsFactory,
-} = require("@spence/spence/test/test-tables"); // eslint-disable-line global-require
-const uuidv1 = require("uuid/v1");
+} = require("../../spence/test/test-tables");
 const { register } = require("../src/factory");
 const knex = require("../../spence/src/tables");
 const { createSchema, dropSchema } = require("../../spence/src/tables/db");
