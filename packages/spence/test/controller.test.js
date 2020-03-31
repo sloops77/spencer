@@ -1,5 +1,6 @@
 const _ = require("lodash/fp");
 const initController = require("../src/rest/controller");
+const { create, getAll, getById } = require("../src/rest/rest-handlers");
 const { createSchema, dropSchema } = require("../src/tables/db");
 const knex = require("../src/tables");
 const { clearTableRegistry } = require("../src/table-effects/table-registry");
@@ -50,12 +51,17 @@ describe("controller", () => {
     });
     (await examplesTableEffectsFactory({ schemaName, transformCase: false }))();
 
-    simpleController = initController({
-      tag: "",
-      routes: ["create", "get", "all"],
-      schemas: { create: newSimpleSchema, reply: simpleSchema },
-      tableName: "examples",
-    });
+    simpleController = initController(
+      {
+        tag: "examples",
+        schemas: { create: newSimpleSchema, reply: simpleSchema },
+        tableName: "examples",
+      },
+      (router, controllerOptions, next) => {
+        router.restRoutes(create, getAll, getById);
+        next();
+      }
+    );
 
     fastify = initFastify({ "/examples": simpleController }, {});
   });
