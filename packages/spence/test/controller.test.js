@@ -42,7 +42,7 @@ describe("controller", () => {
 
   beforeAll(async () => {
     // eslint-disable-next-line global-require
-    const { exampleTableCreator, examplesTableEffectsFactory } = require("./simple-table");
+    const { exampleTableCreator, examplesTableEffectsFactory } = require("./test-tables");
 
     schemaName = `simpleTest--${Date.now()}`;
     await createSchema({

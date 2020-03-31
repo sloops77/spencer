@@ -42,7 +42,7 @@ async function publish(topic, eventName, payload, context) {
 
 function logSubscribe(event) {
   return (returnVal) => {
-    if (!_.isEmpty(returnVal)) {
+    if (returnVal != null) {
       log.info({ event: _.omit(["meta.tables"], event), returnVal }, `subscribe result log`);
     }
     return returnVal;
@@ -52,7 +52,11 @@ function logSubscribe(event) {
 function subscribe(topic, eventName, listener) {
   nexus.on(`${topic}.${eventName}`, (event) => {
     const returnVal = listener(event);
-    if (returnVal.then) {
+    if (returnVal == null) {
+      return undefined;
+    }
+
+    if (returnVal.then != null) {
       return returnVal.then(logSubscribe(event));
     }
     return logSubscribe(event)(returnVal);

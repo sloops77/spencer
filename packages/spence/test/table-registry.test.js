@@ -3,7 +3,7 @@ const uuidv1 = require("uuid/v1");
 const knex = require("../src/tables");
 const { createSchema, dropSchema } = require("../src/tables/db");
 const { tableRegistry, clearTableRegistry, addContext } = require("../src/table-effects/table-registry");
-const simpleTableSpec = require("./simple-table");
+const simpleTableSpec = require("./test-tables");
 
 describe("table registry", () => {
   let schemaName = null;
