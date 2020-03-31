@@ -18,7 +18,7 @@ describe.each([["snake"], ["camel"]])("simple table %s", (columnCase) => {
       simpleTableEffectsFactory,
       arrayTableCreator,
       arraysTableEffectsFactory,
-    } = require("./simple-table"); // eslint-disable-line global-require
+    } = require("./test-tables"); // eslint-disable-line global-require
     await createSchema({
       schemaName,
       tableCreators: [simpleTableCreator(columnCase === "snake"), arrayTableCreator(columnCase === "snake")],
