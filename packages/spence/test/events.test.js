@@ -47,7 +47,7 @@ describe("events", () => {
         topic: "simple",
       },
     });
-    expect(subscribers[3]).toHaveBeenCalledWith({
+    expect(subscribers[2]).toHaveBeenCalledWith({
       payload,
       meta: {
         ...context,
@@ -127,7 +127,7 @@ describe("events", () => {
 
   it("reconnecting using * reenable sending events to subscribers", async () => {
     disconnect(`simple.created`);
-    connect(`*`);
+    connect();
     const subscriber = jest.fn();
     subscribe(`simple`, `created`, subscriber);
     const payload = { aVal: "test" };
