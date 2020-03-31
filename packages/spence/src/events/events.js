@@ -52,7 +52,11 @@ function logSubscribe(event) {
 function subscribe(topic, eventName, listener) {
   nexus.on(`${topic}.${eventName}`, (event) => {
     const returnVal = listener(event);
-    if (returnVal.then) {
+    if (returnVal == null) {
+      return undefined;
+    }
+
+    if (returnVal.then != null) {
       return returnVal.then(logSubscribe(event));
     }
     return logSubscribe(event)(returnVal);
