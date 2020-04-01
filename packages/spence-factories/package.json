@@ -1,6 +1,6 @@
 {
   "name": "@spencer/spencer-factories",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "main": "src/factory.js",
   "license": "MIT",
   "dependencies": {
