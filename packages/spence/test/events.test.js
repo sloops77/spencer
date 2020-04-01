@@ -33,7 +33,7 @@ describe("events", () => {
         ...context,
         eventName: "created",
         id: expect.stringMatching(UUID_FORMAT),
-        source: "spencer-node",
+        source: "spence-node",
         topic: "simple",
       },
     });
@@ -43,7 +43,7 @@ describe("events", () => {
         ...context,
         eventName: "created",
         id: expect.stringMatching(UUID_FORMAT),
-        source: "spencer-node",
+        source: "spence-node",
         topic: "simple",
       },
     });
@@ -53,7 +53,7 @@ describe("events", () => {
         ...context,
         eventName: "created",
         id: expect.stringMatching(UUID_FORMAT),
-        source: "spencer-node",
+        source: "spence-node",
         topic: "simple",
       },
     });
@@ -74,7 +74,7 @@ describe("events", () => {
           ...context,
           eventName: "created",
           id: expect.stringMatching(UUID_FORMAT),
-          source: "spencer-node",
+          source: "spence-node",
           topic: "simple",
         },
       },
@@ -87,7 +87,7 @@ describe("events", () => {
         ...context,
         eventName: "created",
         id: expect.stringMatching(UUID_FORMAT),
-        source: "spencer-node",
+        source: "spence-node",
         topic: "simple",
       },
     });
@@ -119,7 +119,7 @@ describe("events", () => {
         ...context,
         eventName: "created",
         id: expect.stringMatching(UUID_FORMAT),
-        source: "spencer-node",
+        source: "spence-node",
         topic: "simple",
       },
     });
@@ -141,7 +141,7 @@ describe("events", () => {
         ...context,
         eventName: "created",
         id: expect.stringMatching(UUID_FORMAT),
-        source: "spencer-node",
+        source: "spence-node",
         topic: "simple",
       },
     });
