@@ -1,21 +1,6 @@
 const _ = require("lodash/fp");
-const traverse = require("json-schema-traverse");
 
 const knex = require("../knex");
-
-function buildColumnInfoFromSchema(schema) {
-  const columnInfo = {};
-  traverse(schema, {
-    cb: (...args) => {
-      if (!_.isString(args[args.length - 1])) {
-        return;
-      }
-
-      columnInfo[args[args.length - 1]] = "string";
-    },
-  });
-  return Promise.resolve(columnInfo);
-}
 
 async function buildColumnInfoFromDb(table, ignoreColumns) {
   const rawColumnInfo = await table().columnInfo();
@@ -27,14 +12,13 @@ async function buildColumnInfoFromDb(table, ignoreColumns) {
   );
 }
 
-function init({ name, schemaName = "public", entityName, jsonSchema, ignoreColumns = [] }) {
+function init({ name, schemaName = "public", entityName, ignoreColumns = [] }) {
   function table(context = {}) {
     const knexTable = context.trx != null ? context.trx(name) : knex(name);
     return schemaName ? knexTable.withSchema(schemaName) : knexTable;
   }
 
-  const columnInfo =
-    jsonSchema != null ? buildColumnInfoFromSchema(jsonSchema) : buildColumnInfoFromDb(table, ignoreColumns);
+  const columnInfo = buildColumnInfoFromDb(table, ignoreColumns);
 
   return Object.assign(table, {
     schemaName,
