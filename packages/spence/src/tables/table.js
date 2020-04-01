@@ -14,11 +14,15 @@ async function buildColumnInfoFromDb(table, ignoreColumns) {
 
 function init({ name, schemaName = "public", entityName, ignoreColumns = [] }) {
   function table(context = {}) {
-    const knexTable = context.trx != null ? context.trx(name) : knex(name);
+    const knexTable = connection(context)(name);
     return schemaName ? knexTable.withSchema(schemaName) : knexTable;
   }
 
   const columnInfo = buildColumnInfoFromDb(table, ignoreColumns);
+
+  function connection(context) {
+    return (context && context.trx) || knex;
+  }
 
   return Object.assign(table, {
     schemaName,
@@ -26,6 +30,7 @@ function init({ name, schemaName = "public", entityName, ignoreColumns = [] }) {
     entityName,
     columnInfo,
     knex,
+    connection,
     get columnNames() {
       return columnInfo.then(_.keys);
     },
