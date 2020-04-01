@@ -1,6 +1,6 @@
 {
   "name": "@spencer/spencer",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "main": "src/index.js",
   "license": "MIT",
   "publishConfig": {
