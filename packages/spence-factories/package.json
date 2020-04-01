@@ -3,9 +3,6 @@
   "version": "0.3.5",
   "main": "src/factory.js",
   "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  },
   "dependencies": {
     "lodash": "~4.17.15",
     "uuid": "~7.0.2"
@@ -29,9 +26,6 @@
     "test": "jest test --runInBand --coverage"
   },
   "description": "Spencer Factories - An opinionated Factory Framework for testing db entities",
-  "directories": {
-    "test": "test"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sloops77/spencer.git"
@@ -44,5 +38,9 @@
   "bugs": {
     "url": "https://github.com/sloops77/spencer/issues"
   },
-  "homepage": "https://github.com/sloops77/spencer#readme"
+  "homepage": "https://github.com/sloops77/spencer#readme",
+  "gitHead": "590e16eda20c0813410c8287cfa506890aa45264",
+  "publishConfig": {
+    "access": "public"
+  }
 }
