@@ -28,5 +28,5 @@
     "lint": "eslint src test --fix",
     "test": "jest test --runInBand --coverage"
   },
-  "gitHead": "cd2dfc2e86dcfc92d4ff2d94b2a79fe3ec1200ad"
+  "gitHead": "b1a7b5e65ec31b7799b992846ba4e7307145ef48"
 }
