@@ -180,5 +180,5 @@ describe("controller", () => {
   describe("extensions", () => {
     it("should be possible to add an extension and it works", () => {});
     it("should be possible to add an extension that sets a transaction", () => {});
-  })
+  });
 });
