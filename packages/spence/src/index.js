@@ -6,7 +6,7 @@ const { tableEffectsFactory, addContext } = require("./table-effects/table-regis
 
 module.exports = {
   log: require("./log"),
-  knex: require("./tables"),
+  knex: require("./knex"),
   initTable,
   initTableEffects,
   tableEffectsFactory,
@@ -20,8 +20,8 @@ module.exports = {
   },
   newError: require("./new-error"),
   fastifyRest: require("./rest/plugin"),
-  createSchema: require("./tables/db").createSchema,
-  dropSchema: require("./tables/db").dropSchema,
+  createSchema: require("./tables/schemas").createSchema,
+  dropSchema: require("./tables/schemas").dropSchema,
   tenantPreHandler: require("./hooks/tenant-pre-handler"),
   tablesPreHandler: require("./hooks/tables-pre-handler"),
   softDeleteExtension: require("./table-effects/soft-delete-extension"),

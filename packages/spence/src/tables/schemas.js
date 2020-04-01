@@ -1,5 +1,5 @@
 const _ = require("lodash/fp");
-const knex = require("./index");
+const knex = require("../knex");
 
 async function createSchema({ schemaName = "public", softDelete = false, tableCreators = [] } = {}) {
   await knex.raw(`CREATE SCHEMA IF NOT EXISTS "${schemaName}"`);

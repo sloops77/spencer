@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 const _ = require("lodash/fp");
+const pSettle = require("p-settle");
 const { publish } = require("../events/events");
 const newError = require("../new-error");
 const initPrepModification = require("./prep-modification");
@@ -39,15 +40,11 @@ function init(table, extensions = [], transformCase) {
       return query.whereRaw(filter, _.castArray(params));
     }
 
-    async function insert(val, selection, tx) {
+    async function insert(val, selection) {
       const returning = selection || (await applied.defaultColumnsSelection);
-      let statement = table()
+      const statement = table()
         .returning(returning)
         .insert(await applied.prepModification(val));
-
-      if (tx != null) {
-        statement = statement.transacting(tx);
-      }
 
       const insertVal = await statement;
 
@@ -56,8 +53,8 @@ function init(table, extensions = [], transformCase) {
       return result;
     }
 
-    async function insertMany(vals, selection, tx) {
-      return Promise.all(_.map((val) => applied.insert(val, selection, tx), vals));
+    async function insertMany(vals, selection) {
+      return pSettle(_.map((val) => applied.insert(val, selection), vals));
     }
 
     async function findOrInsert(val, naturalKey, selection) {
@@ -76,13 +73,8 @@ function init(table, extensions = [], transformCase) {
       return table().where(_.pick(dbifiedNaturalKeys, preppedVal)).select(returning).first().then(apifyResult);
     }
 
-    async function findById(id, selection, tx) {
-      let query = applied.buildFinderQuery({ filter: "id = ?", params: [id] });
-
-      if (tx != null) {
-        query = query.transacting(tx);
-      }
-
+    async function findById(id, selection) {
+      const query = applied.buildFinderQuery({ filter: "id = ?", params: [id] });
       const returning = (selection && dbifySelection(selection)) || (await applied.defaultColumnsSelection);
       const result = await query.first(returning);
 
@@ -150,14 +142,10 @@ function init(table, extensions = [], transformCase) {
     }
 
     // eslint-disable-next-line complexity
-    async function doUpdateById(id, updateStatement, selection = "id", tx = null) {
-      let query = applied
+    async function doUpdateById(id, updateStatement, selection = "id") {
+      const query = applied
         .buildFinderQuery({ filter: "id = ?", params: [id] })
         .returning(selection && dbifySelection(selection));
-
-      if (tx != null) {
-        query = query.transacting(tx);
-      }
 
       const result = await query.update(_.isFunction(updateStatement) ? updateStatement() : updateStatement);
 
@@ -168,14 +156,9 @@ function init(table, extensions = [], transformCase) {
       return (selection && apifyResult(_.first(result))) || result;
     }
 
-    async function updateUsingFilter(filter, val, selection, tx = null) {
+    async function updateUsingFilter(filter, val, selection) {
       const returning = (selection && dbifySelection(selection)) || (await applied.defaultColumnsSelection);
-      let query = applied.buildFinderQuery(filter).returning(returning);
-
-      if (tx != null) {
-        query = query.transacting(tx);
-      }
-
+      const query = applied.buildFinderQuery(filter).returning(returning);
       const updateStatement = await applied.prepModification(val);
       const result = apifyResult(
         await query.update(_.isFunction(updateStatement) ? updateStatement() : updateStatement)
@@ -185,15 +168,15 @@ function init(table, extensions = [], transformCase) {
       return result;
     }
 
-    async function touch(id, selection, tx) {
+    async function touch(id, selection) {
       const returning = selection || (await applied.defaultColumnsSelection);
-      const result = await doUpdateById(id, { updatedAt: new Date() }, returning, tx);
+      const result = await doUpdateById(id, { updatedAt: new Date() }, returning);
       return result;
     }
 
-    async function update(id, val, selection, tx) {
+    async function update(id, val, selection) {
       const returning = selection || (await applied.defaultColumnsSelection);
-      const result = await doUpdateById(id, await applied.prepModification(val), returning, tx);
+      const result = await doUpdateById(id, await applied.prepModification(val), returning);
       publish(table.entityName, `updated`, { state: result, changes: { kind: "patch", val } }, context);
       return result;
     }

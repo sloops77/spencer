@@ -1,7 +1,7 @@
 const _ = require("lodash/fp");
 const traverse = require("json-schema-traverse");
 
-const knex = require("./index");
+const knex = require("../knex");
 
 function buildColumnInfoFromSchema(schema) {
   const columnInfo = {};
@@ -28,8 +28,8 @@ async function buildColumnInfoFromDb(table, ignoreColumns) {
 }
 
 function init({ name, schemaName = "public", entityName, jsonSchema, ignoreColumns = [] }) {
-  function table() {
-    const knexTable = knex(name);
+  function table(context = {}) {
+    const knexTable = context.trx != null ? context.trx(name) : knex(name);
     return schemaName ? knexTable.withSchema(schemaName) : knexTable;
   }
 

@@ -1,5 +1,5 @@
-const knex = require("../src/tables");
-const { createSchema, dropSchema } = require("../src/tables/db");
+const knex = require("../src/knex");
+const { createSchema, dropSchema } = require("../src/tables/schemas");
 const { clearTableRegistry } = require("../src/table-effects/table-registry");
 
 afterAll(async () => {

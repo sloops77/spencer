@@ -7,8 +7,8 @@ const {
   complexTableEffectsFactory,
 } = require("../../spence/test/test-tables");
 const { register } = require("../src/factory");
-const knex = require("../../spence/src/tables");
-const { createSchema, dropSchema } = require("../../spence/src/tables/db");
+const knex = require("../../spence/src/knex");
+const { createSchema, dropSchema } = require("../../spence/src/tables/schemas");
 const { clearTableRegistry } = require("../../spence/src/table-effects/table-registry");
 const { UUID_FORMAT, ISO_DATETIME_FORMAT } = require("../../spence/test/helpers/regexes");
 

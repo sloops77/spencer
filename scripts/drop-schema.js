@@ -1,5 +1,5 @@
-const { dropSchema } = require("../packages/spence/src/tables/db");
-const knex = require("../packages/spence/src/tables");
+const { dropSchema } = require("../packages/spence/src/tables/schemas");
+const knex = require("../packages/spence/src/knex");
 
 dropSchema({ softDelete: true })
   .then(() => knex.destroy())

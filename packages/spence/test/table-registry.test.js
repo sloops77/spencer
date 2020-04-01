@@ -1,7 +1,7 @@
 const _ = require("lodash/fp");
 const uuidv1 = require("uuid/v1");
-const knex = require("../src/tables");
-const { createSchema, dropSchema } = require("../src/tables/db");
+const knex = require("../src/knex");
+const { createSchema, dropSchema } = require("../src/tables/schemas");
 const { tableRegistry, clearTableRegistry, addContext } = require("../src/table-effects/table-registry");
 const simpleTableSpec = require("./test-tables");
 

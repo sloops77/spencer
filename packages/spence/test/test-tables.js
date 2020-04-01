@@ -1,5 +1,5 @@
 const { tableEffectsFactory } = require("../src");
-const knex = require("../src/tables");
+const knex = require("../src/knex");
 
 function simpleTableEffectsFactory(config) {
   return tableEffectsFactory({
