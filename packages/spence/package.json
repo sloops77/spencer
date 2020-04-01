@@ -3,7 +3,7 @@
   "version": "0.3.2",
   "main": "src/index.js",
   "license": "MIT",
-  "config": {
+  "publishConfig": {
     "access": "public"
   },
   "dependencies": {
