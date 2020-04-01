@@ -1,5 +1,5 @@
 {
-  "name": "@spencer/spencer",
+  "name": "@spencejs/spence",
   "version": "0.3.7",
   "main": "src/index.js",
   "license": "MIT",
@@ -58,5 +58,5 @@
     "url": "https://github.com/sloops77/spencer/issues"
   },
   "homepage": "https://github.com/sloops77/spencer#readme",
-  "gitHead": "43cb71321d5f65db7081d125c723d038f0fd35bf"
+  "gitHead": "e5640ff1eda85b2477b2940b2f6cebca74726d80"
 }

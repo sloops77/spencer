@@ -1,5 +1,5 @@
 {
-  "name": "@spencer/spencer-factories",
+  "name": "@spencejs/spence-factories",
   "version": "0.3.7",
   "main": "src/factory.js",
   "license": "MIT",
@@ -25,7 +25,7 @@
     "lint": "eslint src test --fix",
     "test": "jest test --runInBand --coverage"
   },
-  "description": "Spencer Factories - An opinionated Factory Framework for testing db entities",
+  "description": "Spence Factories - An opinionated Factory Framework for testing db entities",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sloops77/spencer.git"
@@ -39,7 +39,7 @@
     "url": "https://github.com/sloops77/spencer/issues"
   },
   "homepage": "https://github.com/sloops77/spencer#readme",
-  "gitHead": "43cb71321d5f65db7081d125c723d038f0fd35bf",
+  "gitHead": "e5640ff1eda85b2477b2940b2f6cebca74726d80",
   "publishConfig": {
     "access": "public"
   }
