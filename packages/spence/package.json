@@ -1,7 +1,9 @@
 {
   "name": "@spence/spence",
-  "version": "0.3.0",
+  "version": "0.2.0",
   "main": "src/index.js",
+  "license": "MIT",
+  "access": "public",
   "dependencies": {
     "env-var": "~6.0.4",
     "fastify-plugin": "~1.6.1",
@@ -36,5 +38,6 @@
   "scripts": {
     "lint": "eslint src test --fix",
     "test": "jest test --runInBand --coverage"
-  }
+  },
+  "gitHead": "9512cfe524b8e0c2ddb6cc9e5556b8f2226eaca0"
 }
