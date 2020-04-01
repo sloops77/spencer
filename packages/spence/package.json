@@ -3,7 +3,9 @@
   "version": "0.3.1",
   "main": "src/index.js",
   "license": "MIT",
-  "access": "public",
+  "config": {
+    "access": "public"
+  },
   "dependencies": {
     "env-var": "~6.0.4",
     "fastify-plugin": "~1.6.1",
@@ -39,5 +41,5 @@
     "lint": "eslint src test --fix",
     "test": "jest test --runInBand --coverage"
   },
-  "gitHead": "9512cfe524b8e0c2ddb6cc9e5556b8f2226eaca0"
+  "gitHead": "cd2dfc2e86dcfc92d4ff2d94b2a79fe3ec1200ad"
 }
