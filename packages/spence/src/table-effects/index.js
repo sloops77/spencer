@@ -33,7 +33,7 @@ function init(table, extensions = [], transformCase) {
 
   return _.memoize((context = {}) => {
     function buildFinderQuery({ filter, params = [] }) {
-      const query = table();
+      const query = table(context);
       if (_.isEmpty(filter)) {
         return query;
       }
@@ -42,7 +42,7 @@ function init(table, extensions = [], transformCase) {
 
     async function insert(val, selection) {
       const returning = selection || (await applied.defaultColumnsSelection);
-      const statement = table()
+      const statement = table(context)
         .returning(returning)
         .insert(await applied.prepModification(val));
 
@@ -62,15 +62,15 @@ function init(table, extensions = [], transformCase) {
       const returning = (selection && dbifySelection(selection)) || (await applied.defaultColumnsSelection);
       const dbifiedNaturalKeys = dbifySelection(naturalKey);
 
-      const insertStmt = `${table().insert(preppedVal).toString()} ON CONFLICT DO NOTHING RETURNING ${returning
-        .map((v) => `"${v}"`)
-        .join(",")}`;
-      const insertedVal = await table.knex.raw(insertStmt);
+      const insertStmt = `${table(context)
+        .insert(preppedVal)
+        .toString()} ON CONFLICT DO NOTHING RETURNING ${returning.map((v) => `"${v}"`).join(",")}`;
+      const insertedVal = await table.connection(context).raw(insertStmt);
       if (insertedVal != null && insertedVal.rowCount === 1) {
         return apifyResult(_.first(insertedVal.rows));
       }
 
-      return table().where(_.pick(dbifiedNaturalKeys, preppedVal)).select(returning).first().then(apifyResult);
+      return table(context).where(_.pick(dbifiedNaturalKeys, preppedVal)).select(returning).first().then(apifyResult);
     }
 
     async function findById(id, selection) {
@@ -100,7 +100,7 @@ function init(table, extensions = [], transformCase) {
           [`${table.tableName}.createdAt`, "desc"],
           [`${table.tableName}.id`, "asc"],
         ],
-      },
+      } = {},
       selection,
       decorator = _.identity
     ) {
@@ -137,7 +137,7 @@ function init(table, extensions = [], transformCase) {
         .replace(/^update.*set\s/i, "")
         .replace(/\swhere\s.*$/i, "")}`;
 
-      await table.knex.raw(query);
+      await table.connection(context).raw(query);
       return findById(id, selection);
     }
 
