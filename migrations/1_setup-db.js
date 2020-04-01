@@ -1,4 +1,3 @@
-const _ = require("lodash/fp");
 const { createSchema } = require("../packages/spence/src");
 const { getSchema } = require("./shared/get-schema");
 

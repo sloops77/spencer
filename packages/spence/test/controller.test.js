@@ -1,8 +1,8 @@
 const _ = require("lodash/fp");
 const initController = require("../src/rest/controller");
 const { create, getAll, getById, del, update } = require("../src/rest/rest-handlers");
-const { createSchema, dropSchema } = require("../src/tables/db");
-const knex = require("../src/tables");
+const { createSchema, dropSchema } = require("../src/tables/schemas");
+const knex = require("../src/knex");
 const { clearTableRegistry } = require("../src/table-effects/table-registry");
 const initFastify = require("./helpers/fastify");
 const { NUMERIC_FORMAT, ISO_DATETIME_FORMAT } = require("./helpers/regexes");
@@ -175,5 +175,10 @@ describe("controller", () => {
     expect(delResponse.statusCode).toEqual(204);
     const findResponse = await fastify.injectJson({ method: "GET", url: `/examples` });
     expect(findResponse.json).toEqual([]);
+  });
+
+  describe("extensions", () => {
+    it("should be possible to add an extension and it works", () => {});
+    it("should be possible to add an extension that sets a transaction", () => {});
   });
 });
