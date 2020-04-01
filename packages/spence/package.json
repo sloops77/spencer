@@ -1,5 +1,5 @@
 {
-  "name": "@spence/spence",
+  "name": "@spencer/spencer",
   "version": "0.3.4",
   "main": "src/index.js",
   "license": "MIT",
@@ -41,5 +41,21 @@
     "lint": "eslint src test --fix",
     "test": "jest test --runInBand --coverage"
   },
-  "gitHead": "f9a145eedde9de6f3e3f8c9526165f05804a9a54"
+  "description": "Spencer - An opinionated API Framework For nodejs",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sloops77/spencer.git"
+  },
+  "keywords": [
+    "API",
+    "framework"
+  ],
+  "author": "Andres Olave",
+  "bugs": {
+    "url": "https://github.com/sloops77/spencer/issues"
+  },
+  "homepage": "https://github.com/sloops77/spencer#readme"
 }
