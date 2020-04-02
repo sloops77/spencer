@@ -22,6 +22,9 @@ function commonFactoryType(baseFactory, itemType) {
         manualProperties.push(property);
         return rawOverrides[property];
       }
+      if (_.isFunction(valFactory)) {
+        return valFactory(overrides);
+      }
       return valFactory[`${itemType}${valFactory.capitalizedName}`](overrides());
     }
 
