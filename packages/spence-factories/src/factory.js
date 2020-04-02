@@ -57,4 +57,12 @@ function persistFactoryType(baseFactory, table, dependencies) {
     );
 }
 
-module.exports = { register, createdFactoryType, persistFactoryType };
+async function getOrBuild(factory, property, overrides) {
+  const val = _.get(property, overrides);
+  if (val == null) {
+    return factory(overrides);
+  }
+  return val;
+}
+
+module.exports = { register, createdFactoryType, persistFactoryType, getOrBuild };

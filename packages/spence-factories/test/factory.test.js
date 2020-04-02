@@ -6,7 +6,7 @@ const {
   complexTableCreator,
   complexTableEffectsFactory,
 } = require("../../spence/test/test-tables");
-const { register } = require("../src/factory");
+const { register, getOrBuild } = require("../src/factory");
 const knex = require("../../spence/src/knex");
 const { createSchema, dropSchema } = require("../../spence/src/tables/schemas");
 const { clearTableRegistry } = require("../../spence/src/table-effects/table-registry");
@@ -82,7 +82,7 @@ describe("test factories", () => {
         "complex",
         complexTable,
         async (overrides, simpleFactory1) => {
-          const simple = _.getOr(await simpleFactory1(), "simple", overrides);
+          const simple = await getOrBuild(simpleFactory1, "simple", overrides);
           return {
             aComplexVal: "test",
             simpleId: simple.id,
