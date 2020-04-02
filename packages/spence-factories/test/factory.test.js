@@ -6,7 +6,7 @@ const {
   complexTableCreator,
   complexTableEffectsFactory,
 } = require("../../spence/test/test-tables");
-const { register, getOrBuild } = require("../src/factory");
+const { register } = require("../src/factory");
 const knex = require("../../spence/src/knex");
 const { createSchema, dropSchema } = require("../../spence/src/tables/schemas");
 const { clearTableRegistry } = require("../../spence/src/table-effects/table-registry");
@@ -37,7 +37,7 @@ describe("test factories", () => {
   beforeEach(() => {
     simpleFactory = register("simple", simpleTable, (overrides) => ({
       aVal: "test",
-      ...overrides,
+      ...overrides(),
     }));
     simpleTable.table.knex.truncate();
   });
@@ -78,19 +78,14 @@ describe("test factories", () => {
     let complexFactory;
 
     beforeEach(() => {
-      complexFactory = register(
-        "complex",
-        complexTable,
-        async (overrides, simpleFactory1) => {
-          const simple = await getOrBuild(simpleFactory1, "simple", overrides);
-          return {
-            aComplexVal: "test",
-            simpleId: simple.id,
-            ..._.omit(["simple"], overrides),
-          };
-        },
-        [simpleFactory]
-      );
+      complexFactory = register("complex", complexTable, async (overrides, getOrBuild) => {
+        const simple = await getOrBuild("simple", simpleFactory);
+        return {
+          aComplexVal: "test",
+          simpleId: simple.id,
+          ...overrides(),
+        };
+      });
     });
 
     it("should create a new struct without an id", async () => {
