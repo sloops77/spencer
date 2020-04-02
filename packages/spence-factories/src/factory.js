@@ -1,15 +1,15 @@
 const _ = require("lodash/fp");
 const uuidv1 = require("uuid/v1");
 
-function register(name, table, baseFactory, dependencies) {
+function register(name, table, baseFactory) {
   const capitalizedName = `${_.capitalize(name[0])}${name.slice(1)}`;
 
   return {
     name,
     capitalizedName,
     [`new${capitalizedName}`]: commonFactoryType(baseFactory, "new"),
-    [`created${capitalizedName}`]: createdFactoryType(baseFactory, dependencies),
-    [`persist${capitalizedName}`]: persistFactoryType(baseFactory, table, dependencies),
+    [`created${capitalizedName}`]: createdFactoryType(baseFactory),
+    [`persist${capitalizedName}`]: persistFactoryType(baseFactory, table),
   };
 }
 
