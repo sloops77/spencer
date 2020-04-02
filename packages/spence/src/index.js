@@ -27,4 +27,15 @@ module.exports = {
   softDeleteExtension: require("./table-effects/soft-delete-extension"),
   multiTenantExtension: require("./table-effects/multi-tenant-extension"),
   findConnectionsExtension: require("./table-effects/find-connections-extension"),
+  testing: {
+    disconnectEvents: events.disconnect,
+    connectEvents: events.connect,
+  },
+  schemas: {
+    idParam: require("./rest/schemas/id-param"),
+    error: require("./rest/schemas/error"),
+    immutableEntity: require("./rest/schemas/immutable-entity"),
+    mutableEntity: require("./rest/schemas/mutable-entity"),
+  },
+  handlers: require("./rest/rest-handlers"),
 };
