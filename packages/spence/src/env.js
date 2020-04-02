@@ -17,7 +17,7 @@ const dbName = getEnv("DB_NAME")
   .default(nodeEnv !== "production" ? `${dbNamePrefix}_${nodeEnv}` : dbNamePrefix)
   .asString();
 const connection = getEnv("DATABASE_URL").default(`postgresql://postgres@localhost:5432/${dbName}`).asString();
-const source = getEnv("NODE_SOURCE").default("spencer-node").asString();
+const source = getEnv("NODE_SOURCE").default("spence-node").asString();
 
 const config = {
   nodeEnv,

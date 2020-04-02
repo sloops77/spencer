@@ -1,7 +1,8 @@
 {
-  "name": "@spence/spence-factories",
-  "version": "0.2.0",
+  "name": "@spencejs/spence-factories",
+  "version": "0.3.8",
   "main": "src/factory.js",
+  "license": "MIT",
   "dependencies": {
     "lodash": "~4.17.15",
     "uuid": "~7.0.2"
@@ -23,5 +24,23 @@
   "scripts": {
     "lint": "eslint src test --fix",
     "test": "jest test --runInBand --coverage"
+  },
+  "description": "Spence Factories - An opinionated Factory Framework for testing db entities",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sloops77/spencer.git"
+  },
+  "keywords": [
+    "API",
+    "framework"
+  ],
+  "author": "Andres Olave",
+  "bugs": {
+    "url": "https://github.com/sloops77/spencer/issues"
+  },
+  "homepage": "https://github.com/sloops77/spencer#readme",
+  "gitHead": "e5640ff1eda85b2477b2940b2f6cebca74726d80",
+  "publishConfig": {
+    "access": "public"
   }
 }
