@@ -79,7 +79,8 @@ describe("test factories", () => {
 
     beforeEach(() => {
       complexFactory = register("complex", complexTable, async (overrides, getOrBuild) => {
-        const simple = await getOrBuild("simple", simpleFactory);
+        const simpleVal = await getOrBuild("simpleVal", _.noop);
+        const simple = await getOrBuild("simple", simpleFactory, { aVal: simpleVal });
         const aComplexVal = await getOrBuild("aComplexVal", uuidv1);
         return {
           aComplexVal,
@@ -91,7 +92,10 @@ describe("test factories", () => {
 
     it("should create a new struct without an id", async () => {
       const { newComplex } = complexFactory;
-      expect(await newComplex()).toEqual({ aComplexVal: expect.stringMatching(UUID_FORMAT) });
+      expect(await newComplex()).toEqual({
+        aComplexVal: expect.stringMatching(UUID_FORMAT),
+        simpleId: expect.stringMatching(UUID_FORMAT),
+      });
     });
 
     it("should create a new struct the override id", async () => {
@@ -132,6 +136,22 @@ describe("test factories", () => {
         aComplexVal: expect.stringMatching(UUID_FORMAT),
         createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
         simpleId,
+      });
+    });
+
+    it("should be able to override a value in a child object", async () => {
+      const { persistComplex } = complexFactory;
+      const complex = await persistComplex({ simpleVal: "totalNewSimpleVal" });
+      expect(complex).toEqual({
+        id: expect.stringMatching(UUID_FORMAT),
+        aComplexVal: expect.stringMatching(UUID_FORMAT),
+        createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
+        simpleId: expect.stringMatching(UUID_FORMAT),
+      });
+      expect(await simpleTable.findById(complex.simpleId)).toEqual({
+        id: expect.stringMatching(UUID_FORMAT),
+        aVal: "totalNewSimpleVal",
+        createdAt: expect.any(Date),
       });
     });
   });

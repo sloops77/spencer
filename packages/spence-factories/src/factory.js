@@ -7,7 +7,7 @@ function register(name, table, baseFactory) {
   return {
     name,
     capitalizedName,
-    [`new${capitalizedName}`]: commonFactoryType(baseFactory, "new"),
+    [`new${capitalizedName}`]: commonFactoryType(baseFactory, "created"),
     [`created${capitalizedName}`]: createdFactoryType(baseFactory),
     [`persist${capitalizedName}`]: persistFactoryType(baseFactory, table),
   };
@@ -17,19 +17,19 @@ function commonFactoryType(baseFactory, itemType) {
   return (rawOverrides = {}) => {
     const manualProperties = [];
 
-    async function getOrBuild(property, valFactory) {
+    async function getOrBuild(property, valFactory, ...valFactoryArgs) {
       if (rawOverrides[property] != null) {
         manualProperties.push(property);
         return rawOverrides[property];
       }
       if (_.isFunction(valFactory)) {
-        return valFactory(overrides);
+        return valFactory(...valFactoryArgs);
       }
-      return valFactory[`${itemType}${valFactory.capitalizedName}`](overrides());
+      return valFactory[`${itemType}${valFactory.capitalizedName}`](...valFactoryArgs);
     }
 
     function overrides() {
-      return _.omit(manualProperties, rawOverrides);
+      return _.pickBy((v, k) => v != null && !_.includes(k, manualProperties), rawOverrides);
     }
 
     return baseFactory(overrides, getOrBuild, rawOverrides);
