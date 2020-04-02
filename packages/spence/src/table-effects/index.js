@@ -141,7 +141,6 @@ function init(table, extensions = [], transformCase) {
       return findById(id, selection);
     }
 
-    // eslint-disable-next-line complexity
     async function doUpdateById(id, updateStatement, selection = "id") {
       const query = applied
         .buildFinderQuery({ filter: "id = ?", params: [id] })
