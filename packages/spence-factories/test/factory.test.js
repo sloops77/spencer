@@ -37,7 +37,7 @@ describe("test factories", () => {
   beforeEach(() => {
     simpleFactory = register("simple", simpleTable, (overrides) => ({
       aVal: "test",
-      ...overrides,
+      ...overrides(),
     }));
     simpleTable.table.knex.truncate();
   });
@@ -78,24 +78,20 @@ describe("test factories", () => {
     let complexFactory;
 
     beforeEach(() => {
-      complexFactory = register(
-        "complex",
-        complexTable,
-        async (overrides, simpleFactory1) => {
-          const simple = _.getOr(await simpleFactory1(), "simple", overrides);
-          return {
-            aComplexVal: "test",
-            simpleId: simple.id,
-            ..._.omit(["simple"], overrides),
-          };
-        },
-        [simpleFactory]
-      );
+      complexFactory = register("complex", complexTable, async (overrides, getOrBuild) => {
+        const simple = await getOrBuild("simple", simpleFactory);
+        const aComplexVal = await getOrBuild("aComplexVal", uuidv1);
+        return {
+          aComplexVal,
+          simpleId: simple.id,
+          ...overrides(),
+        };
+      });
     });
 
     it("should create a new struct without an id", async () => {
       const { newComplex } = complexFactory;
-      expect(await newComplex()).toEqual({ aComplexVal: "test" });
+      expect(await newComplex()).toEqual({ aComplexVal: expect.stringMatching(UUID_FORMAT) });
     });
 
     it("should create a new struct the override id", async () => {
@@ -111,7 +107,7 @@ describe("test factories", () => {
       const complex = await createdComplex();
       expect(complex).toEqual({
         id: expect.stringMatching(UUID_FORMAT),
-        aComplexVal: "test",
+        aComplexVal: expect.stringMatching(UUID_FORMAT),
         createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
         updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
         simpleId: expect.stringMatching(UUID_FORMAT),
@@ -122,7 +118,7 @@ describe("test factories", () => {
       const { persistComplex } = complexFactory;
       expect(await persistComplex()).toEqual({
         id: expect.stringMatching(UUID_FORMAT),
-        aComplexVal: "test",
+        aComplexVal: expect.stringMatching(UUID_FORMAT),
         createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
         simpleId: expect.stringMatching(UUID_FORMAT),
       });
@@ -133,7 +129,7 @@ describe("test factories", () => {
       const simpleId = uuidv1();
       expect(await persistComplex({ simple: { id: simpleId } })).toEqual({
         id: expect.stringMatching(UUID_FORMAT),
-        aComplexVal: "test",
+        aComplexVal: expect.stringMatching(UUID_FORMAT),
         createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
         simpleId,
       });
