@@ -1,7 +1,11 @@
 {
-  "name": "@spence/spence",
-  "version": "0.2.0",
+  "name": "@spencejs/spence",
+  "version": "0.3.8",
   "main": "src/index.js",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "env-var": "~6.0.4",
     "fastify-plugin": "~1.6.1",
@@ -36,5 +40,23 @@
   "scripts": {
     "lint": "eslint src test --fix",
     "test": "jest test --runInBand --coverage"
-  }
+  },
+  "description": "Spencer - An opinionated API Framework For nodejs",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sloops77/spencer.git"
+  },
+  "keywords": [
+    "API",
+    "framework"
+  ],
+  "author": "Andres Olave",
+  "bugs": {
+    "url": "https://github.com/sloops77/spencer/issues"
+  },
+  "homepage": "https://github.com/sloops77/spencer#readme",
+  "gitHead": "e5640ff1eda85b2477b2940b2f6cebca74726d80"
 }
