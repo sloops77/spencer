@@ -30,25 +30,27 @@ function init(
       );
     }
 
-    const schemaBuilders = configureSchemaBuilders(tag);
-
-    function tableEffects(req) {
-      return tableEffectsParam || req.tables[tableName];
+    if (router.restRoutes == null) {
+      throw new RestConfigurationError(
+        `you must 'const { fastifyRest } = require("@spencejs/spence"); register(fastifyRest);' before using a restController`
+      );
     }
 
     const schemas = _.uniqBy("$id", _.compact([createSchema, updateSchema, replySchema]));
     _.forEach((s) => router.addSchema(s), schemas);
 
     const spenceControllerOptions = _.assign(opts, {
-      tableEffects,
+      tableEffects(req) {
+        return tableEffectsParam || req.tables[tableName];
+      },
       schemas: { createSchema, updateSchema, replySchema },
-      schemaBuilders,
+      schemaBuilders: configureSchemaBuilders(tag),
     });
-    function restRoute(handlerSpec) {
+    // eslint-disable-next-line no-param-reassign
+    router.restRoute = function restRoute(handlerSpec) {
       router.route(instantiateRoute(handlerSpec, spenceControllerOptions));
-    }
-    router.decorate("restRoute", restRoute);
-    router.decorate("restRoutes", (...args) => _.map(restRoute, args), ["restRoute"]);
+    };
+
     if (extend != null) {
       extend(router, spenceControllerOptions, next);
       return;
