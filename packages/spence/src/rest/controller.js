@@ -53,12 +53,7 @@ function init(
       router.route(instantiateRoute(handlerSpec, spenceControllerOptions));
     };
 
-    if (extend != null) {
-      extend(router, spenceControllerOptions, next);
-      return;
-    }
-
-    next();
+    extend(router, spenceControllerOptions, next);
   };
 }
 
