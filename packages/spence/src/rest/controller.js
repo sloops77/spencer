@@ -25,36 +25,35 @@ function init(
    */
   return function addRoutes(router, opts, next) {
     if (extend == null && !_.isFunction(extend)) {
-      throw new RestConfigurationError(
-        `last argument must be a function that takes three arguments router, opts, and next`
+      next(
+        new RestConfigurationError(`last argument must be a function that takes three arguments router, opts, and next`)
       );
+      return;
     }
 
-    const schemaBuilders = configureSchemaBuilders(tag);
-
-    function tableEffects(req) {
-      return tableEffectsParam || req.tables[tableName];
+    if (router.restRoutes == null) {
+      next(
+        new RestConfigurationError(`To use @spence, please register the fastifyRest plugin with the fastify server`)
+      );
+      return;
     }
 
     const schemas = _.uniqBy("$id", _.compact([createSchema, updateSchema, replySchema]));
     _.forEach((s) => router.addSchema(s), schemas);
 
     const spenceControllerOptions = _.assign(opts, {
-      tableEffects,
+      tableEffects(req) {
+        return tableEffectsParam || req.tables[tableName];
+      },
       schemas: { createSchema, updateSchema, replySchema },
-      schemaBuilders,
+      schemaBuilders: configureSchemaBuilders(tag),
     });
-    function restRoute(handlerSpec) {
+    // eslint-disable-next-line no-param-reassign
+    router.restRoute = function restRoute(handlerSpec) {
       router.route(instantiateRoute(handlerSpec, spenceControllerOptions));
-    }
-    router.decorate("restRoute", restRoute);
-    router.decorate("restRoutes", (...args) => _.map(restRoute, args), ["restRoute"]);
-    if (extend != null) {
-      extend(router, spenceControllerOptions, next);
-      return;
-    }
+    };
 
-    next();
+    extend(router, spenceControllerOptions, next);
   };
 }
 

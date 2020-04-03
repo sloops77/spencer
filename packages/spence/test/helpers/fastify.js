@@ -47,10 +47,7 @@ function fastify(routes, defaultHeaders = {}) {
   app.register(fastifyRest);
   app.register(tablesPreHandler);
 
-  _.forEach(
-    (route) => app.register(routes[route], { prefix: route }).after((err) => err != null && console.error(err)),
-    _.keys(routes)
-  );
+  _.forEach((route) => app.register(routes[route], { prefix: route }), _.keys(routes));
 
   app.injectJson = async function injectJson({ method, url, userId, payload, headers }) {
     const response = await app.inject({

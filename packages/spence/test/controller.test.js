@@ -1,43 +1,13 @@
 const _ = require("lodash/fp");
-const initController = require("../src/rest/controller");
-const { create, getAll, getById, del, update } = require("../src/rest/rest-handlers");
 const { createSchema, dropSchema } = require("../src/tables/schemas");
 const knex = require("../src/knex");
 const { clearTableRegistry } = require("../src/table-effects/table-registry");
 const initFastify = require("./helpers/fastify");
 const { NUMERIC_FORMAT, ISO_DATETIME_FORMAT } = require("./helpers/regexes");
-
-const newSimpleSchema = {
-  $schema: "http://json-schema.org/draft-07/schema#",
-  $id: "new-simple",
-  type: "object",
-  properties: {
-    aVal: {
-      type: "string",
-    },
-    manyVals: {
-      type: "array",
-      items: {
-        type: "string",
-      },
-      defaults: [],
-    },
-  },
-  required: ["aVal"],
-  additionalProperties: false,
-};
-
-const simpleSchema = {
-  $schema: "http://json-schema.org/draft-07/schema#",
-  $id: "simple",
-  type: "object",
-  allOf: ["immutable-entity#", "new-simple#"],
-  required: ["id", "createdAt", "aVal"],
-};
+const { simpleController } = require("./helpers/simple-controller");
 
 describe("controller", () => {
   let schemaName = null;
-  let simpleController = null;
   let fastify = null;
 
   beforeAll(async () => {
@@ -50,18 +20,6 @@ describe("controller", () => {
       tableCreators: [exampleTableCreator(false)],
     });
     (await examplesTableEffectsFactory({ schemaName, transformCase: false }))();
-
-    simpleController = initController(
-      {
-        tag: "examples",
-        schemas: { create: newSimpleSchema, reply: simpleSchema },
-        tableName: "examples",
-      },
-      (router, controllerOptions, next) => {
-        router.restRoutes(create, getAll, getById, update, del);
-        next();
-      }
-    );
 
     fastify = initFastify({ "/examples": simpleController }, {});
   });

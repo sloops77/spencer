@@ -16,8 +16,20 @@ function loader(app) {
   )(files);
 }
 
+function decorateRestRoutes(app) {
+  app.decorate("restRoute", _.noop);
+  app.decorate(
+    "restRoutes",
+    function restRoutes(...args) {
+      return _.map(this.restRoute, args);
+    },
+    ["restRoute"]
+  );
+}
+
 function plugin(fastify, opts, next) {
   loader(fastify);
+  decorateRestRoutes(fastify);
   next();
 }
 
