@@ -25,15 +25,17 @@ function init(
    */
   return function addRoutes(router, opts, next) {
     if (extend == null && !_.isFunction(extend)) {
-      throw new RestConfigurationError(
-        `last argument must be a function that takes three arguments router, opts, and next`
+      next(
+        new RestConfigurationError(`last argument must be a function that takes three arguments router, opts, and next`)
       );
+      return;
     }
 
     if (router.restRoutes == null) {
-      throw new RestConfigurationError(
-        `you must 'const { fastifyRest } = require("@spencejs/spence"); register(fastifyRest);' before using a restController`
+      next(
+        new RestConfigurationError(`To use @spence, please register the fastifyRest plugin with the fastify server`)
       );
+      return;
     }
 
     const schemas = _.uniqBy("$id", _.compact([createSchema, updateSchema, replySchema]));

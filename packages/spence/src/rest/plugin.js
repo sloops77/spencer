@@ -20,7 +20,7 @@ function decorateRestRoutes(app) {
   app.decorate("restRoute", _.noop);
   app.decorate(
     "restRoutes",
-    function (...args) {
+    function restRoutes(...args) {
       return _.map(this.restRoute, args);
     },
     ["restRoute"]
