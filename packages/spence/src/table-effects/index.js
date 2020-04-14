@@ -29,9 +29,8 @@ function init(table, extensions = []) {
       return query.whereRaw(filter, _.castArray(params));
     }
 
-    function findById(id, selection) {
+    function findById(id, returning = applied.defaultColumnsSelection) {
       const query = applied.buildFinderQuery({ filter: "id = ?", params: [id] });
-      const returning = selection || applied.defaultColumnsSelection;
       return query.first(returning).delayThen((result) => {
         if (_.isEmpty(result)) {
           throw newError(`${table.entityName} ${id} not found`, 404);
@@ -52,10 +51,9 @@ function init(table, extensions = []) {
           [`${table.tableName}.id`, "asc"],
         ],
       } = {},
-      selection
+      returning = applied.defaultColumnsSelection
     ) {
       let query = applied.buildFinderQuery({ filter, params });
-      const returning = selection || applied.defaultColumnsSelection;
       query = query.select(returning);
 
       _.forEach(([column, dir]) => {
@@ -67,7 +65,6 @@ function init(table, extensions = []) {
 
     function findOne({ filter, params = [], orderBy }, selection) {
       const x = applied.find({ filter, params, limit: 1, offset: 0, orderBy }, selection);
-
       return x.delayThen(_.first);
     }
 
@@ -78,8 +75,7 @@ function init(table, extensions = []) {
         .delayThen((result) => parseInt(_.getOr(0, "[0].count", result), 10));
     }
 
-    function insert(val, selection) {
-      const returning = selection || applied.defaultColumnsSelection;
+    function insert(val, returning = applied.defaultColumnsSelection) {
       const resultTransformer = _.first;
       return table(context)
         .queryContext(queryContext)
@@ -96,10 +92,8 @@ function init(table, extensions = []) {
       return pSettle(_.map((val) => applied.insert(val, selection), vals));
     }
 
-    async function findOrInsert(val, naturalKey, selection) {
+    async function findOrInsert(val, naturalKey, returning = applied.defaultColumnsSelection) {
       const preppedVal = applied.prepModification(val);
-      const returning = selection || applied.defaultColumnsSelection;
-
       const insertStmt = table(context)
         .insert(_.mapKeys(dbifyColumn(table.transformCase), preppedVal))
         .returning(_.map((column) => `${column} as ${apifyColumn(table.transformCase)(column)}`, returning))
@@ -114,29 +108,27 @@ function init(table, extensions = []) {
       return table(context).queryContext(queryContext).where(_.pick(naturalKey, preppedVal)).select(returning).first();
     }
 
-    function doUpdateById(id, updateStatement, selection = "id") {
+    function doUpdateById(id, updateStatement, returning = applied.defaultColumnsSelection) {
       return applied
         .buildFinderQuery({ filter: "id = ?", params: [id] })
-        .returning(selection)
+        .returning(returning)
         .update(_.isFunction(updateStatement) ? updateStatement() : updateStatement)
         .delayThen((result) => {
           if (_.isEmpty(result)) {
             throw newError(`${table.entityName} ${id} not found`, 404);
           }
-          return (selection && _.first(result)) || result;
+          return _.first(result);
         });
     }
 
-    function update(id, val, selection) {
-      const returning = selection || applied.defaultColumnsSelection;
+    function update(id, val, returning = applied.defaultColumnsSelection) {
       return doUpdateById(id, applied.prepModification(val), returning).delayThen((result) => {
         publish(table.entityName, `updated`, { state: result, changes: { kind: "patch", val } }, context);
         return result;
       });
     }
 
-    async function upsert(id, val, selection) {
-      const returning = selection || applied.defaultColumnsSelection;
+    async function upsert(id, val, returning = applied.defaultColumnsSelection) {
       const preppedVal = applied.prepModification(val);
       const insertStmt = table().queryContext(queryContext).insert(preppedVal).toString();
 
@@ -156,8 +148,7 @@ function init(table, extensions = []) {
         .then((result) => _.first(result.rows));
     }
 
-    function updateUsingFilter(filter, val, selection) {
-      const returning = selection || applied.defaultColumnsSelection;
+    function updateUsingFilter(filter, val, returning = applied.defaultColumnsSelection) {
       const query = applied.buildFinderQuery(filter).returning(returning);
       const updateStatement = applied.prepModification(val);
       return query.update(_.isFunction(updateStatement) ? updateStatement() : updateStatement).delayThen((result) => {
@@ -166,8 +157,7 @@ function init(table, extensions = []) {
       });
     }
 
-    function touch(id, selection) {
-      const returning = selection || applied.defaultColumnsSelection;
+    function touch(id, returning) {
       return doUpdateById(id, { updatedAt: new Date() }, returning);
     }
 
