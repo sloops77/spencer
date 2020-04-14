@@ -10,7 +10,7 @@
     "env-var": "~6.0.4",
     "fastify-plugin": "~1.6.1",
     "import-cwd": "~3.0.0",
-    "knex": "~0.20.13",
+    "knex": "sloops77/knex#8cd7217ffa34ecb08d2c4881c0f39f93ae19bbed",
     "lodash": "~4.17.15",
     "p-settle": "^4.0.1",
     "pg": "~7.18.2",
