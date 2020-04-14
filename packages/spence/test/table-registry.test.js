@@ -2,7 +2,7 @@ const _ = require("lodash/fp");
 const uuidv1 = require("uuid/v1");
 const knex = require("../src/knex");
 const { createSchema, dropSchema } = require("../src/tables/schemas");
-const { tableRegistry, clearTableRegistry, addContext } = require("../src/table-effects/table-registry");
+const { tableRegistry, clearTableRegistry, addContext, ready } = require("../src/table-effects/table-registry");
 const simpleTableSpec = require("./test-tables");
 
 describe("table registry", () => {
@@ -26,12 +26,14 @@ describe("table registry", () => {
   });
 
   it("should register a table and be able to retrieve it", async () => {
-    const baseTable = await simpleTableEffectsFactory({ schemaName });
+    const baseTable = simpleTableEffectsFactory({ schemaName });
+    await ready();
     expect(tableRegistry.simples).not.toBeNull();
     expect(tableRegistry.simples()).toBe(baseTable());
   });
   it("should register a table and its extensions and retrieve it", async () => {
-    const baseTable = await simpleTableEffectsFactory({ schemaName, extensions: [simpleTableSpec.testExtension] });
+    const baseTable = simpleTableEffectsFactory({ schemaName, extensions: [simpleTableSpec.testExtension] });
+    await ready();
     const context = { foo: "1" };
     const tableEffects = baseTable(context);
     const registeredTables = addContext(context);
@@ -44,6 +46,7 @@ describe("table registry", () => {
   });
   it("should register a table running multiple contextualisations should have no effect", async () => {
     await simpleTableEffectsFactory({ schemaName, extensions: [simpleTableSpec.testExtension] });
+    await ready();
     const contexts = [{ foo: "1" }, { foo: "2" }, { foo: "3" }];
     const registeredTablesArray = _.map(addContext, contexts);
     const results = await Promise.all(

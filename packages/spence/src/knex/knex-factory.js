@@ -1,8 +1,11 @@
 const { types } = require("pg");
 const initKnex = require("knex");
+const flow = require("lodash/fp/flow");
 const pick = require("lodash/fp/pick");
 const pickBy = require("lodash/fp/pickBy");
 const isNil = require("lodash/fp/isNil");
+const map = require("lodash/fp/map");
+const { dbifyColumn, apifyResult, apifyResultArray } = require("./transformations");
 const log = require("../log");
 const { nodeEnv, connection } = require("../env");
 
@@ -24,18 +27,22 @@ const pool =
         max: 1,
       };
 
-const knexFactory = () =>
-  initKnex({
+function knexFactory() {
+  return initKnex({
     client: "pg",
     connection,
     debug: true,
+    asyncStackTraces: nodeEnv !== "production",
     pool,
-    postProcessResponse: (result) => {
+    wrapIdentifier(value, origImpl, { transformCase } = {}) {
+      return origImpl(dbifyColumn(transformCase)(value));
+    },
+    postProcessResponse(result, { transformCase } = {}) {
       // TODO: add special case for raw results (depends on dialect)
       if (Array.isArray(result)) {
-        return result.map((row) => compactObj(row));
+        return flow(map(compactObj), apifyResultArray(transformCase))(result);
       }
-      return compactObj(result);
+      return apifyResult(transformCase)(compactObj(result));
     },
     log: {
       debug: (obj) => log.debug(pick(["method", "bindings", "sql"], obj)),
@@ -43,5 +50,6 @@ const knexFactory = () =>
       error: log.error.bind(log),
     },
   });
+}
 
 module.exports = knexFactory;
