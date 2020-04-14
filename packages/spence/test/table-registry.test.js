@@ -32,9 +32,11 @@ describe("table registry", () => {
     const context = { foo: "1" };
     const tableEffects = baseTable(context);
     const val = { id: Date.now().toString(), aVal: "foo" };
-    await expect(() => tableEffects.insert(val)).toThrow(new Error("Table not initialized yet. Wait for the ready() signal"));
+    await expect(() => tableEffects.insert(val)).toThrow(
+      new Error("Table not initialized yet. Wait for the ready() signal")
+    );
     await ready();
-  })
+  });
   it("should register a table and be able to retrieve it", async () => {
     const baseTable = simpleTableEffectsFactory({ schemaName });
     await ready();
