@@ -2,7 +2,7 @@
 const events = require("./events/events");
 const initTable = require("./tables/table");
 const initTableEffects = require("./table-effects");
-const { tableEffectsFactory, addContext } = require("./table-effects/table-registry");
+const { tableEffectsFactory, addContext, ready } = require("./table-effects/table-registry");
 
 module.exports = {
   log: require("./log"),
@@ -10,6 +10,7 @@ module.exports = {
   initTable,
   initTableEffects,
   tableEffectsFactory,
+  ready,
   bindTableEffects: addContext,
   initController: require("./rest/controller"),
   subscribe: events.subscribe,

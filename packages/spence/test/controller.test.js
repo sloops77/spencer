@@ -1,7 +1,7 @@
 const _ = require("lodash/fp");
 const { createSchema, dropSchema } = require("../src/tables/schemas");
 const knex = require("../src/knex");
-const { clearTableRegistry } = require("../src/table-effects/table-registry");
+const { clearTableRegistry, ready } = require("../src/table-effects/table-registry");
 const initFastify = require("./helpers/fastify");
 const { NUMERIC_FORMAT, ISO_DATETIME_FORMAT } = require("./helpers/regexes");
 const { simpleController } = require("./helpers/simple-controller");
@@ -19,7 +19,8 @@ describe("controller", () => {
       schemaName,
       tableCreators: [exampleTableCreator(false)],
     });
-    (await examplesTableEffectsFactory({ schemaName, transformCase: false }))();
+    examplesTableEffectsFactory({ schemaName, transformCase: false })();
+    await ready();
 
     fastify = initFastify({ "/examples": simpleController }, {});
   });

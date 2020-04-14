@@ -3,7 +3,7 @@ const _ = require("lodash/fp");
 function multiTenantExtension(parent, { tenant }) {
   const baseExtension = {
     get defaultColumnsSelection() {
-      return parent.defaultColumnsSelection.then((array) => _.pull("tenant", array));
+      return _.pull("tenant", parent.defaultColumnsSelection);
     },
     extensions: parent.extensions.concat(["multiTenant"]),
   };

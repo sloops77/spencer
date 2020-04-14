@@ -1,6 +1,8 @@
+const _ = require("lodash/fp");
+const { v1: uuidv1 } = require("uuid");
 const knex = require("../src/knex");
 const { createSchema, dropSchema } = require("../src/tables/schemas");
-const { clearTableRegistry } = require("../src/table-effects/table-registry");
+const { clearTableRegistry, ready } = require("../src/table-effects/table-registry");
 
 afterAll(async () => {
   await knex.destroy();
@@ -11,10 +13,9 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
   ({ columnCase, transactions }) => {
     let simpleTable = null;
     let arrayTable = null;
-    let schemaName = null;
+    const schemaName = `simple_test_${columnCase}_${Date.now()}`;
 
     beforeAll(async () => {
-      schemaName = `simpleTest-${columnCase}-${Date.now()}`;
       const {
         simpleTableCreator,
         simpleTableEffectsFactory,
@@ -25,8 +26,9 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
         schemaName,
         tableCreators: [simpleTableCreator(columnCase === "snake"), arrayTableCreator(columnCase === "snake")],
       });
-      simpleTable = await simpleTableEffectsFactory({ schemaName, transformCase: columnCase === "snake" });
-      arrayTable = await arraysTableEffectsFactory({ schemaName, transformCase: columnCase === "snake" });
+      simpleTable = simpleTableEffectsFactory({ schemaName, transformCase: columnCase === "snake" });
+      arrayTable = arraysTableEffectsFactory({ schemaName, transformCase: columnCase === "snake" });
+      await ready();
     });
 
     function wrap(statements) {
@@ -63,6 +65,17 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
         expect(findResults).toEqual([insertedVal]);
       }
     });
+
+    it("should be able to insertMany", async () => {
+      const val = () => ({ id: uuidv1(), aVal: "foo" });
+      const vals = [val(), val(), val()];
+      const result = await wrap(async (context) => simpleTable(context).insertMany(vals));
+      const findResults = await simpleTable().find().whereIn("id", _.map("id", vals));
+      const expected = _.map((v) => ({ ...v, createdAt: expect.any(Date) }), vals);
+      expect(_.map("value", result)).toEqual(expected);
+      expect(_.sortBy("id", findResults)).toEqual(_.sortBy("id", expected));
+    });
+
     it("should be able to find by id", async () => {
       const val = { id: Date.now().toString(), aVal: "foo" };
       const result = await wrap(async (context) => {
@@ -72,6 +85,29 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
 
       expect(result).toEqual({ ...val, createdAt: expect.any(Date) });
     });
+
+    it("should be able to find using knex methods", async () => {
+      const val = { id: Date.now().toString(), aVal: "foo" };
+      const result = await wrap(async (context) => {
+        await simpleTable(context).insert(val);
+        return simpleTable(context).findOne({}).where({ id: val.id });
+      });
+
+      expect(result).toEqual({ ...val, createdAt: expect.any(Date) });
+    });
+
+    it("should be able to count", async () => {
+      const val = () => ({ id: uuidv1(), aVal: "foo" });
+      const vals = [val(), val(), val()];
+
+      const result = await wrap(async (context) => {
+        await simpleTable(context).insertMany(vals);
+        return simpleTable(context).count().whereIn("id", _.map("id", vals));
+      });
+
+      expect(result).toEqual(3);
+    });
+
     it("upsert should insert if doesnt exist already", async () => {
       const val = { id: Date.now().toString(), aVal: "foo" };
       const result = await wrap(async (context) => simpleTable(context).upsert(val.id, val));

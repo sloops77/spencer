@@ -9,7 +9,7 @@ const {
 const { register } = require("../src/factory");
 const knex = require("../../spence/src/knex");
 const { createSchema, dropSchema } = require("../../spence/src/tables/schemas");
-const { clearTableRegistry } = require("../../spence/src/table-effects/table-registry");
+const { clearTableRegistry, ready } = require("../../spence/src/table-effects/table-registry");
 const { UUID_FORMAT, ISO_DATETIME_FORMAT } = require("../../spence/test/helpers/regexes");
 
 describe("test factories", () => {
@@ -23,8 +23,9 @@ describe("test factories", () => {
       schemaName,
       tableCreators: [simpleUuidTableCreator(false), complexTableCreator(false)],
     });
-    simpleTable = (await simpleUuidTableEffectsFactory({ schemaName, transformCase: false }))();
-    complexTable = (await complexTableEffectsFactory({ schemaName, transformCase: false }))();
+    simpleTable = simpleUuidTableEffectsFactory({ schemaName, transformCase: false })();
+    complexTable = complexTableEffectsFactory({ schemaName, transformCase: false })();
+    await ready();
   });
 
   afterAll(async () => {
