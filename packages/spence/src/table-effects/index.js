@@ -63,15 +63,15 @@ function init(table, extensions = []) {
       return query.limit(parseInt(limit, 10) || 200).offset(parseInt(offset, 10) || 0);
     }
 
-    function findOne({ filter, params = [], orderBy }, selection) {
+    function findOne({ filter, params = [], orderBy } = {}, selection) {
       const x = applied.find({ filter, params, limit: 1, offset: 0, orderBy }, selection);
       return x.delayThen(_.first);
     }
 
-    function count({ filter, params = [] }) {
+    function count({ filter, params = [] } = {}) {
       return applied
         .buildFinderQuery({ filter, params })
-        .count()
+        .count("id")
         .delayThen((result) => parseInt(_.getOr(0, "[0].count", result), 10));
     }
 
