@@ -102,9 +102,7 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
 
       const result = await wrap(async (context) => {
         await simpleTable(context).insertMany(vals);
-        return simpleTable(context)
-          .count()
-          .whereIn("id", _.map("id", vals) );
+        return simpleTable(context).count().whereIn("id", _.map("id", vals));
       });
 
       expect(result).toEqual(3);
