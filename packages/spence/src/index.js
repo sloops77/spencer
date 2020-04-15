@@ -19,7 +19,6 @@ module.exports = {
     events.setErrorHandler(errorHandler);
     events.setLog(log);
   },
-  newError: require("./new-error"),
   fastifyRest: require("./rest/plugin"),
   createSchema: require("./tables/schemas").createSchema,
   dropSchema: require("./tables/schemas").dropSchema,

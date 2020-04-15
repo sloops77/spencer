@@ -1,8 +1,8 @@
 /* eslint-disable max-lines */
 const _ = require("lodash/fp");
+const newError = require("http-errors");
 const pSettle = require("p-settle");
 const { publish } = require("../events/events");
-const newError = require("../new-error");
 const initPrepModification = require("./prep-modification");
 const { dbifyColumn, apifyColumn } = require("../knex/transformations");
 
@@ -33,7 +33,7 @@ function init(table, extensions = []) {
       const query = applied.buildFinderQuery({ filter: "id = ?", params: [id] });
       return query.first(returning).delayThen((result) => {
         if (_.isEmpty(result)) {
-          throw newError(`${table.entityName} ${id} not found`, 404);
+          throw newError.NotFound(`${table.entityName} ${id} not found`);
         }
 
         return result;
@@ -115,7 +115,7 @@ function init(table, extensions = []) {
         .update(_.isFunction(updateStatement) ? updateStatement() : updateStatement)
         .delayThen((result) => {
           if (_.isEmpty(result)) {
-            throw newError(`${table.entityName} ${id} not found`, 404);
+            throw newError.NotFound(`${table.entityName} ${id} not found`);
           }
           return _.first(result);
         });
@@ -167,7 +167,7 @@ function init(table, extensions = []) {
         .delete()
         .delayThen((result) => {
           if (result === 0) {
-            throw newError(`${table.entityName} ${id} not found`, 404);
+            throw newError.NotFound(`${table.entityName} ${id} not found`);
           }
           return id;
         })

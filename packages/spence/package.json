@@ -9,6 +9,7 @@
   "dependencies": {
     "env-var": "~6.0.4",
     "fastify-plugin": "~1.6.1",
+    "http-errors": "^1.7.3",
     "import-cwd": "~3.0.0",
     "knex": "sloops77/knex#8cd7217ffa34ecb08d2c4881c0f39f93ae19bbed",
     "lodash": "~4.17.15",
