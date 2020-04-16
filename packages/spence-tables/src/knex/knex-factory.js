@@ -5,9 +5,11 @@ const pick = require("lodash/fp/pick");
 const pickBy = require("lodash/fp/pickBy");
 const isNil = require("lodash/fp/isNil");
 const map = require("lodash/fp/map");
+const {
+  log,
+  env: { nodeEnv, connection },
+} = require("@spencejs/spence-core");
 const { dbifyColumn, apifyResult, apifyResultArray } = require("./transformations");
-const log = require("../log");
-const { nodeEnv, connection } = require("../env");
 
 const compactObj = pickBy((x) => !isNil(x));
 

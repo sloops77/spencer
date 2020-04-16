@@ -1,9 +1,9 @@
 const fastifyPlugin = require("fastify-plugin");
-const { addContext } = require("../table-effects/table-registry");
+const { bindTableEffects } = require("@spencejs/spence-tables");
 
 function tablesPreHandler(app, options, next) {
   app.addHook("preHandler", async (req) => {
-    req.tables = addContext({ tenant: req.tenant, userId: req.userId || (req.user && req.user.id) });
+    req.tables = bindTableEffects({ tenant: req.tenant, userId: req.userId || (req.user && req.user.id) });
   });
 
   next();

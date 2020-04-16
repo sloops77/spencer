@@ -1,7 +1,8 @@
 const fastifyFactory = require("fastify");
 const _ = require("lodash/fp");
 
-const { tablesPreHandler } = require("../src");
+const tablesPreHandler = require("../src/hooks/tables-pre-handler");
+
 const RestConfigurationError = require("../src/rest/RestConfigurationError");
 const { simpleController } = require("./helpers/simple-controller");
 

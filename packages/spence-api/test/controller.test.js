@@ -1,7 +1,5 @@
 const _ = require("lodash/fp");
-const { createSchema, dropSchema } = require("../src/tables/schemas");
-const knex = require("../src/knex");
-const { clearTableRegistry, ready } = require("../src/table-effects/table-registry");
+const { createSchema, dropSchema, knex, clearTableRegistry, ready } = require("@spencejs/spence-tables");
 const initFastify = require("./helpers/fastify");
 const { NUMERIC_FORMAT, ISO_DATETIME_FORMAT } = require("./helpers/regexes");
 const { simpleController } = require("./helpers/simple-controller");
@@ -11,8 +9,11 @@ describe("controller", () => {
   let fastify = null;
 
   beforeAll(async () => {
-    // eslint-disable-next-line global-require
-    const { exampleTableCreator, examplesTableEffectsFactory } = require("./test-tables");
+    const {
+      exampleTableCreator,
+      examplesTableEffectsFactory,
+      // eslint-disable-next-line global-require
+    } = require("../../spence-tables/test/helpers/test-tables");
 
     schemaName = `simpleTest--${Date.now()}`;
     await createSchema({
@@ -33,7 +34,7 @@ describe("controller", () => {
     await fastify.close();
     clearTableRegistry();
     await dropSchema({ schemaName });
-    knex.destroy();
+    await knex.destroy();
   });
 
   it("create simples", async () => {

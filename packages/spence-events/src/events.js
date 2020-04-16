@@ -1,7 +1,9 @@
 const _ = require("lodash/fp");
 const EventEmitter = require("events");
-const idGenerator = require("uuid/v1");
-const { source } = require("../env");
+const { v1: idGenerator } = require("uuid");
+const {
+  env: { source },
+} = require("@spencejs/spence-core");
 
 const nexus = new EventEmitter();
 let connectedChannels = ["*"];

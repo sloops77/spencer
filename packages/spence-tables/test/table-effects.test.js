@@ -21,7 +21,7 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
         simpleTableEffectsFactory,
         arrayTableCreator,
         arraysTableEffectsFactory,
-      } = require("./test-tables"); // eslint-disable-line global-require
+      } = require("./helpers/test-tables"); // eslint-disable-line global-require
       await createSchema({
         schemaName,
         tableCreators: [simpleTableCreator(columnCase === "snake"), arrayTableCreator(columnCase === "snake")],

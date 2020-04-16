@@ -1,6 +1,6 @@
-const uuidv1 = require("uuid/v1");
-const { publish, subscribe, disconnect, connect, setErrorHandler } = require("../src/events/events");
-const { UUID_FORMAT } = require("./helpers/regexes");
+const { v1: uuidv1 } = require("uuid");
+const { publish, subscribe, disconnect, connect, setErrorHandler } = require("../src/events");
+const { UUID_FORMAT } = require("../../spence-api/test/helpers/regexes");
 
 describe("events", () => {
   const errorHandler = jest.fn();

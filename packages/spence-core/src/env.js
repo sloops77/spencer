@@ -2,8 +2,6 @@ const _ = require("lodash/fp");
 const { get: getEnv } = require("env-var");
 const importCwd = require("import-cwd");
 
-const log = require("./log");
-
 const packageJson = importCwd.silent("./package.json");
 const spenceConfig = importCwd.silent("./spencerc") || {};
 const packageName = _.get("name", packageJson);
@@ -27,6 +25,5 @@ const config = {
   connection,
   source,
 };
-log.info(config, `Spencer Config`);
 
 module.exports = config;

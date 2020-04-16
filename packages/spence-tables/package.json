@@ -1,16 +1,25 @@
 {
-  "name": "@spencejs/spence-factories",
+  "name": "@spencejs/spence-tables",
   "version": "0.5.0",
-  "main": "src/factory.js",
+  "main": "./src/index.js",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
+    "@spencejs/spence-core": "0.5.0",
+    "@spencejs/spence-events": "0.5.0",
+    "http-errors": "^1.7.3",
+    "knex": "sloops77/knex#8cd7217ffa34ecb08d2c4881c0f39f93ae19bbed",
     "lodash": "~4.17.15",
-    "uuid": "~7.0.2"
+    "p-settle": "^4.0.1",
+    "pg": "~7.18.2",
+    "pg-types": "~3.0.0"
   },
   "devDependencies": {
-    "@spencejs/spence-tables": "0.5.0",
-    "@types/lodash": "^4.14.149",
+    "@types/lodash": "~4.14.149",
     "@types/node": "~13.9.5",
+    "await-sleep": "~0.0.1",
     "eslint": "~6.8.0",
     "eslint-config-airbnb-base": "~14.1.0",
     "eslint-config-prettier": "~6.10.1",
@@ -20,13 +29,17 @@
     "jest-junit": "~10.0.0",
     "pino-pretty": "~3.6.1",
     "prettier": "~2.0.2",
-    "typescript": "~3.8.3"
+    "typescript": "~3.8.3",
+    "uuid": "~7.0.2"
   },
   "scripts": {
     "lint": "eslint src test --fix",
     "test": "jest test --runInBand --coverage"
   },
-  "description": "Spence Factories - An opinionated Factory Framework for testing db entities",
+  "description": "Spencer - An opinionated table based persistence framework For nodejs",
+  "directories": {
+    "test": "test"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sloops77/spencer.git"
@@ -40,8 +53,5 @@
     "url": "https://github.com/sloops77/spencer/issues"
   },
   "homepage": "https://github.com/sloops77/spencer#readme",
-  "gitHead": "e5640ff1eda85b2477b2940b2f6cebca74726d80",
-  "publishConfig": {
-    "access": "public"
-  }
+  "gitHead": "e5640ff1eda85b2477b2940b2f6cebca74726d80"
 }

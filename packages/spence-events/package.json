@@ -1,16 +1,20 @@
 {
-  "name": "@spencejs/spence-factories",
+  "name": "@spencejs/spence-events",
   "version": "0.5.0",
-  "main": "src/factory.js",
+  "main": "src/index.js",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
+    "@spencejs/spence-core": "0.5.0",
     "lodash": "~4.17.15",
     "uuid": "~7.0.2"
   },
   "devDependencies": {
-    "@spencejs/spence-tables": "0.5.0",
-    "@types/lodash": "^4.14.149",
+    "@types/lodash": "~4.14.149",
     "@types/node": "~13.9.5",
+    "await-sleep": "~0.0.1",
     "eslint": "~6.8.0",
     "eslint-config-airbnb-base": "~14.1.0",
     "eslint-config-prettier": "~6.10.1",
@@ -26,13 +30,17 @@
     "lint": "eslint src test --fix",
     "test": "jest test --runInBand --coverage"
   },
-  "description": "Spence Factories - An opinionated Factory Framework for testing db entities",
+  "description": "Spencer - An opinionated event driven framework For nodejs",
+  "directories": {
+    "test": "test"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sloops77/spencer.git"
   },
   "keywords": [
     "API",
+    "events",
     "framework"
   ],
   "author": "Andres Olave",
@@ -40,8 +48,5 @@
     "url": "https://github.com/sloops77/spencer/issues"
   },
   "homepage": "https://github.com/sloops77/spencer#readme",
-  "gitHead": "e5640ff1eda85b2477b2940b2f6cebca74726d80",
-  "publishConfig": {
-    "access": "public"
-  }
+  "gitHead": "e5640ff1eda85b2477b2940b2f6cebca74726d80"
 }

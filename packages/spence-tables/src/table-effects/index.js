@@ -2,7 +2,7 @@
 const _ = require("lodash/fp");
 const newError = require("http-errors");
 const pSettle = require("p-settle");
-const { publish } = require("../events/events");
+const { publish } = require("@spencejs/spence-events");
 const initPrepModification = require("./prep-modification");
 const { dbifyColumn, apifyColumn } = require("../knex/transformations");
 

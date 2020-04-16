@@ -1,8 +1,10 @@
 const fastifyFactory = require("fastify");
 const _ = require("lodash/fp");
 const statusCodes = require("http").STATUS_CODES;
-
-const { log, initEvents, fastifyRest, tablesPreHandler } = require("../../src");
+const { initEvents } = require("@spencejs/spence-events");
+const { log } = require("@spencejs/spence-core");
+const fastifyRest = require("../../src/rest/plugin");
+const tablesPreHandler = require("../../src/hooks/tables-pre-handler");
 
 function fastify(routes, defaultHeaders = {}) {
   const app = fastifyFactory({

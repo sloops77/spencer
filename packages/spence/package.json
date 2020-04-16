@@ -1,42 +1,17 @@
 {
   "name": "@spencejs/spence",
   "version": "0.5.0",
-  "main": "src/index.js",
+  "main": "./src/index.js",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "env-var": "~6.0.4",
-    "fastify-plugin": "~1.6.1",
-    "http-errors": "^1.7.3",
-    "import-cwd": "~3.0.0",
-    "knex": "sloops77/knex#8cd7217ffa34ecb08d2c4881c0f39f93ae19bbed",
-    "lodash": "~4.17.15",
-    "p-settle": "^4.0.1",
-    "pg": "~7.18.2",
-    "pg-types": "~3.0.0",
-    "pino": "~6.0.0",
-    "uuid": "~7.0.2"
-  },
-  "peerDependencies": {
+    "@spencejs/spence-api": "0.5.0",
+    "@spencejs/spence-core": "0.5.0",
+    "@spencejs/spence-events": "0.5.0",
+    "@spencejs/spence-tables": "0.5.0",
     "fastify": "~2.13.0"
-  },
-  "devDependencies": {
-    "@types/lodash": "~4.14.149",
-    "@types/node": "~13.9.5",
-    "await-sleep": "~0.0.1",
-    "eslint": "~6.8.0",
-    "eslint-config-airbnb-base": "~14.1.0",
-    "eslint-config-prettier": "~6.10.1",
-    "eslint-plugin-import": "~2.20.1",
-    "eslint-plugin-prettier": "~3.1.2",
-    "fastify": "~2.13.0",
-    "jest": "25.2.3",
-    "jest-junit": "~10.0.0",
-    "pino-pretty": "~3.6.1",
-    "prettier": "~2.0.2",
-    "typescript": "~3.8.3"
   },
   "scripts": {
     "lint": "eslint src test --fix",
@@ -52,6 +27,8 @@
   },
   "keywords": [
     "API",
+    "events",
+    "persistence",
     "framework"
   ],
   "author": "Andres Olave",
