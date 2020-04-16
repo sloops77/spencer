@@ -1,4 +1,4 @@
-const { createSchema } = require("../packages/spence/src");
+const { createSchema } = require("../packages/spence-tables/src");
 const { getSchema } = require("./shared/get-schema");
 
 exports.up = function(knex) {

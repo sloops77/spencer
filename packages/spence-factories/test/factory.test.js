@@ -1,16 +1,14 @@
 const _ = require("lodash/fp");
 const uuidv1 = require("uuid/v1");
+const { knex, clearTableRegistry, ready, createSchema, dropSchema } = require("@spencejs/spence-tables");
+const { register } = require("../src/factory");
 const {
   simpleUuidTableCreator,
   simpleUuidTableEffectsFactory,
   complexTableCreator,
   complexTableEffectsFactory,
-} = require("../../spence/test/test-tables");
-const { register } = require("../src/factory");
-const knex = require("../../spence/src/knex");
-const { createSchema, dropSchema } = require("../../spence/src/tables/schemas");
-const { clearTableRegistry, ready } = require("../../spence/src/table-effects/table-registry");
-const { UUID_FORMAT, ISO_DATETIME_FORMAT } = require("../../spence/test/helpers/regexes");
+} = require("../../spence-tables/test/helpers/test-tables");
+const { UUID_FORMAT, ISO_DATETIME_FORMAT } = require("../../spence-api/test/helpers/regexes");
 
 describe("test factories", () => {
   let simpleTable = null;
