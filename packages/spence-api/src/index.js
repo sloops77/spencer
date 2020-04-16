@@ -1,7 +1,8 @@
 /* eslint-disable global-require */
 module.exports = {
-  initController: require("./rest/controller"),
   fastifyRest: require("./rest/plugin"),
+  initController: require("./rest/controller"),
+  handlers: require("./rest/rest-handlers"),
   tenantPreHandler: require("./hooks/tenant-pre-handler"),
   tablesPreHandler: require("./hooks/tables-pre-handler"),
   schemas: {
@@ -10,5 +11,4 @@ module.exports = {
     immutableEntity: require("./rest/schemas/immutable-entity"),
     mutableEntity: require("./rest/schemas/mutable-entity"),
   },
-  handlers: require("./rest/rest-handlers"),
 };
