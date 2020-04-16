@@ -1,13 +1,13 @@
 {
   "name": "@spencejs/spence-events",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "main": "src/index.js",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@spencejs/spence-core": "0.5.0",
+    "@spencejs/spence-core": "^0.6.0",
     "lodash": "~4.17.15",
     "uuid": "~7.0.2"
   },

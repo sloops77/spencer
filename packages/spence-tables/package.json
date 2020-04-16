@@ -1,14 +1,14 @@
 {
   "name": "@spencejs/spence-tables",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "main": "./src/index.js",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@spencejs/spence-core": "0.5.0",
-    "@spencejs/spence-events": "0.5.0",
+    "@spencejs/spence-core": "^0.6.0",
+    "@spencejs/spence-events": "^0.6.0",
     "http-errors": "^1.7.3",
     "knex": "sloops77/knex#8cd7217ffa34ecb08d2c4881c0f39f93ae19bbed",
     "lodash": "~4.17.15",
