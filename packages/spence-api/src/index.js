@@ -3,6 +3,7 @@ module.exports = {
   fastifyRest: require("./rest/plugin"),
   initController: require("./rest/controller"),
   handlers: require("./rest/rest-handlers"),
+  responses: require("./rest/responses"),
   tenantPreHandler: require("./hooks/tenant-pre-handler"),
   tablesPreHandler: require("./hooks/tables-pre-handler"),
   schemas: {
