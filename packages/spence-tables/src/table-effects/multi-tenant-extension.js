@@ -12,8 +12,7 @@ function multiTenantExtension(parent, { tenant }) {
     return baseExtension;
   }
 
-  return {
-    ...baseExtension,
+  return Object.assign(baseExtension, {
     insert(val, ...args) {
       return parent.insert({ tenant, ...val }, ...args);
     },
@@ -21,7 +20,7 @@ function multiTenantExtension(parent, { tenant }) {
       const query = parent.buildFinderQuery(...args);
       return query.where({ tenant });
     },
-  };
+  });
 }
 
 module.exports = multiTenantExtension;
