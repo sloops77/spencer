@@ -301,7 +301,17 @@ function init(table, extensions = []) {
     };
 
     const applied = _.reduce(
-      (acc, fn) => ({ ...acc, ...fn({ doUpdateById, ...acc }, context) }),
+      (acc, fn) => {
+        const result = {};
+        for (const key of Object.keys(acc)) {
+          Object.defineProperty(result, key, Object.getOwnPropertyDescriptor(acc, key));
+        }
+        const extension = fn(acc, context);
+        for (const key of Object.keys(extension)) {
+          Object.defineProperty(result, key, Object.getOwnPropertyDescriptor(extension, key));
+        }
+        return result;
+      },
       coreTableEffects,
       extensions
     );

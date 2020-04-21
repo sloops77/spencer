@@ -1,4 +1,5 @@
 const _ = require("lodash/fp");
+const { log } = require("@spencejs/spence-core");
 const initTable = require("../tables/table");
 const initTableEffects = require("./index");
 
@@ -33,7 +34,12 @@ function onTableReady(name) {
   return (err) => {
     if (err) {
       waiting[name] = err;
-      readyCb(err);
+      log.error(err);
+      if (readyCb != null) {
+        readyCb(err);
+      }
+
+      return;
     }
     delete waiting[name];
     checkRegistryReady();
@@ -63,7 +69,9 @@ function ready(cb) {
 
 function checkRegistryReady() {
   if (isRegistryReady()) {
-    readyCb();
+    if (readyCb != null) {
+      readyCb();
+    }
   }
 }
 
