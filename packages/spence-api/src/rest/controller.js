@@ -11,12 +11,7 @@ function instantiateRoute(routeSpec, options) {
 }
 
 function init(
-  {
-    tag,
-    schemas: { create: createSchema, update: updateSchema, reply: replySchema },
-    repo: repoParam,
-    tableName,
-  },
+  { tag, schemas: { create: createSchema, update: updateSchema, reply: replySchema }, repo: repoParam, tableName },
   extend
 ) {
   /**
