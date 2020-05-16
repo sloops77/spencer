@@ -11,12 +11,7 @@ function instantiateRoute(routeSpec, options) {
 }
 
 function init(
-  {
-    tag,
-    schemas: { create: createSchema, update: updateSchema, reply: replySchema },
-    tableEffects: tableEffectsParam,
-    tableName,
-  },
+  { tag, schemas: { create: createSchema, update: updateSchema, reply: replySchema }, repo: repoParam, tableName },
   extend
 ) {
   /**
@@ -42,8 +37,8 @@ function init(
     _.forEach((s) => router.addSchema(s), schemas);
 
     const spenceControllerOptions = _.assign(opts, {
-      tableEffects(req) {
-        return tableEffectsParam || req.tables[tableName];
+      repo(req) {
+        return repoParam || req.repos[tableName];
       },
       schemas: { createSchema, updateSchema, replySchema },
       schemaBuilders: configureSchemaBuilders(tag),

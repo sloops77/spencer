@@ -1,7 +1,7 @@
 const fastifyFactory = require("fastify");
 const _ = require("lodash/fp");
 
-const tablesPreHandler = require("../src/hooks/tables-pre-handler");
+const reposPreHandler = require("../src/hooks/repos-pre-handler");
 
 const RestConfigurationError = require("../src/rest/RestConfigurationError");
 const { simpleController } = require("./helpers/simple-controller");
@@ -9,7 +9,7 @@ const { simpleController } = require("./helpers/simple-controller");
 function pluginNotRegisteredFastify(routes) {
   const app = fastifyFactory();
 
-  app.register(tablesPreHandler);
+  app.register(reposPreHandler);
 
   _.forEach(
     (route) => app.register(routes[route], { prefix: route }), // .after((err) => err != null && console.error(err)),

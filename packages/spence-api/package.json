@@ -9,7 +9,7 @@
   "dependencies": {
     "@spencejs/spence-core": "^0.6.0",
     "@spencejs/spence-events": "^0.6.0",
-    "@spencejs/spence-tables": "^0.6.2",
+    "@spencejs/spence-repos": "^0.6.2",
     "fastify-plugin": "~1.6.1",
     "http-errors": "^1.7.3",
     "lodash": "~4.17.15"

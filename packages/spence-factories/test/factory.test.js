@@ -1,13 +1,13 @@
 const _ = require("lodash/fp");
 const uuidv1 = require("uuid/v1");
-const { knex, clearTableRegistry, ready, createSchema, dropSchema } = require("@spencejs/spence-tables");
+const { knex, clearTableRegistry, ready, createSchema, dropSchema } = require("@spencejs/spence-repos");
 const { register } = require("../src/factory");
 const {
   simpleUuidTableCreator,
-  simpleUuidTableEffectsFactory,
+  simpleUuidRepoFactory,
   complexTableCreator,
-  complexTableEffectsFactory,
-} = require("../../spence-tables/test/helpers/test-tables");
+  complexRepoFactory,
+} = require("../../spence-repos/test/helpers/test-tables");
 const { UUID_FORMAT, ISO_DATETIME_FORMAT } = require("../../spence-api/test/helpers/regexes");
 
 describe("test factories", () => {
@@ -21,8 +21,8 @@ describe("test factories", () => {
       schemaName,
       tableCreators: [simpleUuidTableCreator(false), complexTableCreator(false)],
     });
-    simpleTable = simpleUuidTableEffectsFactory({ schemaName, transformCase: false })();
-    complexTable = complexTableEffectsFactory({ schemaName, transformCase: false })();
+    simpleTable = simpleUuidRepoFactory({ schemaName, transformCase: false })();
+    complexTable = complexRepoFactory({ schemaName, transformCase: false })();
     await ready();
   });
 

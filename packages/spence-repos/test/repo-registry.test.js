@@ -2,12 +2,12 @@ const _ = require("lodash/fp");
 const { v1: uuidv1 } = require("uuid");
 const knex = require("../src/knex");
 const { createSchema, dropSchema } = require("../src/tables/schemas");
-const { tableRegistry, clearTableRegistry, addContext, ready } = require("../src/table-effects/table-registry");
+const { tableRegistry, clearTableRegistry, addContext, ready } = require("../src/repos/repo-registry");
 const simpleTableSpec = require("./helpers/test-tables");
 
 describe("table registry", () => {
   let schemaName = null;
-  let simpleTableEffectsFactory = null;
+  let simpleRepoFactory = null;
 
   afterEach(() => {
     clearTableRegistry();
@@ -17,7 +17,7 @@ describe("table registry", () => {
     schemaName = `simpleTest-${Date.now()}`;
     await createSchema({ schemaName, tableCreators: [simpleTableSpec.simpleTableCreator()] });
     // eslint-disable-next-line prefer-destructuring
-    simpleTableEffectsFactory = simpleTableSpec.simpleTableEffectsFactory;
+    simpleRepoFactory = simpleTableSpec.simpleRepoFactory;
   });
 
   afterAll(async () => {
@@ -26,38 +26,36 @@ describe("table registry", () => {
   });
 
   it("should error if the registry isnt ready yet", async () => {
-    const baseTable = simpleTableEffectsFactory({ schemaName });
+    const baseTable = simpleRepoFactory({ schemaName });
     expect(tableRegistry.simples).not.toBeNull();
     expect(tableRegistry.simples()).toBe(baseTable());
     const context = { foo: "1" };
-    const tableEffects = baseTable(context);
+    const repo = baseTable(context);
     const val = { id: Date.now().toString(), aVal: "foo" };
-    await expect(() => tableEffects.insert(val)).toThrow(
-      new Error("Table not initialized yet. Wait for the ready() signal")
-    );
+    await expect(() => repo.insert(val)).toThrow(new Error("Table not initialized yet. Wait for the ready() signal"));
     await ready();
   });
   it("should register a table and be able to retrieve it", async () => {
-    const baseTable = simpleTableEffectsFactory({ schemaName });
+    const baseTable = simpleRepoFactory({ schemaName });
     await ready();
     expect(tableRegistry.simples).not.toBeNull();
     expect(tableRegistry.simples()).toBe(baseTable());
   });
   it("should register a table and its extensions and retrieve it", async () => {
-    const baseTable = simpleTableEffectsFactory({ schemaName, extensions: [simpleTableSpec.testExtension] });
+    const baseTable = simpleRepoFactory({ schemaName, extensions: [simpleTableSpec.testExtension] });
     await ready();
     const context = { foo: "1" };
-    const tableEffects = baseTable(context);
+    const repo = baseTable(context);
     const registeredTables = addContext(context);
     const val = { id: Date.now().toString(), aVal: "foo" };
-    const result = await tableEffects.insert(val);
+    const result = await repo.insert(val);
     expect(result).toEqual({ ...val, createdAt: expect.any(Date) });
-    expect(tableEffects.callCounterRef.current).toEqual(1);
-    expect(tableEffects.contextRef.current).toBe(context);
-    expect(registeredTables.simples).toBe(tableEffects);
+    expect(repo.callCounterRef.current).toEqual(1);
+    expect(repo.contextRef.current).toBe(context);
+    expect(registeredTables.simples).toBe(repo);
   });
   it("should register a table running multiple contextualisations should have no effect", async () => {
-    await simpleTableEffectsFactory({ schemaName, extensions: [simpleTableSpec.testExtension] });
+    await simpleRepoFactory({ schemaName, extensions: [simpleTableSpec.testExtension] });
     await ready();
     const contexts = [{ foo: "1" }, { foo: "2" }, { foo: "3" }];
     const registeredTablesArray = _.map(addContext, contexts);

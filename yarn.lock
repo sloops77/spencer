@@ -1397,6 +1397,20 @@
   dependencies:
     type-detect "4.0.8"
 
+"@spencejs/spence-tables@^0.6.2":
+  version "0.6.2"
+  resolved "https://registry.npmjs.org/@spencejs/spence-tables/-/spence-tables-0.6.2.tgz#c13b75bc7c838080ef3010168b08832b43fe271f"
+  integrity sha512-idCyC5a33VH6EBTpOiVksS8mWaIfItY7+3KMOW6f5zXH6ZRESEIUCkHlHthewEB/p8khEIrOunVnUN4/GPsLcw==
+  dependencies:
+    "@spencejs/spence-core" "^0.6.0"
+    "@spencejs/spence-events" "^0.6.0"
+    http-errors "^1.7.3"
+    knex sloops77/knex#8cd7217ffa34ecb08d2c4881c0f39f93ae19bbed
+    lodash "~4.17.15"
+    p-settle "^4.0.1"
+    pg "~7.18.2"
+    pg-types "~3.0.0"
+
 "@types/babel__core@^7.1.0":
   version "7.1.3"
   resolved "https://registry.npmjs.org/@types/babel__core/-/babel__core-7.1.3.tgz#e441ea7df63cd080dfcd02ab199e6d16a735fc30"
@@ -5027,7 +5041,7 @@ kleur@^3.0.3:
   resolved "https://registry.npmjs.org/kleur/-/kleur-3.0.3.tgz#a79c9ecc86ee1ce3fa6206d1216c501f147fc07e"
   integrity sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==
 
-knex@sloops77/knex#8cd7217ffa34ecb08d2c4881c0f39f93ae19bbed:
+"knex@github:sloops77/knex#8cd7217ffa34ecb08d2c4881c0f39f93ae19bbed", knex@sloops77/knex#8cd7217ffa34ecb08d2c4881c0f39f93ae19bbed:
   version "0.20.11"
   resolved "https://codeload.github.com/sloops77/knex/tar.gz/8cd7217ffa34ecb08d2c4881c0f39f93ae19bbed"
   dependencies:

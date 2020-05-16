@@ -3,5 +3,5 @@ module.exports = {
   ...require("@spencejs/spence-api"),
   ...require("@spencejs/spence-core"),
   ...require("@spencejs/spence-events"),
-  ...require("@spencejs/spence-tables"),
+  ...require("@spencejs/spence-repos"),
 };
