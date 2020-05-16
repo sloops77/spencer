@@ -5,7 +5,7 @@ module.exports = {
   handlers: require("./rest/rest-handlers"),
   responses: require("./rest/responses"),
   tenantPreHandler: require("./hooks/tenant-pre-handler"),
-  tablesPreHandler: require("./hooks/tables-pre-handler"),
+  reposPreHandler: require("./hooks/repos-pre-handler"),
   schemas: {
     idParam: require("./rest/schemas/id-param"),
     error: require("./rest/schemas/error"),

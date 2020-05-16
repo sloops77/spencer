@@ -10,9 +10,9 @@ const create = {
 
     return insertOne(createSchema, replySchema);
   },
-  handler({ tableEffects }) {
+  handler({ repo }) {
     return async (req, reply) => {
-      const result = await tableEffects(req).insert(req.body);
+      const result = await repo(req).insert(req.body);
       reply.code(201).send(result);
     };
   },
@@ -28,9 +28,9 @@ const getById = {
 
     return findOne(replySchema);
   },
-  handler({ tableEffects }) {
+  handler({ repo }) {
     return async (req, reply) => {
-      reply.send(await tableEffects(req).findById(req.params.id));
+      reply.send(await repo(req).findById(req.params.id));
     };
   },
 };
@@ -45,9 +45,9 @@ const getAll = {
 
     return findMany(replySchema);
   },
-  handler({ tableEffects }) {
+  handler({ repo }) {
     return async (req, reply) => {
-      const results = await tableEffects(req).find(req.query);
+      const results = await repo(req).find(req.query);
       reply.send(results);
     };
   },
@@ -62,9 +62,9 @@ const update = {
 
     return updateOne(updateSchema, replySchema);
   },
-  handler({ tableEffects }) {
+  handler({ repo }) {
     return async (req, reply) => {
-      const result = await tableEffects(req).update(req.params.id, req.body);
+      const result = await repo(req).update(req.params.id, req.body);
       reply.send(result);
     };
   },
@@ -75,9 +75,9 @@ const del = {
   schema({ schemaBuilders: { deleteOne } }) {
     return deleteOne();
   },
-  handler({ tableEffects }) {
+  handler({ repo }) {
     return async (req, reply) => {
-      await tableEffects(req).del(req.params.id, req.body);
+      await repo(req).del(req.params.id, req.body);
       reply.code(204).send();
     };
   },

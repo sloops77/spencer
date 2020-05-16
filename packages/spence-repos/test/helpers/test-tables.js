@@ -1,8 +1,8 @@
-const { tableEffectsFactory } = require("../../src");
+const { repoFactory } = require("../../src");
 const knex = require("../../src/knex");
 
-function simpleTableEffectsFactory(config) {
-  return tableEffectsFactory({
+function simpleRepoFactory(config) {
+  return repoFactory({
     name: "simples",
     entityName: "simple",
     ...config,
@@ -21,8 +21,8 @@ function simpleTableCreator(snakeCase) {
     });
 }
 
-function simpleUuidTableEffectsFactory(config) {
-  return tableEffectsFactory({
+function simpleUuidRepoFactory(config) {
+  return repoFactory({
     name: "simples",
     entityName: "simple",
     ...config,
@@ -41,8 +41,8 @@ function simpleUuidTableCreator(snakeCase) {
     });
 }
 
-function complexTableEffectsFactory(config) {
-  return tableEffectsFactory({
+function complexRepoFactory(config) {
+  return repoFactory({
     name: "complexes",
     entityName: "complex",
     ...config,
@@ -62,8 +62,8 @@ function complexTableCreator(snakeCase) {
     });
 }
 
-function arraysTableEffectsFactory(config) {
-  return tableEffectsFactory({
+function arraysRepoFactory(config) {
+  return repoFactory({
     name: "arrays",
     entityName: "array",
     ...config,
@@ -82,8 +82,8 @@ function arrayTableCreator(snakeCase) {
     });
 }
 
-function examplesTableEffectsFactory(config) {
-  return tableEffectsFactory({
+function examplesRepoFactory(config) {
+  return repoFactory({
     name: "examples",
     entityName: "example",
     ...config,
@@ -117,12 +117,12 @@ function testExtension(parent, context) {
 }
 
 module.exports = {
-  simpleTableEffectsFactory,
-  simpleUuidTableEffectsFactory,
+  simpleRepoFactory,
+  simpleUuidRepoFactory,
   complexTableCreator,
-  complexTableEffectsFactory,
-  arraysTableEffectsFactory,
-  examplesTableEffectsFactory,
+  complexRepoFactory,
+  arraysRepoFactory,
+  examplesRepoFactory,
   simpleTableCreator,
   simpleUuidTableCreator,
   arrayTableCreator,

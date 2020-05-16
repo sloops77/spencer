@@ -1,32 +1,32 @@
 const _ = require("lodash/fp");
 const { log } = require("@spencejs/spence-core");
 const initTable = require("../tables/table");
-const initTableEffects = require("./index");
+const initRepo = require("./index");
 
-const tableRegistry = {};
+const repoRegistry = {};
 const waiting = {};
 let readyCb;
 
-function tableEffectsFactory({ extensions, ...tableConfig }) {
-  if (tableRegistry[tableConfig.name]) {
-    return tableRegistry[tableConfig.name];
+function repoFactory({ extensions, ...tableConfig }) {
+  if (repoRegistry[tableConfig.name]) {
+    return repoRegistry[tableConfig.name];
   }
 
   const table = initTable(tableConfig, onTableReady(tableConfig.name));
-  const tableEffects = initTableEffects(table, extensions);
-  tableRegistry[tableConfig.name] = tableEffects;
-  return tableEffects;
+  const repo = initRepo(table, extensions);
+  repoRegistry[tableConfig.name] = repo;
+  return repo;
 }
 
 function clearTableRegistry() {
   // eslint-disable-next-line no-restricted-syntax
-  for (const prop of Object.keys(tableRegistry)) {
-    delete tableRegistry[prop];
+  for (const prop of Object.keys(repoRegistry)) {
+    delete repoRegistry[prop];
   }
 }
 
 function addContext(context) {
-  return _.mapValues((tableEffects) => tableEffects(context), tableRegistry);
+  return _.mapValues((repo) => repo(context), repoRegistry);
 }
 
 function onTableReady(name) {
@@ -76,13 +76,13 @@ function checkRegistryReady() {
 }
 
 function isRegistryReady() {
-  return _.size(tableRegistry) && _.isEmpty(waiting);
+  return _.size(repoRegistry) && _.isEmpty(waiting);
 }
 
 module.exports = {
-  tableRegistry,
+  tableRegistry: repoRegistry,
   clearTableRegistry,
-  tableEffectsFactory,
+  repoFactory,
   addContext,
   ready,
   isRegistryReady,

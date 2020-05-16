@@ -4,7 +4,7 @@ const statusCodes = require("http").STATUS_CODES;
 const { initEvents } = require("@spencejs/spence-events");
 const { log } = require("@spencejs/spence-core");
 const fastifyRest = require("../../src/rest/plugin");
-const tablesPreHandler = require("../../src/hooks/tables-pre-handler");
+const reposPreHandler = require("../../src/hooks/repos-pre-handler");
 
 function fastify(routes, defaultHeaders = {}) {
   const app = fastifyFactory({
@@ -47,7 +47,7 @@ function fastify(routes, defaultHeaders = {}) {
   });
 
   app.register(fastifyRest);
-  app.register(tablesPreHandler);
+  app.register(reposPreHandler);
 
   _.forEach((route) => app.register(routes[route], { prefix: route }), _.keys(routes));
 

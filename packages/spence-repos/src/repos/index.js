@@ -273,7 +273,7 @@ function init(table, extensions = []) {
       });
     }
 
-    const coreTableEffects = {
+    const coreRepo = {
       insert,
       insertMany,
       upsert,
@@ -312,7 +312,7 @@ function init(table, extensions = []) {
         }
         return result;
       },
-      coreTableEffects,
+      coreRepo,
       extensions
     );
 

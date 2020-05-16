@@ -2,7 +2,7 @@ const _ = require("lodash/fp");
 const { v1: uuidv1 } = require("uuid");
 const knex = require("../src/knex");
 const { createSchema, dropSchema } = require("../src/tables/schemas");
-const { clearTableRegistry, ready } = require("../src/table-effects/table-registry");
+const { clearTableRegistry, ready } = require("../src/repos/repo-registry");
 
 afterAll(async () => {
   await knex.destroy();
@@ -18,16 +18,16 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
     beforeAll(async () => {
       const {
         simpleTableCreator,
-        simpleTableEffectsFactory,
+        simpleRepoFactory,
         arrayTableCreator,
-        arraysTableEffectsFactory,
+        arraysRepoFactory,
       } = require("./helpers/test-tables"); // eslint-disable-line global-require
       await createSchema({
         schemaName,
         tableCreators: [simpleTableCreator(columnCase === "snake"), arrayTableCreator(columnCase === "snake")],
       });
-      simpleTable = simpleTableEffectsFactory({ schemaName, transformCase: columnCase === "snake" });
-      arrayTable = arraysTableEffectsFactory({ schemaName, transformCase: columnCase === "snake" });
+      simpleTable = simpleRepoFactory({ schemaName, transformCase: columnCase === "snake" });
+      arrayTable = arraysRepoFactory({ schemaName, transformCase: columnCase === "snake" });
       await ready();
     });
 
