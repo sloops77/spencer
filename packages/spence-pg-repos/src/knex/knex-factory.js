@@ -33,8 +33,9 @@ function knexFactory() {
   return initKnex({
     client: "pg",
     connection,
-    debug: true,
+    debug: false,
     asyncStackTraces: nodeEnv !== "production",
+    acquireConnectionTimeout: nodeEnv !== "production" ? 3000 : 30000,
     pool,
     wrapIdentifier(value, origImpl, { transformCase } = {}) {
       return origImpl(dbifyColumn(transformCase)(value));

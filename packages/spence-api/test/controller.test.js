@@ -1,5 +1,5 @@
 const _ = require("lodash/fp");
-const { createSchema, dropSchema, knex, clearTableRegistry, ready } = require("@spencejs/spence-repos");
+const { createSchema, dropSchema, knex, clearTableRegistry, ready } = require("@spencejs/spence-pg-repos");
 const initFastify = require("./helpers/fastify");
 const { NUMERIC_FORMAT, ISO_DATETIME_FORMAT } = require("./helpers/regexes");
 const { simpleController } = require("./helpers/simple-controller");
@@ -13,7 +13,7 @@ describe("controller", () => {
       exampleTableCreator,
       examplesRepoFactory,
       // eslint-disable-next-line global-require
-    } = require("../../spence-repos/test/helpers/test-tables");
+    } = require("../../spence-pg-repos/test/helpers/test-tables");
 
     schemaName = `simpleTest--${Date.now()}`;
     await createSchema({

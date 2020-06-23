@@ -5,7 +5,7 @@ const { createSchema, dropSchema } = require("../src/tables/schemas");
 const { tableRegistry, clearTableRegistry, addContext, ready } = require("../src/repos/repo-registry");
 const simpleTableSpec = require("./helpers/test-tables");
 
-describe("table registry", () => {
+describe("pg table registry", () => {
   let schemaName = null;
   let simpleRepoFactory = null;
 

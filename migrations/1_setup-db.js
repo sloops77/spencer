@@ -1,4 +1,4 @@
-const { createSchema } = require("../packages/spence-repos/src");
+const { createSchema } = require("../packages/spence-pg-repos/src");
 const { getSchema } = require("./shared/get-schema");
 
 exports.up = function(knex) {

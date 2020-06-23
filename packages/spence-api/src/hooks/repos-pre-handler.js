@@ -1,5 +1,5 @@
 const fastifyPlugin = require("fastify-plugin");
-const { bindRepo } = require("@spencejs/spence-repos");
+const { bindRepo } = require("@spencejs/spence-pg-repos");
 
 function reposPreHandler(app, options, next) {
   app.addHook("preHandler", async (req) => {

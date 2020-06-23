@@ -63,7 +63,7 @@ function init(table, extensions = []) {
       return query.limit(parseInt(limit, 10) || 200).offset(parseInt(offset, 10) || 0);
     }
 
-    function findOne({ filter, params = [], orderBy } = {}, selection) {
+    function findOne({ filter, params = [], orderBy } = {}, selection = applied.defaultColumnsSelection) {
       const x = applied.find({ filter, params, limit: 1, offset: 0, orderBy }, selection);
       return x.delayThen(_.first);
     }

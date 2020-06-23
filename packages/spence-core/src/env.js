@@ -14,7 +14,12 @@ const dbNamePrefix = getEnv("DB_NAME_PREFIX")
 const dbName = getEnv("DB_NAME")
   .default(nodeEnv !== "production" ? `${dbNamePrefix}_${nodeEnv}` : dbNamePrefix)
   .asString();
-const connection = getEnv("DATABASE_URL").default(`postgresql://postgres@localhost:5432/${dbName}`).asString();
+const connection = getEnv("DATABASE_URL")
+  .default(`postgresql://postgres@localhost:5432/${_.snakeCase(dbName)}`)
+  .asString();
+const mongoConnection = getEnv("MONGO_URL")
+  .default(`mongodb://localhost:27017/?connectTimeoutMS=10000&t.databases=${_.kebabCase(dbName)}`)
+  .asString();
 const source = getEnv("NODE_SOURCE").default("spence-node").asString();
 
 const config = {
@@ -23,6 +28,7 @@ const config = {
   dbName,
   dbNamePrefix,
   connection,
+  mongoConnection,
   source,
 };
 

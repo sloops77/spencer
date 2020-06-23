@@ -1,5 +1,5 @@
 {
-  "name": "@spencejs/spence-api",
+  "name": "@spencejs/spence-pg-repos",
   "version": "0.6.2",
   "main": "./src/index.js",
   "license": "MIT",
@@ -9,13 +9,13 @@
   "dependencies": {
     "@spencejs/spence-core": "^0.6.0",
     "@spencejs/spence-events": "^0.6.0",
-    "@spencejs/spence-pg-repos": "^0.6.2",
-    "fastify-plugin": "~1.6.1",
     "http-errors": "^1.7.3",
-    "lodash": "~4.17.15"
-  },
-  "peerDependencies": {
-    "fastify": "~2.13.0"
+    "knex": "sloops77/knex#b72652a279b94dfff3fb4c73dd916f086f5b1bb0",
+    "lodash": "~4.17.15",
+    "p-settle": "^4.0.1",
+    "pg": "8.2.1",
+    "pg-types": "~3.0.0",
+    "uuid": "~7.0.2"
   },
   "devDependencies": {
     "@types/lodash": "~4.14.149",
@@ -26,18 +26,18 @@
     "eslint-config-prettier": "~6.10.1",
     "eslint-plugin-import": "~2.20.1",
     "eslint-plugin-prettier": "~3.1.2",
-    "fastify": "~2.13.0",
     "jest": "25.2.3",
     "jest-junit": "~10.0.0",
     "pino-pretty": "~3.6.1",
     "prettier": "~2.0.2",
-    "typescript": "~3.8.3"
+    "typescript": "~3.8.3",
+    "uuid": "~7.0.2"
   },
   "scripts": {
     "lint": "eslint src test --fix",
     "test": "jest test --runInBand --coverage"
   },
-  "description": "Spencer - An opinionated API Framework For nodejs",
+  "description": "Spencer - An opinionated table based persistence framework For nodejs",
   "directories": {
     "test": "test"
   },

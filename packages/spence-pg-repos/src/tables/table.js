@@ -1,4 +1,5 @@
 const _ = require("lodash/fp");
+const { v4: uuidv4 } = require("uuid");
 
 const knex = require("../knex");
 
@@ -12,7 +13,17 @@ async function buildColumnInfoFromDb(table, ignoreColumns) {
   );
 }
 
-function init({ name, schemaName = "public", entityName, ignoreColumns = [], transformCase }, ready) {
+function init(
+  {
+    name,
+    schemaName = "public",
+    entityName,
+    ignoreColumns = [],
+    transformCase,
+    timestampKeys = { createdAt: "createdAt", updatedAt: "updatedAt" },
+  },
+  ready
+) {
   function tableFn(context = {}) {
     const knexTable = connection(context)(name);
     return schemaName ? knexTable.withSchema(schemaName) : knexTable;
@@ -38,6 +49,8 @@ function init({ name, schemaName = "public", entityName, ignoreColumns = [], tra
     knex,
     connection,
     transformCase,
+    timestampKeys,
+    mockIdGenerator: uuidv4,
   });
   Object.defineProperty(table, "columnInfo", {
     get() {
