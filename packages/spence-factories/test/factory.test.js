@@ -17,6 +17,11 @@ const {
 } = require("../../spence-pg-repos/test/helpers/test-tables");
 const { UUID_FORMAT, ISO_DATETIME_FORMAT, OBJECT_ID_FORMAT } = require("../../spence-api/test/helpers/regexes");
 
+afterAll(async () => {
+  await getMongoClient().close();
+  await knex.destroy();
+});
+
 describe("test mongo factories", () => {
   let simpleCollection = null;
   let schemaName = null;
@@ -29,7 +34,6 @@ describe("test mongo factories", () => {
 
   afterAll(async () => {
     clearMongoCollectionRegistry();
-    return getMongoClient().close();
   });
 
   let simpleFactory;
@@ -95,7 +99,7 @@ describe("test pg factories", () => {
   afterAll(async () => {
     clearTableRegistry();
     await dropSchema({ schemaName });
-    knex.destroy();
+    // await knex.destroy();
   });
 
   let simpleFactory;
