@@ -1,5 +1,4 @@
 const _ = require("lodash/fp");
-const { v1: uuidv1 } = require("uuid");
 const shortid = require("shortid");
 const { ObjectID } = require("mongodb");
 const mongoClientPromise = require("../src/mongodb");
@@ -66,9 +65,7 @@ describe("collection registry", () => {
     await ready();
     const contexts = [{ foo: "1" }, { foo: "2" }, { foo: "3" }];
     const registeredTablesArray = _.map(addContext, contexts);
-    const results = await Promise.all(
-      _.map((tables) => tables.simples.insert({ aVal: "foo" }), registeredTablesArray)
-    );
+    const results = await Promise.all(_.map((tables) => tables.simples.insert({ aVal: "foo" }), registeredTablesArray));
 
     expect(results).toHaveLength(3);
 
