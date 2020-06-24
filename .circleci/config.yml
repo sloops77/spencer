@@ -7,10 +7,10 @@ jobs:
       # specify the version you desire here
       - image: circleci/node:12
       - image: circleci/postgres:11.5
-      - image: circleci/mongo:4.2
         environment:
           POSTGRES_USER: postgres
           POSTGRES_DB: spence_test
+      - image: circleci/mongo:4.2
 
     working_directory: ~/repo
 
