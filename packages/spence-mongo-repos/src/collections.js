@@ -21,7 +21,7 @@ function init(
       throw new Error("Mongodb not initialized yet. Wait for the ready() signal");
     }
 
-    return mongoDb.collection(`${schemaName}_${name}`);
+    return mongoDb.collection(`${schemaName}.${name}`);
   }
 
   const table = Object.assign(collectionFn, {

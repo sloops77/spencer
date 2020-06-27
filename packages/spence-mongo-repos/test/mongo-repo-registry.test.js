@@ -23,6 +23,7 @@ describe("collection registry", () => {
 
   afterAll(async () => {
     const { mongoClient } = await mongoClientPromise;
+    await mongoClient.db().dropCollection(`${schemaName}.simples`);
     await mongoClient.close();
   });
 

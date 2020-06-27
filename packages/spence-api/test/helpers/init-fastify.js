@@ -1,13 +1,13 @@
-const fastifyFactory = require("fastify");
+const fastify = require("fastify");
 const _ = require("lodash/fp");
 const statusCodes = require("http").STATUS_CODES;
 const { initEvents } = require("@spencejs/spence-events");
 const { log } = require("@spencejs/spence-core");
 const fastifyRest = require("../../src/rest/plugin");
-const reposPreHandler = require("../../src/hooks/repos-pre-handler");
+const { fastifySchemaBuilders } = require("../../src/schema-builders");
 
-function fastify(routes, defaultHeaders = {}) {
-  const app = fastifyFactory({
+function initFastify(routes, repoPreHandler, defaultHeaders = {}) {
+  const app = fastify({
     logger: log,
     trustProxy: true,
     // @ts-ignore
@@ -46,8 +46,9 @@ function fastify(routes, defaultHeaders = {}) {
     });
   });
 
+  app.register(fastifySchemaBuilders);
   app.register(fastifyRest);
-  app.register(reposPreHandler);
+  app.register(repoPreHandler);
 
   _.forEach((route) => app.register(routes[route], { prefix: route }), _.keys(routes));
 
@@ -73,4 +74,4 @@ function fastify(routes, defaultHeaders = {}) {
   return app;
 }
 
-module.exports = fastify;
+module.exports = initFastify;

@@ -16,6 +16,8 @@ describe("mongo repo persistence and queries", () => {
     clearTableRegistry();
     // delete schema tables?
     const { mongoClient } = await mongoClientPromise;
+    await mongoClient.db().dropCollection(`${schemaName}.simples`);
+    await mongoClient.db().dropCollection(`${schemaName}.arrays`);
     await mongoClient.close();
   });
 

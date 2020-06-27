@@ -9,15 +9,18 @@
   "dependencies": {
     "@spencejs/spence-core": "^0.6.0",
     "@spencejs/spence-events": "^0.6.0",
-    "@spencejs/spence-pg-repos": "^0.6.2",
     "fastify-plugin": "~1.6.1",
     "http-errors": "^1.7.3",
     "lodash": "~4.17.15"
   },
   "peerDependencies": {
-    "fastify": "~2.13.0"
+    "fastify": "~2.13.0",
+    "@spencejs/spence-mongo-repos": "^0.6.2",
+    "@spencejs/spence-pg-repos": "^0.6.2"
   },
   "devDependencies": {
+    "@spencejs/spence-mongo-repos": "^0.6.2",
+    "@spencejs/spence-pg-repos": "^0.6.2",
     "@types/lodash": "~4.14.149",
     "@types/node": "~13.9.5",
     "await-sleep": "~0.0.1",
@@ -31,6 +34,7 @@
     "jest-junit": "~10.0.0",
     "pino-pretty": "~3.6.1",
     "prettier": "~2.0.2",
+    "shortid": "^2.2.15",
     "typescript": "~3.8.3"
   },
   "scripts": {

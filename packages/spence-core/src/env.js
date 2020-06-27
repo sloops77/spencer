@@ -7,7 +7,7 @@ const spenceConfig = importCwd.silent("./spencerc") || {};
 const packageName = _.get("name", packageJson);
 
 const nodeEnv = getEnv("NODE_ENV").default("development").asString();
-const debug = getEnv("DEBUG").default(["test", "development"].includes(nodeEnv).toString()).asBool();
+const debug = getEnv("DEBUG").default("false").asBool();
 const dbNamePrefix = getEnv("DB_NAME_PREFIX")
   .default(_.get("dbNamePrefix", spenceConfig) || _.last(packageName.split("/")))
   .asString();

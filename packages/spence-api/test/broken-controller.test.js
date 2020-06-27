@@ -1,10 +1,10 @@
 const fastifyFactory = require("fastify");
 const _ = require("lodash/fp");
 
-const reposPreHandler = require("../src/hooks/repos-pre-handler");
+const reposPreHandler = require("../src/hooks/pg-repos-pre-handler");
 
 const RestConfigurationError = require("../src/rest/RestConfigurationError");
-const { simpleController } = require("./helpers/simple-controller");
+const { simpleController } = require("./helpers/pg-rest-controller");
 
 function pluginNotRegisteredFastify(routes) {
   const app = fastifyFactory();

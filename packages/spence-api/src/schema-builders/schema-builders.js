@@ -1,6 +1,6 @@
 const _ = require("lodash/fp");
 const idParam = require("./schemas/id-param");
-const responses = require("./responses");
+const responses = require("./response-schema-builder");
 
 function init(tag) {
   function tagify(base) {
@@ -37,7 +37,11 @@ function init(tag) {
     });
   }
 
-  return _.mapValues((fn) => _.flow(fn, tagify), { insertOne, findOne, updateOne, deleteOne, findMany });
+  return {
+    ..._.mapValues((fn) => _.flow(fn, tagify), { insertOne, findOne, updateOne, deleteOne, findMany }),
+    responses,
+    idParam,
+  };
 }
 
 module.exports = init;

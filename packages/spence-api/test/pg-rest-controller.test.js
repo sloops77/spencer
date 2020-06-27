@@ -1,10 +1,11 @@
 const _ = require("lodash/fp");
 const { createSchema, dropSchema, knex, clearTableRegistry, ready } = require("@spencejs/spence-pg-repos");
-const initFastify = require("./helpers/fastify");
+const initFastify = require("./helpers/init-fastify");
 const { NUMERIC_FORMAT, ISO_DATETIME_FORMAT } = require("./helpers/regexes");
-const { simpleController } = require("./helpers/simple-controller");
+const { simpleController } = require("./helpers/pg-rest-controller");
+const pgReposPreHandler = require("../src/hooks/pg-repos-pre-handler");
 
-describe("controller", () => {
+describe("rest controller", () => {
   let schemaName = null;
   let fastify = null;
 
@@ -23,7 +24,7 @@ describe("controller", () => {
     examplesRepoFactory({ schemaName, transformCase: false })();
     await ready();
 
-    fastify = initFastify({ "/examples": simpleController }, {});
+    fastify = initFastify({ "/examples": simpleController }, pgReposPreHandler, {});
   });
 
   beforeEach(async () => {

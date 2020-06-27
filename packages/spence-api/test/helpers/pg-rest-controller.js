@@ -29,7 +29,7 @@ const simpleSchema = {
   required: ["id", "createdAt", "aVal"],
 };
 
-const simpleController = initController(
+const pgRestController = initController(
   {
     tag: "examples",
     schemas: { create: newSimpleSchema, reply: simpleSchema },
@@ -42,7 +42,7 @@ const simpleController = initController(
 );
 
 module.exports = {
-  simpleController,
+  simpleController: pgRestController,
   newSimpleSchema,
   simpleSchema,
 };

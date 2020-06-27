@@ -1,6 +1,6 @@
 const error = require("./schemas/error");
 
-function responses(success, { notFound = true, authenticated = true } = {}) {
+function responseSchemaBuilder(success, { notFound = true, authenticated = true } = {}) {
   const kinds = { ...success, 400: error, 500: error };
   if (notFound) {
     kinds[404] = error;
@@ -12,4 +12,4 @@ function responses(success, { notFound = true, authenticated = true } = {}) {
   return kinds;
 }
 
-module.exports = responses;
+module.exports = responseSchemaBuilder;
