@@ -1,4 +1,5 @@
 const { ObjectID } = require("mongodb");
+const _ = require("lodash/fp");
 const { mongoDb, mongoClientPromise } = require("./mongodb/mongodb-factory");
 
 function init(
@@ -12,8 +13,10 @@ function init(
   },
   ready
 ) {
+  const collectionName = _.isEmpty(schemaName) ? name : `${schemaName}.${name}`;
+
   function collectionFn() {
-    return mongoDb().collection(`${schemaName}.${name}`);
+    return mongoDb().collection(collectionName);
   }
 
   const table = Object.assign(collectionFn, {
@@ -26,7 +29,9 @@ function init(
     mockIdGenerator: () => ObjectID().toHexString(),
   });
 
-  mongoClientPromise().then(ready).catch(ready);
+  mongoClientPromise()
+    .then(() => ready())
+    .catch(ready);
 
   return table;
 }

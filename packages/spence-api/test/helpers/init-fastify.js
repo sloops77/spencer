@@ -6,7 +6,7 @@ const { log, env } = require("@spencejs/spence-config");
 const fastifyRest = require("../../src/rest/plugin");
 const { fastifySchemaBuilders } = require("../../src/schema-builders");
 
-function initFastify(routes, { factory, close }, repoPreHandler, defaultHeaders = {}) {
+async function initFastify(routes, dbPlugin, repoPreHandler, defaultHeaders = {}) {
   const app = fastify({
     logger: log,
     trustProxy: true,
@@ -15,10 +15,8 @@ function initFastify(routes, { factory, close }, repoPreHandler, defaultHeaders 
     ignoreTrailingSlash: true,
   });
 
-  factory({ log, config: env });
-  app.addHook("onClose", (instance, done) => {
-    close().then(done);
-  });
+  app.decorate("config", env);
+  app.register(dbPlugin);
 
   initEvents({
     log,
@@ -76,6 +74,9 @@ function initFastify(routes, { factory, close }, repoPreHandler, defaultHeaders 
 
     return { ...response, json: JSON.parse(response.body) };
   };
+
+  await app.ready();
+
   return app;
 }
 

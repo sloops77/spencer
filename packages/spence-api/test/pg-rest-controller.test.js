@@ -1,13 +1,5 @@
 const _ = require("lodash/fp");
-const {
-  createSchema,
-  dropSchema,
-  knex,
-  knexFactory,
-  knexClose,
-  clearTableRegistry,
-  ready,
-} = require("@spencejs/spence-pg-repos");
+const { createSchema, dropSchema, knex, knexPlugin, clearTableRegistry, ready } = require("@spencejs/spence-pg-repos");
 const initFastify = require("./helpers/init-fastify");
 const { NUMERIC_FORMAT, ISO_DATETIME_FORMAT } = require("./helpers/regexes");
 const { simpleController } = require("./helpers/pg-rest-controller");
@@ -18,12 +10,7 @@ describe("rest controller", () => {
   let fastify = null;
 
   beforeAll(async () => {
-    fastify = initFastify(
-      { "/examples": simpleController },
-      { factory: knexFactory, close: knexClose },
-      pgReposPreHandler,
-      {}
-    );
+    fastify = await initFastify({ "/examples": simpleController }, knexPlugin, pgReposPreHandler, {});
 
     const {
       exampleTableCreator,

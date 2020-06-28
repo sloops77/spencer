@@ -1,7 +1,10 @@
 const fastifyPlugin = require("fastify-plugin");
-const { bindRepo } = require("@spencejs/spence-mongo-repos");
 
-function pgReposPreHandler(app, options, next) {
+function mongoReposPreHandler(app, options, next) {
+  // lazy load of the mongo dependency
+  // eslint-disable-next-line global-require
+  const { bindRepo } = require("@spencejs/spence-mongo-repos");
+
   app.addHook("preHandler", async (req) => {
     req.repos = bindRepo({ tenant: req.tenant, userId: req.userId || (req.user && req.user.id), log: app.log });
   });
@@ -9,4 +12,4 @@ function pgReposPreHandler(app, options, next) {
   next();
 }
 
-module.exports = fastifyPlugin(pgReposPreHandler);
+module.exports = fastifyPlugin(mongoReposPreHandler);
