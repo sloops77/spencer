@@ -1,15 +1,14 @@
 const fastifyFactory = require("fastify");
 const _ = require("lodash/fp");
 
-const reposPreHandler = require("../src/hooks/pg-repos-pre-handler");
-
+const { reposPlugin } = require("@spencejs/spence-pg-repos");
 const RestConfigurationError = require("../src/rest/RestConfigurationError");
 const { simpleController } = require("./helpers/pg-rest-controller");
 
 function pluginNotRegisteredFastify(routes) {
   const app = fastifyFactory();
 
-  app.register(reposPreHandler);
+  app.register(reposPlugin);
 
   _.forEach(
     (route) => app.register(routes[route], { prefix: route }), // .after((err) => err != null && console.error(err)),

@@ -3,6 +3,7 @@ const { repoFactory, addContext, ready, clearTableRegistry } = require("./repos/
 
 module.exports = {
   ...require("./knex"),
+  reposPlugin: require("./repos/repos-pre-handler"),
   initTable: require("./tables/table"),
   initRepo: require("./repos"),
   repoFactory,

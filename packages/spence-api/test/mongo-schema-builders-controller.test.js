@@ -1,12 +1,11 @@
 const _ = require("lodash/fp");
 const { ObjectID } = require("mongodb");
-const { mongdbPlugin, mongoDb, clearTableRegistry, ready } = require("@spencejs/spence-mongo-repos");
+const { mongdbPlugin, reposPlugin, mongoDb, clearTableRegistry, ready } = require("@spencejs/spence-mongo-repos");
 const shortId = require("shortid");
 const initFastify = require("./helpers/init-fastify");
 const { OBJECT_ID_FORMAT, ISO_DATETIME_FORMAT } = require("./helpers/regexes");
 const { newSimpleSchema, simpleSchema } = require("./helpers/pg-rest-controller");
 const { schemaBuildingDecorator } = require("../src/schema-builders");
-const mongoReposPreHandler = require("../src/hooks/mongo-repos-pre-handler");
 
 function simpleMongoController(fastify, options, next) {
   fastify.get("/:id", { schemas: fastify.schemaBuilders.findOne(simpleSchema) }, async (req) =>
@@ -54,7 +53,7 @@ describe("schemaBuilder decorated controller", () => {
   });
 
   beforeAll(async () => {
-    fastify = await initFastify({ "/examples": decoratedMongoController }, mongdbPlugin, mongoReposPreHandler, {});
+    fastify = await initFastify({ "/examples": decoratedMongoController }, mongdbPlugin, reposPlugin, {});
     const {
       examplesRepoFactory,
       // eslint-disable-next-line global-require
