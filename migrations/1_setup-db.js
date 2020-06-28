@@ -1,7 +1,7 @@
 const { createSchema } = require("../packages/spence-pg-repos/src");
 const { getSchema } = require("./shared/get-schema");
 
-exports.up = function(knex) {
+exports.up = function (knex) {
   return createSchema({ knex, softDelete: true }).then(() => {
     const schema = getSchema(knex);
     return knex.raw(`create extension if not exists "uuid-ossp" SCHEMA ${schema}`).then(() =>
@@ -18,6 +18,6 @@ exports.up = function(knex) {
   });
 };
 
-exports.down = function(knex) {};
+exports.down = function (knex) {};
 
 // exports.config = { transaction: false };
