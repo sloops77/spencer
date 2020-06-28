@@ -1,8 +1,5 @@
 const _ = require("lodash/fp");
 const fastifyPlugin = require("fastify-plugin");
-const {
-  env: { nodeEnv },
-} = require("@spencejs/spence-core");
 
 function tenantPreHandler(app, { rootDomain }, next) {
   function parseSubdomain(hostname) {
@@ -11,7 +8,7 @@ function tenantPreHandler(app, { rootDomain }, next) {
   }
 
   function getTenant(hostname) {
-    switch (nodeEnv) {
+    switch (app.env.nodeEnv) {
       case "test":
         return "test-tenant";
       case "development":

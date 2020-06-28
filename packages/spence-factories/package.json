@@ -8,7 +8,9 @@
     "uuid": "~7.0.2"
   },
   "devDependencies": {
-    "@spencejs/spence-repos": "^0.6.2",
+    "@spencejs/spence-core": "^0.6.0",
+    "@spencejs/spence-mongo-repos": "^0.6.2",
+    "@spencejs/spence-pg-repos": "^0.6.2",
     "@types/lodash": "^4.14.149",
     "@types/node": "~13.9.5",
     "eslint": "~6.8.0",
@@ -18,6 +20,7 @@
     "eslint-plugin-prettier": "~3.1.2",
     "jest": "25.2.3",
     "jest-junit": "~10.0.0",
+    "mongodb": "^3.5.9",
     "pino-pretty": "~3.6.1",
     "prettier": "~2.0.2",
     "typescript": "~3.8.3"

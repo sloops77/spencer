@@ -1,6 +1,6 @@
 const _ = require("lodash/fp");
 const RestConfigurationError = require("./RestConfigurationError");
-const configureSchemaBuilders = require("./schema-builders");
+const configureSchemaBuilders = require("../schema-builders/schema-builders");
 
 function instantiateRoute(routeSpec, options) {
   return {

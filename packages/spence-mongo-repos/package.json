@@ -1,0 +1,58 @@
+{
+  "name": "@spencejs/spence-mongo-repos",
+  "version": "0.6.2",
+  "main": "./src/index.js",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@spencejs/spence-core": "^0.6.0",
+    "@spencejs/spence-events": "^0.6.0",
+    "http-errors": "^1.7.3",
+    "lodash": "~4.17.15"
+  },
+  "devDependencies": {
+    "@types/lodash": "~4.14.149",
+    "@types/node": "~13.9.5",
+    "await-sleep": "~0.0.1",
+    "eslint": "~6.8.0",
+    "eslint-config-airbnb-base": "~14.1.0",
+    "eslint-config-prettier": "~6.10.1",
+    "eslint-plugin-import": "~2.20.1",
+    "eslint-plugin-prettier": "~3.1.2",
+    "jest": "25.2.3",
+    "jest-junit": "~10.0.0",
+    "mongodb": "~3.5.9",
+    "pino-pretty": "~3.6.1",
+    "shortid": "^2.2.15",
+    "prettier": "~2.0.2",
+    "typescript": "~3.8.3",
+    "uuid": "~7.0.2"
+  },
+  "peerDependencies": {
+    "mongodb": "~3.3.5"
+  },
+  "scripts": {
+    "lint": "eslint src test --fix",
+    "test": "jest test --runInBand --coverage"
+  },
+  "description": "Spencer - An opinionated mongo based persistence framework For nodejs",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sloops77/spencer.git"
+  },
+  "keywords": [
+    "API",
+    "framework"
+  ],
+  "author": "Andres Olave",
+  "bugs": {
+    "url": "https://github.com/sloops77/spencer/issues"
+  },
+  "homepage": "https://github.com/sloops77/spencer#readme",
+  "gitHead": "e5640ff1eda85b2477b2940b2f6cebca74726d80"
+}

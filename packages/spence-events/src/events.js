@@ -1,9 +1,6 @@
 const _ = require("lodash/fp");
 const EventEmitter = require("events");
 const { v1: idGenerator } = require("uuid");
-const {
-  env: { source },
-} = require("@spencejs/spence-core");
 
 const nexus = new EventEmitter();
 let connectedChannels = ["*"];
@@ -18,9 +15,14 @@ function setLog(_log) {
   log = _log;
 }
 
+let selectedContext = _.pick(["source", "tenant", "user", "userId"]);
+function setSelectedContext(contextKeys) {
+  selectedContext = _.pick(contextKeys);
+}
+
 async function publish(topic, eventName, payload, context) {
   const event = {
-    meta: { ...context, id: idGenerator(), topic, eventName, source },
+    meta: { ...selectedContext(context), id: idGenerator(), topic, eventName },
     payload,
   };
   const channel = `${topic}.${eventName}`;
@@ -35,7 +37,7 @@ async function publish(topic, eventName, payload, context) {
     await Promise.all(_.map((callback) => callback(event), callbacks));
   } catch (error) {
     try {
-      errorHandler(event, context, error);
+      errorHandler(event, selectedContext(context), error);
     } catch (nestedError) {
       log.error(nestedError, `Bad error handler has been set using setErrorHandler, it should clean up its own errors`);
     }
@@ -76,4 +78,4 @@ function connect(...channels) {
   connectedChannels = connectedChannels.concat(channels);
 }
 
-module.exports = { publish, subscribe, disconnect, connect, setErrorHandler, setLog };
+module.exports = { publish, subscribe, disconnect, connect, setErrorHandler, setLog, setSelectedContext };

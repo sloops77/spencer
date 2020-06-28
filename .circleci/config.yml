@@ -10,6 +10,7 @@ jobs:
         environment:
           POSTGRES_USER: postgres
           POSTGRES_DB: spence_test
+      - image: circleci/mongo:4.2
 
     working_directory: ~/repo
 

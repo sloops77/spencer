@@ -7,14 +7,19 @@ const spenceConfig = importCwd.silent("./spencerc") || {};
 const packageName = _.get("name", packageJson);
 
 const nodeEnv = getEnv("NODE_ENV").default("development").asString();
-const debug = getEnv("DEBUG").default(["test", "development"].includes(nodeEnv).toString()).asBool();
+const debug = getEnv("DEBUG").default("false").asBool();
 const dbNamePrefix = getEnv("DB_NAME_PREFIX")
   .default(_.get("dbNamePrefix", spenceConfig) || _.last(packageName.split("/")))
   .asString();
 const dbName = getEnv("DB_NAME")
   .default(nodeEnv !== "production" ? `${dbNamePrefix}_${nodeEnv}` : dbNamePrefix)
   .asString();
-const connection = getEnv("DATABASE_URL").default(`postgresql://postgres@localhost:5432/${dbName}`).asString();
+const pgConnection = getEnv("DATABASE_URL")
+  .default(`postgresql://postgres@localhost:5432/${_.snakeCase(dbName)}`)
+  .asString();
+const mongoConnection = getEnv("MONGO_URL")
+  .default(`mongodb://localhost:27017/?connectTimeoutMS=10000&t.databases=${_.kebabCase(dbName)}`)
+  .asString();
 const source = getEnv("NODE_SOURCE").default("spence-node").asString();
 
 const config = {
@@ -22,7 +27,8 @@ const config = {
   debug,
   dbName,
   dbNamePrefix,
-  connection,
+  pgConnection,
+  mongoConnection,
   source,
 };
 
