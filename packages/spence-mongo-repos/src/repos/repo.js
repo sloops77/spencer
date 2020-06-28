@@ -156,7 +156,7 @@ function init({ collection, extensions = [] }) {
       const preppedVal = applied.prepModification(val, "insert");
       const updates = {
         $set: _.omit([collection.timestampKeys.createdAt], preppedVal),
-        $setOnInsert: { [collection.timestampKeys.createdAt]: preppedVal[[collection.timestampKeys.createdAt]] },
+        $setOnInsert: { [collection.timestampKeys.createdAt]: preppedVal[collection.timestampKeys.createdAt] },
       };
 
       const result = await applied.buildFinderQuery({ _id: id }, "findOneAndUpdate")(updates, {
