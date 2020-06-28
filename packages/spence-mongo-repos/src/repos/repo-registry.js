@@ -1,5 +1,4 @@
 const _ = require("lodash/fp");
-const { log } = require("@spencejs/spence-core");
 const initCollection = require("../collections");
 const initRepo = require("./repo");
 
@@ -7,12 +6,12 @@ const repoRegistry = {};
 const waiting = {};
 let readyCb;
 
-function repoFactory({ extensions, ...collectionConfig }) {
+function repoFactory({ extensions, ...collectionConfig }, context) {
   if (repoRegistry[collectionConfig.name]) {
     return repoRegistry[collectionConfig.name];
   }
 
-  const collection = initCollection(collectionConfig, onTableReady(collectionConfig.name));
+  const collection = initCollection(collectionConfig, onTableReady(collectionConfig.name, context));
   const repo = initRepo({ collection, extensions });
   repoRegistry[collectionConfig.name] = repo;
   return repo;
@@ -29,12 +28,12 @@ function addContext(context) {
   return _.mapValues((repo) => repo(context), repoRegistry);
 }
 
-function onTableReady(name) {
+function onTableReady(name, context) {
   waiting[name] = true;
   return (err) => {
     if (err) {
       waiting[name] = err;
-      log.error(err);
+      _.invokeArgs("log.error", [err], context);
       if (readyCb != null) {
         readyCb(err);
       }

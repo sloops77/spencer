@@ -1,6 +1,7 @@
 const _ = require("lodash/fp");
 const { v1: uuidv1 } = require("uuid");
-const knex = require("../src/knex");
+const { log, env } = require("@spencejs/spence-core");
+const { knex, knexFactory } = require("../src/knex");
 const { createSchema, dropSchema } = require("../src/tables/schemas");
 const { tableRegistry, clearTableRegistry, addContext, ready } = require("../src/repos/repo-registry");
 const simpleTableSpec = require("./helpers/test-tables");
@@ -15,6 +16,7 @@ describe("pg table registry", () => {
 
   beforeAll(async () => {
     schemaName = `simpleTest-${Date.now()}`;
+    knexFactory({ log, config: env });
     await createSchema({ schemaName, tableCreators: [simpleTableSpec.simpleTableCreator()] });
     // eslint-disable-next-line prefer-destructuring
     simpleRepoFactory = simpleTableSpec.simpleRepoFactory;
@@ -22,7 +24,7 @@ describe("pg table registry", () => {
 
   afterAll(async () => {
     await dropSchema({ schemaName });
-    await knex.destroy();
+    await knex().destroy();
   });
 
   it("should error if the registry isnt ready yet", async () => {

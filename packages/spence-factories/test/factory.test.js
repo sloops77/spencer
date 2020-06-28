@@ -1,11 +1,19 @@
 const _ = require("lodash/fp");
 const uuidv1 = require("uuid/v1");
 const { ObjectID } = require("mongodb");
-const { knex, clearTableRegistry, ready, createSchema, dropSchema } = require("@spencejs/spence-pg-repos");
+const { log, env } = require("@spencejs/spence-core");
 const {
-  getMongoClient,
+  knexFactory,
+  knexClose,
+  clearTableRegistry,
+  ready,
+  createSchema,
+  dropSchema,
+} = require("@spencejs/spence-pg-repos");
+const {
+  mongoFactory,
+  mongoClose,
   clearTableRegistry: clearMongoCollectionRegistry,
-  ready: mongoReady,
 } = require("@spencejs/spence-mongo-repos");
 const { simpleRepoFactory } = require("../../spence-mongo-repos/test/helpers/test-tables");
 const { register } = require("../src/factory");
@@ -17,23 +25,19 @@ const {
 } = require("../../spence-pg-repos/test/helpers/test-tables");
 const { UUID_FORMAT, ISO_DATETIME_FORMAT, OBJECT_ID_FORMAT } = require("../../spence-api/test/helpers/regexes");
 
-afterAll(async () => {
-  await getMongoClient().close();
-  await knex.destroy();
-});
-
 describe("test mongo factories", () => {
   let simpleCollection = null;
   let schemaName = null;
 
   beforeAll(async () => {
+    await mongoFactory({ log, config: env });
     schemaName = `simpleTest-${Date.now()}`;
     simpleCollection = simpleRepoFactory({ schemaName })();
-    await mongoReady();
   });
 
   afterAll(async () => {
     clearMongoCollectionRegistry();
+    await mongoClose();
   });
 
   let simpleFactory;
@@ -86,6 +90,7 @@ describe("test pg factories", () => {
   let schemaName = null;
 
   beforeAll(async () => {
+    await knexFactory({ log, config: env });
     schemaName = `simpleTest-${Date.now()}`;
     await createSchema({
       schemaName,
@@ -99,7 +104,7 @@ describe("test pg factories", () => {
   afterAll(async () => {
     clearTableRegistry();
     await dropSchema({ schemaName });
-    // await knex.destroy();
+    await knexClose();
   });
 
   let simpleFactory;

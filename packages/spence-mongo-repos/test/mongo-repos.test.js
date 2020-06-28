@@ -3,7 +3,9 @@
 const _ = require("lodash/fp");
 const shortid = require("shortid");
 const { ObjectID } = require("mongodb");
-const mongoClientPromise = require("../src/mongodb");
+const { log, env } = require("@spencejs/spence-core");
+
+const { mongoFactory, mongoClose, mongoDb } = require("../src/mongodb");
 
 const { clearTableRegistry, ready } = require("../src/repos/repo-registry");
 
@@ -12,16 +14,8 @@ describe("mongo repo persistence and queries", () => {
   let arrayTable = null;
   const schemaName = shortid.generate();
 
-  afterAll(async () => {
-    clearTableRegistry();
-    // delete schema tables?
-    const { mongoClient } = await mongoClientPromise;
-    await mongoClient.db().dropCollection(`${schemaName}.simples`);
-    await mongoClient.db().dropCollection(`${schemaName}.arrays`);
-    await mongoClient.close();
-  });
-
   beforeAll(async () => {
+    await mongoFactory({ log, config: env });
     const {
       // simpleTableCreator,
       simpleRepoFactory,
@@ -35,6 +29,14 @@ describe("mongo repo persistence and queries", () => {
     simpleTable = simpleRepoFactory({ schemaName });
     arrayTable = arraysRepoFactory({ schemaName });
     await ready();
+  });
+
+  afterAll(async () => {
+    clearTableRegistry();
+    // delete schema tables?
+    await mongoDb().dropCollection(`${schemaName}.simples`);
+    await mongoDb().dropCollection(`${schemaName}.arrays`);
+    await mongoClose();
   });
 
   function wrap(statements) {

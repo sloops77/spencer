@@ -1,7 +1,7 @@
 const _ = require("lodash/fp");
 const { v4: uuidv4 } = require("uuid");
 
-const knex = require("../knex");
+const { knex } = require("../knex");
 
 async function buildColumnInfoFromDb(table, ignoreColumns) {
   const rawColumnInfo = await table().columnInfo();
@@ -39,14 +39,14 @@ function init(
     .catch(ready);
 
   function connection(context) {
-    return (context && context.trx) || knex;
+    return (context && context.trx) || knex();
   }
 
   const table = Object.assign(tableFn, {
     schemaName,
     tableName: name,
     entityName,
-    knex,
+    knex: knex(),
     connection,
     transformCase,
     timestampKeys,

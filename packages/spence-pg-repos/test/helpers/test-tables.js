@@ -1,5 +1,5 @@
 const { repoFactory } = require("../../src");
-const knex = require("../../src/knex");
+const { knex } = require("../../src/knex");
 
 function simpleRepoFactory(config) {
   return repoFactory({
@@ -16,7 +16,7 @@ function simpleTableCreator(snakeCase) {
       table.text(snakeCase ? "a_val" : "aVal");
       table
         .timestamp(snakeCase ? "created_at" : "createdAt")
-        .defaultTo(knex.fn.now())
+        .defaultTo(knex().fn.now())
         .notNullable();
     });
 }
@@ -32,11 +32,11 @@ function simpleUuidRepoFactory(config) {
 function simpleUuidTableCreator(snakeCase) {
   return (schema) =>
     schema.createTable("simples", (table) => {
-      table.uuid("id").defaultTo(knex.raw("uuid_generate_v4()")).primary();
+      table.uuid("id").defaultTo(knex().raw("uuid_generate_v4()")).primary();
       table.text(snakeCase ? "a_val" : "aVal");
       table
         .timestamp(snakeCase ? "created_at" : "createdAt")
-        .defaultTo(knex.fn.now())
+        .defaultTo(knex().fn.now())
         .notNullable();
     });
 }
@@ -52,12 +52,12 @@ function complexRepoFactory(config) {
 function complexTableCreator(snakeCase) {
   return (schema) =>
     schema.createTable("complexes", (table) => {
-      table.uuid("id").defaultTo(knex.raw("uuid_generate_v4()")).primary();
+      table.uuid("id").defaultTo(knex().raw("uuid_generate_v4()")).primary();
       table.uuid("simpleId");
       table.text(snakeCase ? "a_complex_val" : "aComplexVal");
       table
         .timestamp(snakeCase ? "created_at" : "createdAt")
-        .defaultTo(knex.fn.now())
+        .defaultTo(knex().fn.now())
         .notNullable();
     });
 }
@@ -77,7 +77,7 @@ function arrayTableCreator(snakeCase) {
       table.jsonb(snakeCase ? "many_vals" : "manyVals");
       table
         .timestamp(snakeCase ? "created_at" : "createdAt")
-        .defaultTo(knex.fn.now())
+        .defaultTo(knex().fn.now())
         .notNullable();
     });
 }
@@ -93,12 +93,12 @@ function examplesRepoFactory(config) {
 function exampleTableCreator(snakeCase) {
   return (schema) =>
     schema.createTable("examples", (table) => {
-      table.uuid("id").defaultTo(knex.raw("uuid_generate_v4()")).primary();
+      table.uuid("id").defaultTo(knex().raw("uuid_generate_v4()")).primary();
       table.text(snakeCase ? "a_val" : "aVal");
       table.jsonb(snakeCase ? "many_vals" : "manyVals");
       table
         .timestamp(snakeCase ? "created_at" : "createdAt")
-        .defaultTo(knex.fn.now())
+        .defaultTo(knex().fn.now())
         .notNullable();
     });
 }

@@ -1,9 +1,5 @@
-const mongodb = require("mongodb");
-const mongoClientPromise = require("./mongodb");
-
-const { ObjectID } = mongodb;
-
-let mongoDb;
+const { ObjectID } = require("mongodb");
+const { mongoDb, mongoClientPromise } = require("./mongodb/mongodb-factory");
 
 function init(
   {
@@ -17,17 +13,12 @@ function init(
   ready
 ) {
   function collectionFn() {
-    if (mongoDb == null) {
-      throw new Error("Mongodb not initialized yet. Wait for the ready() signal");
-    }
-
-    return mongoDb.collection(`${schemaName}.${name}`);
+    return mongoDb().collection(`${schemaName}.${name}`);
   }
 
   const table = Object.assign(collectionFn, {
     tableName: name,
     entityName,
-    mongodb,
     defaultProjection,
     timestampKeys,
     mutable,
@@ -35,10 +26,7 @@ function init(
     mockIdGenerator: () => ObjectID().toHexString(),
   });
 
-  mongoClientPromise.then(({ db }) => {
-    mongoDb = db;
-    ready();
-  });
+  mongoClientPromise().then(ready).catch(ready);
 
   return table;
 }

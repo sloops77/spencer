@@ -1,6 +1,6 @@
 const _ = require("lodash/fp");
 const { ObjectID } = require("mongodb");
-const { getMongoClient, clearTableRegistry, ready } = require("@spencejs/spence-mongo-repos");
+const { mongoFactory, mongoClose, mongoDb, clearTableRegistry, ready } = require("@spencejs/spence-mongo-repos");
 const shortId = require("shortId");
 const initFastify = require("./helpers/init-fastify");
 const { OBJECT_ID_FORMAT, ISO_DATETIME_FORMAT } = require("./helpers/regexes");
@@ -8,18 +8,20 @@ const { newSimpleSchema, simpleSchema } = require("./helpers/pg-rest-controller"
 const { schemaBuildingDecorator } = require("../src/schema-builders");
 const mongoReposPreHandler = require("../src/hooks/mongo-repos-pre-handler");
 
-function simpleMongoController(fastify, { schemaBuilders }, next) {
-  fastify.get("/:id", { schemas: schemaBuilders.findOne(simpleSchema) }, async (req) =>
+function simpleMongoController(fastify, options, next) {
+  fastify.get("/:id", { schemas: fastify.schemaBuilders.findOne(simpleSchema) }, async (req) =>
     req.repos.examples.findById(new ObjectID(req.params.id))
   );
-  fastify.get("/", { schemas: schemaBuilders.findMany(simpleSchema) }, async (req) => req.repos.examples.find({}));
-  fastify.post("/", { schemas: schemaBuilders.insertOne(newSimpleSchema, simpleSchema) }, async (req) =>
+  fastify.get("/", { schemas: fastify.schemaBuilders.findMany(simpleSchema) }, async (req) =>
+    req.repos.examples.find({})
+  );
+  fastify.post("/", { schemas: fastify.schemaBuilders.insertOne(newSimpleSchema, simpleSchema) }, async (req) =>
     req.repos.examples.insert(req.body)
   );
-  fastify.put("/:id", { schemas: schemaBuilders.updateOne(newSimpleSchema, simpleSchema) }, async (req) =>
+  fastify.put("/:id", { schemas: fastify.schemaBuilders.updateOne(newSimpleSchema, simpleSchema) }, async (req) =>
     req.repos.examples.update(new ObjectID(req.params.id), req.body)
   );
-  fastify.delete("/:id", { schemas: schemaBuilders.deleteOne() }, async (req, reply) => {
+  fastify.delete("/:id", { schemas: fastify.schemaBuilders.deleteOne() }, async (req, reply) => {
     await req.repos.examples.del(new ObjectID(req.params.id));
     reply.code(204).send();
   });
@@ -27,7 +29,12 @@ function simpleMongoController(fastify, { schemaBuilders }, next) {
   // custom action
   fastify.post(
     "/:id/action",
-    { schemas: { params: schemaBuilders.idParam, response: schemaBuilders.responses(schemaBuilders.idParam) } },
+    {
+      schemas: {
+        params: fastify.schemaBuilders.idParam,
+        response: fastify.schemaBuilders.responses(fastify.schemaBuilders.idParam),
+      },
+    },
     async (req) => {
       return req.repos.simple.findById(req.params.id);
     }
@@ -43,10 +50,16 @@ describe("schemaBuilder decorated controller", () => {
   const schemaName = shortId.generate();
 
   beforeEach(async () => {
-    await getMongoClient().db().collection(`${schemaName}.examples`).deleteMany({});
+    await mongoDb().collection(`${schemaName}.examples`).deleteMany({});
   });
 
   beforeAll(async () => {
+    fastify = initFastify(
+      { "/examples": decoratedMongoController },
+      { factory: mongoFactory, close: mongoClose },
+      mongoReposPreHandler,
+      {}
+    );
     const {
       examplesRepoFactory,
       // eslint-disable-next-line global-require
@@ -54,16 +67,12 @@ describe("schemaBuilder decorated controller", () => {
 
     examplesRepoFactory({ schemaName })();
     await ready();
-
-    fastify = initFastify({ "/examples": decoratedMongoController }, mongoReposPreHandler, {});
   });
 
   afterAll(async () => {
-    await fastify.close();
-
     clearTableRegistry();
-    await getMongoClient().db().dropCollection(`${schemaName}.examples`);
-    await getMongoClient().close();
+    await mongoDb().dropCollection(`${schemaName}.examples`);
+    await fastify.close();
   });
 
   it("create simples", async () => {
@@ -126,7 +135,7 @@ describe("schemaBuilder decorated controller", () => {
     );
 
     const findResponse = await fastify.injectJson({ method: "GET", url: `/examples` });
-    expect(findResponse.json).toEqual([createResponses[1], createResponses[0]]);
+    expect(findResponse.json).toEqual(_.sortBy((example) => -(new Date(example.createdAt).getTime()), createResponses));
   });
 
   it("update simples", async () => {

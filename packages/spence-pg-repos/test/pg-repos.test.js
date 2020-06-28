@@ -1,11 +1,16 @@
 const _ = require("lodash/fp");
 const { v1: uuidv1 } = require("uuid");
-const knex = require("../src/knex");
+const { log, env } = require("@spencejs/spence-core");
+const { knex, knexFactory } = require("../src/knex");
 const { createSchema, dropSchema } = require("../src/tables/schemas");
 const { clearTableRegistry, ready } = require("../src/repos/repo-registry");
 
+beforeAll(() => {
+  knexFactory({ log, config: env });
+});
+
 afterAll(async () => {
-  await knex.destroy();
+  await knex().destroy();
 });
 
 describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "camel", transactions: true }]])(
@@ -33,7 +38,7 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
 
     function wrap(statements) {
       if (transactions) {
-        return knex.transaction((trx) => statements({ trx }));
+        return knex().transaction((trx) => statements({ trx }));
       }
       return statements();
     }

@@ -1,12 +1,10 @@
 /* eslint-disable global-require */
-const initTable = require("./tables/table");
-const initRepo = require("./repos");
 const { repoFactory, addContext, ready, clearTableRegistry } = require("./repos/repo-registry");
 
 module.exports = {
-  knex: require("./knex"),
-  initTable,
-  initRepo,
+  ...require("./knex"),
+  initTable: require("./tables/table"),
+  initRepo: require("./repos"),
   repoFactory,
   ready,
   bindRepo: addContext,

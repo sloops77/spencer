@@ -14,7 +14,7 @@ const dbNamePrefix = getEnv("DB_NAME_PREFIX")
 const dbName = getEnv("DB_NAME")
   .default(nodeEnv !== "production" ? `${dbNamePrefix}_${nodeEnv}` : dbNamePrefix)
   .asString();
-const connection = getEnv("DATABASE_URL")
+const pgConnection = getEnv("DATABASE_URL")
   .default(`postgresql://postgres@localhost:5432/${_.snakeCase(dbName)}`)
   .asString();
 const mongoConnection = getEnv("MONGO_URL")
@@ -27,7 +27,7 @@ const config = {
   debug,
   dbName,
   dbNamePrefix,
-  connection,
+  pgConnection,
   mongoConnection,
   source,
 };

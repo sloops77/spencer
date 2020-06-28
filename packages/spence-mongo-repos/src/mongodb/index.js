@@ -1,3 +1,3 @@
-const mongodbFactory = require("./mongodb-factory");
+const { mongoFactory, mongoClient, mongoDb, mongoClose } = require("./mongodb-factory");
 
-module.exports = mongodbFactory();
+module.exports = { mongoFactory, mongoClient, mongoDb, mongoClose };

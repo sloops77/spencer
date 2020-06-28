@@ -2,17 +2,22 @@ const fastify = require("fastify");
 const _ = require("lodash/fp");
 const statusCodes = require("http").STATUS_CODES;
 const { initEvents } = require("@spencejs/spence-events");
-const { log } = require("@spencejs/spence-core");
+const { log, env } = require("@spencejs/spence-core");
 const fastifyRest = require("../../src/rest/plugin");
 const { fastifySchemaBuilders } = require("../../src/schema-builders");
 
-function initFastify(routes, repoPreHandler, defaultHeaders = {}) {
+function initFastify(routes, { factory, close }, repoPreHandler, defaultHeaders = {}) {
   const app = fastify({
     logger: log,
     trustProxy: true,
     // @ts-ignore
     caseSensitive: false,
     ignoreTrailingSlash: true,
+  });
+
+  factory({ log, config: env });
+  app.addHook("onClose", (instance, done) => {
+    close().then(done);
   });
 
   initEvents({

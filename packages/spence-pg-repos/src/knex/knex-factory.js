@@ -5,34 +5,55 @@ const pick = require("lodash/fp/pick");
 const pickBy = require("lodash/fp/pickBy");
 const isNil = require("lodash/fp/isNil");
 const map = require("lodash/fp/map");
-const {
-  log,
-  env: { nodeEnv, connection },
-} = require("@spencejs/spence-core");
 const { dbifyColumn, apifyResult, apifyResultArray } = require("./transformations");
 
 const compactObj = pickBy((x) => !isNil(x));
 
 const DATE_OID = 1082;
 const parseDate = (value) => value;
+let knexInstance = null;
+let lastConnection = null;
+
+function knex(...args) {
+  if (lastConnection == null) {
+    throw new Error(`Knex not initialized yet. Call knexFactory() before using knex()`);
+  }
+
+  if (args.length) {
+    return knexInstance(...args);
+  }
+
+  return knexInstance;
+}
+
+function knexClose() {
+  return knex().destroy();
+}
 
 types.setTypeParser(DATE_OID, parseDate);
 
-const pool =
-  nodeEnv !== "test"
-    ? {
-        min: 2,
-        max: 10,
-      }
-    : {
-        min: 1,
-        max: 1,
-      };
+function knexFactory({ log, config: { nodeEnv, pgConnection } }) {
+  if (pgConnection === lastConnection) {
+    throw new Error(
+      `Initializiong knex twice to ${pgConnection} is not possible. Please remove one of the initializations`
+    );
+  }
 
-function knexFactory() {
-  return initKnex({
+  lastConnection = pgConnection;
+  const pool =
+    nodeEnv !== "test"
+      ? {
+          min: 2,
+          max: 10,
+        }
+      : {
+          min: 1,
+          max: 1,
+        };
+
+  knexInstance = initKnex({
     client: "pg",
-    connection,
+    connection: pgConnection,
     debug: false,
     asyncStackTraces: nodeEnv !== "production",
     acquireConnectionTimeout: nodeEnv !== "production" ? 3000 : 30000,
@@ -53,6 +74,8 @@ function knexFactory() {
       error: log.error.bind(log),
     },
   });
+
+  return knex();
 }
 
-module.exports = knexFactory;
+module.exports = { knexFactory, knex, knexClose };

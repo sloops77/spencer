@@ -1,4 +1,5 @@
 const { v1: uuidv1 } = require("uuid");
+const { env } = require("@spencejs/spence-core");
 const { publish, subscribe, disconnect, connect, setErrorHandler } = require("../src/events");
 const { UUID_FORMAT } = require("../../spence-api/test/helpers/regexes");
 
@@ -23,7 +24,7 @@ describe("events", () => {
     subscribe(`simple`, `created`, subscribers[1]);
     subscribe(`simple`, `created`, subscribers[2]);
     const payload = { aVal: "test" };
-    const context = { userId: uuidv1() };
+    const context = { userId: uuidv1(), source: env.source };
     const result = await publish(`simple`, `created`, payload, context);
     expect(result).toEqual(undefined);
     expect(errorHandler).not.toHaveBeenCalled();
@@ -64,7 +65,7 @@ describe("events", () => {
     });
     subscribe(`simple`, `created`, subscriber);
     const payload = { aVal: "test" };
-    const context = { userId: uuidv1() };
+    const context = { userId: uuidv1(), source: env.source };
     const result = await publish(`simple`, `created`, payload, context);
     expect(result).toEqual(undefined);
     expect(errorHandler).toHaveBeenCalledWith(
@@ -109,7 +110,7 @@ describe("events", () => {
     const subscriber = jest.fn();
     subscribe(`simple`, `created`, subscriber);
     const payload = { aVal: "test" };
-    const context = { userId: uuidv1() };
+    const context = { userId: uuidv1(), source: env.source };
     const result = await publish(`simple`, `created`, payload, context);
     expect(result).toEqual(undefined);
     expect(errorHandler).not.toHaveBeenCalled();
@@ -131,7 +132,7 @@ describe("events", () => {
     const subscriber = jest.fn();
     subscribe(`simple`, `created`, subscriber);
     const payload = { aVal: "test" };
-    const context = { userId: uuidv1() };
+    const context = { userId: uuidv1(), source: env.source };
     const result = await publish(`simple`, `created`, payload, context);
     expect(result).toEqual(undefined);
     expect(errorHandler).not.toHaveBeenCalled();
