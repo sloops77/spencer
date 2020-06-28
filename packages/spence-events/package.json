@@ -1,6 +1,6 @@
 {
   "name": "@spencejs/spence-events",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "main": "src/index.js",
   "license": "MIT",
   "publishConfig": {
@@ -11,7 +11,7 @@
     "uuid": "~7.0.2"
   },
   "devDependencies": {
-    "@spencejs/spence-config": "^0.6.0",
+    "@spencejs/spence-config": "^0.7.0",
     "@types/lodash": "~4.14.149",
     "@types/node": "~13.9.5",
     "await-sleep": "~0.0.1",

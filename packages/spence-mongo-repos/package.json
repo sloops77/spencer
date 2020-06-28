@@ -1,18 +1,18 @@
 {
   "name": "@spencejs/spence-mongo-repos",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "main": "./src/index.js",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@spencejs/spence-events": "^0.6.0",
+    "@spencejs/spence-events": "^0.7.0",
     "http-errors": "^1.7.3",
     "lodash": "~4.17.15"
   },
   "devDependencies": {
-    "@spencejs/spence-config": "^0.6.0",
+    "@spencejs/spence-config": "^0.7.0",
     "@types/lodash": "~4.14.149",
     "@types/node": "~13.9.5",
     "await-sleep": "~0.0.1",
@@ -25,8 +25,8 @@
     "jest-junit": "~10.0.0",
     "mongodb": "~3.5.9",
     "pino-pretty": "~3.6.1",
-    "shortid": "^2.2.15",
     "prettier": "~2.0.2",
+    "shortid": "^2.2.15",
     "typescript": "~3.8.3",
     "uuid": "~7.0.2"
   },
