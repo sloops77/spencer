@@ -1,34 +1,18 @@
-const _ = require("lodash/fp");
-
-const deepCompactObj = (initialAcc, obj) =>
-  _.reduce(
-    (acc, k) => {
-      if (obj[k] == null) {
-        return acc;
-      }
-      if (!_.isPlainObject(obj[k])) {
-        acc[k] = obj[k];
-        return acc;
-      }
-      return deepCompactObj({}, obj[k]);
-    },
-    initialAcc,
-    _.keys(obj)
-  );
+const deepCompactObj = require("./deep-compact-obj");
 
 function initPrepModification(collection) {
   return function prepModification(val, kind) {
-    const initialAcc = {};
+    const acc = deepCompactObj(val);
     const now = new Date();
 
     if (kind === "insert") {
-      initialAcc[collection.timestampKeys.createdAt] = now;
+      acc[collection.timestampKeys.createdAt] = now;
     }
     if (collection.mutable) {
-      initialAcc[collection.timestampKeys.updatedAt] = now;
+      acc[collection.timestampKeys.updatedAt] = now;
     }
 
-    return deepCompactObj(initialAcc, val);
+    return acc;
   };
 }
 
