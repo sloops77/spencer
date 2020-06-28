@@ -1,7 +1,7 @@
 const _ = require("lodash/fp");
 const shortid = require("shortid");
 const { ObjectID } = require("mongodb");
-const { log, env } = require("@spencejs/spence-core");
+const { log, env } = require("@spencejs/spence-config");
 
 const { mongoFactory, mongoDb, mongoClose } = require("../src/mongodb");
 const { tableRegistry, clearTableRegistry, addContext, ready } = require("../src/repos/repo-registry");

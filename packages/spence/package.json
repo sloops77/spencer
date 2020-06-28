@@ -8,7 +8,6 @@
   },
   "dependencies": {
     "@spencejs/spence-api": "^0.6.2",
-    "@spencejs/spence-core": "^0.6.0",
     "@spencejs/spence-events": "^0.6.0",
     "@spencejs/spence-mongo-repos": "^0.6.2",
     "@spencejs/spence-pg-repos": "^0.6.2",

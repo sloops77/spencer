@@ -7,12 +7,12 @@
     "access": "public"
   },
   "dependencies": {
-    "@spencejs/spence-core": "^0.6.0",
     "@spencejs/spence-events": "^0.6.0",
     "http-errors": "^1.7.3",
     "lodash": "~4.17.15"
   },
   "devDependencies": {
+    "@spencejs/spence-config": "^0.6.0",
     "@types/lodash": "~4.14.149",
     "@types/node": "~13.9.5",
     "await-sleep": "~0.0.1",

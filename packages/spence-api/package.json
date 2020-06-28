@@ -7,7 +7,6 @@
     "access": "public"
   },
   "dependencies": {
-    "@spencejs/spence-core": "^0.6.0",
     "@spencejs/spence-events": "^0.6.0",
     "fastify-plugin": "~1.6.1",
     "http-errors": "^1.7.3",
@@ -19,6 +18,7 @@
     "@spencejs/spence-pg-repos": "^0.6.2"
   },
   "devDependencies": {
+    "@spencejs/spence-config": "^0.6.0",
     "@spencejs/spence-mongo-repos": "^0.6.2",
     "@spencejs/spence-pg-repos": "^0.6.2",
     "@types/lodash": "~4.14.149",
