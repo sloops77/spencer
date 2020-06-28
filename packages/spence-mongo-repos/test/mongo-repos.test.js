@@ -215,7 +215,9 @@ describe("mongo repo persistence and queries", () => {
   it("should be able to delete using filter", async () => {
     const val = { aVal: "foo" };
     const insertedVal = await simpleTable().insert(val);
-    expect(await wrap(async (context) => simpleTable(context).delUsingFilter({ aVal: "foo" }))).toEqual([insertedVal._id]);
+    expect(await wrap(async (context) => simpleTable(context).delUsingFilter({ aVal: "foo" }))).toEqual([
+      insertedVal._id,
+    ]);
     await expect(simpleTable().findById(val.id)).rejects.toEqual(new Error(`simple ${val.id} not found`));
   });
   it("delete should error if cannot be found", async () => {

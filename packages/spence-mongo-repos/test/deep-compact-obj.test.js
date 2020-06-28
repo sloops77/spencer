@@ -21,18 +21,10 @@ describe("deep compact obj", () => {
   it("should handle deep arrays", () => {
     expect(
       deepCompactObj({
-        a: [
-          { x: 1, y: null, z: { m: null } },
-          { x: null, y: 2, z: { m: "string" } },
-          null
-        ],
+        a: [{ x: 1, y: null, z: { m: null } }, { x: null, y: 2, z: { m: "string" } }, null],
       })
     ).toEqual({
-      a: [
-        { x: 1, z: {} },
-        { y: 2, z: { m: "string" } },
-        null
-      ],
+      a: [{ x: 1, z: {} }, { y: 2, z: { m: "string" } }, null],
     });
   });
 });
