@@ -194,10 +194,10 @@ describe("mongo repo persistence and queries", () => {
     expect(updatedVal).toEqual({ ...insertedVal, updatedAt: expect.any(Date), aVal: "bar" });
   });
   it("should be able to update by filter", async () => {
-    const val = { aVal: "foo" };
+    const val = { aVal: "foo1" };
     const insertedVal = await simpleTable().insert(val);
     const updatedVal = await wrap(async (context) =>
-      simpleTable(context).updateUsingFilter({ aVal: "foo" }, { aVal: "bar" })
+      simpleTable(context).updateUsingFilter({ aVal: "foo1" }, { aVal: "bar" })
     );
     expect(updatedVal).toEqual([{ ...insertedVal, updatedAt: expect.any(Date), aVal: "bar" }]);
   });
@@ -213,9 +213,9 @@ describe("mongo repo persistence and queries", () => {
     await expect(simpleTable().findById(val.id)).rejects.toEqual(new Error(`simple ${val.id} not found`));
   });
   it("should be able to delete using filter", async () => {
-    const val = { aVal: "foo" };
+    const val = { aVal: "foo2" };
     const insertedVal = await simpleTable().insert(val);
-    expect(await wrap(async (context) => simpleTable(context).delUsingFilter({ aVal: "foo" }))).toEqual([
+    expect(await wrap(async (context) => simpleTable(context).delUsingFilter({ aVal: "foo2" }))).toEqual([
       insertedVal._id,
     ]);
     await expect(simpleTable().findById(val.id)).rejects.toEqual(new Error(`simple ${val.id} not found`));

@@ -175,14 +175,14 @@ function init({ collection, extensions = [] }) {
     }
 
     async function updateUsingFilter(filter, val, projection = applied.defaultColumnsSelection) {
-      const affectedIds = await applied.find(filter, { _id: 1 });
+      const affectedIds = _.map("_id", await applied.find({ filter }, { _id: 1 }));
       return (
         applied
           .buildFinderQuery(
             filter,
             "updateMany"
           )({ $set: applied.prepModification(val) })
-          .then(() => applied.find({ _id: { $in: affectedIds } }), { projection })
+          .then(() => applied.find({ filter: { _id: { $in: affectedIds } } }, projection))
           // in mongo its not possible to figure return the objects that were updated as the id's of the updated docs are not returned
           .then((result) => {
             _.forEach(
@@ -215,7 +215,7 @@ function init({ collection, extensions = [] }) {
 
     async function delUsingFilter(filter) {
       // use find to get the affected id's. This is subject to race coniditions, so consumers must be aware they may receive a deleted message twice
-      const affectedIds = _.map("_id", await applied.find(filter, { _id: 1 }));
+      const affectedIds = _.map("_id", await applied.find({ filter }, { _id: 1 }));
       return applied
         .buildFinderQuery(filter, "deleteMany")()
         .then(() => {
