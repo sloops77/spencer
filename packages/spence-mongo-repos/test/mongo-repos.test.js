@@ -3,7 +3,7 @@
 const _ = require("lodash/fp");
 const shortid = require("shortid");
 const { ObjectID } = require("mongodb");
-const { log, env } = require("@spencejs/spence-core");
+const { log, env } = require("@spencejs/spence-config");
 
 const { mongoFactory, mongoClose, mongoDb } = require("../src/mongodb");
 

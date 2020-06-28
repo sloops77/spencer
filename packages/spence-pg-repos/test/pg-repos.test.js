@@ -1,6 +1,6 @@
 const _ = require("lodash/fp");
 const { v1: uuidv1 } = require("uuid");
-const { log, env } = require("@spencejs/spence-core");
+const { log, env } = require("@spencejs/spence-config");
 const { knex, knexFactory } = require("../src/knex");
 const { createSchema, dropSchema } = require("../src/tables/schemas");
 const { clearTableRegistry, ready } = require("../src/repos/repo-registry");

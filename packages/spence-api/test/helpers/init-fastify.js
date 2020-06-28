@@ -2,7 +2,7 @@ const fastify = require("fastify");
 const _ = require("lodash/fp");
 const statusCodes = require("http").STATUS_CODES;
 const { initEvents } = require("@spencejs/spence-events");
-const { log, env } = require("@spencejs/spence-core");
+const { log, env } = require("@spencejs/spence-config");
 const fastifyRest = require("../../src/rest/plugin");
 const { fastifySchemaBuilders } = require("../../src/schema-builders");
 

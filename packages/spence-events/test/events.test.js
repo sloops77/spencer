@@ -1,5 +1,5 @@
 const { v1: uuidv1 } = require("uuid");
-const { env } = require("@spencejs/spence-core");
+const { env } = require("@spencejs/spence-config");
 const { publish, subscribe, disconnect, connect, setErrorHandler } = require("../src/events");
 const { UUID_FORMAT } = require("../../spence-api/test/helpers/regexes");
 

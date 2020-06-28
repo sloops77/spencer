@@ -1,7 +1,7 @@
 const _ = require("lodash/fp");
 const uuidv1 = require("uuid/v1");
 const { ObjectID } = require("mongodb");
-const { log, env } = require("@spencejs/spence-core");
+const { log, env } = require("@spencejs/spence-config");
 const {
   knexFactory,
   knexClose,
