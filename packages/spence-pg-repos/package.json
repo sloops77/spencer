@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@spencejs/spence-events": "^0.7.0",
+    "fastify-plugin": "1.6.1",
     "http-errors": "^1.7.3",
     "knex": "sloops77/knex#b72652a279b94dfff3fb4c73dd916f086f5b1bb0",
     "lodash": "~4.17.15",
