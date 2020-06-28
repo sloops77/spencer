@@ -169,6 +169,19 @@ describe("mongo repo persistence and queries", () => {
       { ...val, _id: expect.any(ObjectID), createdAt: expect.any(Date), updatedAt: expect.any(Date) },
     ]);
   });
+
+  it("should be able to findOne", async () => {
+    const val = { aVal: "foo" };
+    const result = await wrap(async (context) => {
+      const insertedVal = await simpleTable(context).insert(val);
+      return simpleTable(context).findOne({ filter: { _id: insertedVal._id } }, { _id: 1, createdAt: 1 });
+    });
+
+    expect(result).toEqual({
+      _id: expect.any(ObjectID),
+      createdAt: expect.any(Date),
+    });
+  });
   it("find by filter should error if cannot be found", async () => {
     await expect(wrap(async (context) => simpleTable(context).find({ filter: { aVal: "notfound" } }))).resolves.toEqual(
       []
@@ -180,6 +193,14 @@ describe("mongo repo persistence and queries", () => {
     const updatedVal = await wrap(async (context) => simpleTable(context).update(insertedVal._id, { aVal: "bar" }));
     expect(updatedVal).toEqual({ ...insertedVal, updatedAt: expect.any(Date), aVal: "bar" });
   });
+  it("should be able to update by filter", async () => {
+    const val = { aVal: "foo" };
+    const insertedVal = await simpleTable().insert(val);
+    const updatedVal = await wrap(async (context) =>
+      simpleTable(context).updateUsingFilter({ aVal: "foo" }, { aVal: "bar" })
+    );
+    expect(updatedVal).toEqual([{ ...insertedVal, updatedAt: expect.any(Date), aVal: "bar" }]);
+  });
   it("update should error if cannot be found", async () => {
     await expect(wrap(async (context) => simpleTable(context).update("1", { aVal: "bar" }))).rejects.toEqual(
       new Error("simple 1 not found")
@@ -189,6 +210,12 @@ describe("mongo repo persistence and queries", () => {
     const val = { aVal: "foo" };
     const insertedVal = await simpleTable().insert(val);
     expect(await wrap(async (context) => simpleTable(context).del(insertedVal._id))).toEqual(insertedVal._id);
+    await expect(simpleTable().findById(val.id)).rejects.toEqual(new Error(`simple ${val.id} not found`));
+  });
+  it("should be able to delete using filter", async () => {
+    const val = { aVal: "foo" };
+    const insertedVal = await simpleTable().insert(val);
+    expect(await wrap(async (context) => simpleTable(context).delUsingFilter({ aVal: "foo" }))).toEqual([insertedVal._id]);
     await expect(simpleTable().findById(val.id)).rejects.toEqual(new Error(`simple ${val.id} not found`));
   });
   it("delete should error if cannot be found", async () => {

@@ -175,7 +175,7 @@ function init({ collection, extensions = [] }) {
     }
 
     async function updateUsingFilter(filter, val, projection = applied.defaultColumnsSelection) {
-      const affectedIds = await applied.find(filter, { projection: { _id: 1 } });
+      const affectedIds = await applied.find(filter, { _id: 1 });
       return (
         applied
           .buildFinderQuery(
@@ -215,7 +215,7 @@ function init({ collection, extensions = [] }) {
 
     async function delUsingFilter(filter) {
       // use find to get the affected id's. This is subject to race coniditions, so consumers must be aware they may receive a deleted message twice
-      const affectedIds = await applied.find(filter, { projection: { _id: 1 } });
+      const affectedIds = _.map("_id", await applied.find(filter, { _id: 1 }));
       return applied
         .buildFinderQuery(filter, "deleteMany")()
         .then(() => {
