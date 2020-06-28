@@ -1,7 +1,7 @@
 const _ = require("lodash/fp");
 const { ObjectID } = require("mongodb");
 const { mongoFactory, mongoClose, mongoDb, clearTableRegistry, ready } = require("@spencejs/spence-mongo-repos");
-const shortId = require("shortId");
+const shortId = require("shortid");
 const initFastify = require("./helpers/init-fastify");
 const { OBJECT_ID_FORMAT, ISO_DATETIME_FORMAT } = require("./helpers/regexes");
 const { newSimpleSchema, simpleSchema } = require("./helpers/pg-rest-controller");
@@ -135,7 +135,7 @@ describe("schemaBuilder decorated controller", () => {
     );
 
     const findResponse = await fastify.injectJson({ method: "GET", url: `/examples` });
-    expect(findResponse.json).toEqual(_.sortBy((example) => -(new Date(example.createdAt).getTime()), createResponses));
+    expect(findResponse.json).toEqual(_.sortBy((example) => -new Date(example.createdAt).getTime(), createResponses));
   });
 
   it("update simples", async () => {

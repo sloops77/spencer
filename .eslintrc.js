@@ -17,6 +17,7 @@ module.exports = {
     "max-lines": ["error", 150],
     "max-nested-callbacks": ["error", 3],
     "no-console": ["error", { allow: ["warn", "error"] }],
+    "no-underscore-dangle": ["error", {allow: ["_id"] }],
     "no-use-before-define": 0, // override airbnb
     "prettier/prettier": "error",
     "no-restricted-syntax": [
