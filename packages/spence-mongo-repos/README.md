@@ -12,10 +12,10 @@ Spencer repos are a way to share the most common logic of your data layer, makin
 For saving documents like:
 ```json
       _id: ObjectId("507f1f77bcf86cd799439011"),
-      createdAt: "2020-06-29T12:22:56Z",
-      updatedAt: "2020-06-29T12:22:56Z",
       aVal: "foobar",
-      manyVals: [1,2,3]
+      manyVals: [1,2,3],
+      createdAt: "2019-12-22T07:27:33Z",
+      updatedAt: "2019-12-22T07:27:33Z"
 ```
 
 Intialize a repo like this:
@@ -39,6 +39,15 @@ Happy databasing!
 const exampleRepo = initExampleRepo();
 const insertedDoc = await repo.insert({aVal: "foobar", manyVals: []}); 
 console.info(await repo.findById(insertedDoc._id));
+```
+
+Output
+```json
+      _id: ObjectId("507f1f77bcf86cd799439011"),
+      aVal: "foobar",
+      manyVals: [],
+      createdAt: "2020-06-29T12:22:56Z",
+      updatedAt: "2020-06-29T12:22:56Z"
 ```
 
 ## Repos
