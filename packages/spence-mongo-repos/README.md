@@ -5,7 +5,7 @@ Spencer repos are a way to share the most common logic of your data layer, makin
 - easy to use
 - simple (only 400 lines of code)
 - offers access to the full power of the mongo driver to the user when they need to do more complex queries such as aggregation pipelines. No point building an abstraction over that
-- Bootstrap your Event Driven Architecture to manage sideeffects in a decoupled way by using @spencejs/spence-events.
+- manage sideeffects in a decoupled way by using @spencejs/spence-events. Bootstrap your Event Driven Architecture! 
 
 
 ## Getting Started
