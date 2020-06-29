@@ -6,6 +6,7 @@ Spencer repos are a way to share the most common logic of your data layer, makin
 - simple (only 400 lines of code)
 - offers access to the full power of the mongo driver to the user when they need to do more complex queries such as aggregation pipelines. No point building an abstraction over that
 - manage sideeffects in a decoupled way by using @spencejs/spence-events. Bootstrap your Event Driven Architecture! 
+- very similar api to relational database using knex means you can migrate easily if you need to.
 
 
 ## Getting Started
@@ -51,7 +52,39 @@ Output
 ```
 
 ## Repos
-Default projections are setup when specifying the collection you need in your repo object
+Repos are extensible adapters over a collection that provide operations to add or change docs. It is very easy to add capabilities like multitenant support or soft delete with just a few lines of code.
+
+When creating a repo first define the collection and how you want to interact with it. Then you can add custom extensions.
+
+*Example coming soon*
+
+### Collections
+#### name (required)
+The name of the collection in the db
+#### entityName
+The name of a single entity
+#### defaultProjection
+The default set keys to retrieve for a repo operation.
+#### timestampKeys
+spence automatically generates timestamp keys `createdAt` & `updatedAt`. Overriding them by suppying a map like
+```json
+{
+      "createdAt": "creationDate",
+      "updatedAt": "modificationDate"
+}
+```
+#### mutable
+defaults to true. if false the `updatedAt` timestamp will not be set.
+#### mockIdGenerator
+Set this value so that your @spencejs/spence-factories can generate ids of the correct type without persisting data to the db.
+
+### Extensions
+Extensions can be passed into the Repo. They can override the implementation of any of the operaitons listed below. They can be used for modifying any of the arguments then delgating, or completely reimplementing an operation.
+
+### RepoRegistry
+The repo registry caches intializations of repo so that 
+
+## Fastify plugins
 
 ## Operations
 ### `find({ filter, limit, skip, sort }, projection)`
@@ -121,6 +154,6 @@ deletes the document specified by the id.
 - `_id` to delete
 
 ### `delUsingFilter(filter)`
-deletes all documents matching hte mongo filter
+deletes all documents matching the mongo filter
 - `filter` is a regular mongo query object
 
