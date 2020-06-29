@@ -84,30 +84,30 @@ Find or insert the value. The second argument is the natural key.  Sets `created
 - `naturalKey`. the attribute within the `val` that should be used as a naturalKey.
 - `projection` is a regular mongo projection object. Defaults to your default.
 
-### `update(id, val, projection)`
+### `update(_id*, val, projection)`
 Update by id. Updates all the fields for you. Sets `updatedAt`. Dispatches a updated events.
 - `_id` to update
 - `val` to set
 - `projection` is a regular mongo projection object. Defaults to your default.
 
-### `updateUsingFilter(filter, val, projection)`
+### `updateUsingFilter(filter*, val*, projection)`
 Update using filters. Updates all the fields for you. Sets `updatedAt`. Dispatches a updated events.
 - `filter` is a regular mongo query object. All docs matching the filters.
 - `val` to set
 - `projection` is a regular mongo projection object. Defaults to your default.
 
-### `upsert(_id, val, projection)`
+### `upsert(_id*, val*, projection)`
 Upserts the passed val. Sets `updatedAt` & dispatches a updated events if an update occurs. Sets `createdAt`, `updatedAt` & dispatches insert events if an insert occurs.
 - `_id` to find
 - `val` to set or insert
 - `projection` is a regular mongo projection object. Defaults to your default.
 
-### `touch(_id, projection)`
+### `touch(_id*, projection)`
 Sets updatedAt on the document only. Does not dispatch updated events
 - `_id` to find
 - `projection` is a regular mongo projection object. Defaults to your default.
 
-### `del(_id)`
+### `del(_id*)`
 deletes the document specified by the id.
 - `_id` to delete
 
