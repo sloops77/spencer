@@ -12,6 +12,24 @@ Opinionated API Framework For Fastify and Postgres for FAST coding and EXTREME e
 - creating a controller
 - subscribe to changes
 
+## Documentation
+### [spence-api](./packages/spence-api)
+Api Building Libraries for fastify that simplifies quickly building enterprise grade apis with reusable json schemas, open api v3 compliant documentation and generatable integration tests.
+
+### [spence-events](./packages/spence-events)
+Event layer that enables event driven architectures. All changes on the persistence layer are evented.
+*Rabbitmq & Kafka support comming soon*
+
+### [spence-mongo-repos](./packages/spence-mongo-repos)
+Repo library over mongo. Build a extensible data layer for mongo in 3 lines of code.
+
+### [spence-pg-repos](./packages/spence-pg-repos)
+Repo library over postgres. Build a extensible data layer for postgres & knex in 3 lines of code.
+
+### [spence-factories](./packages/spence-factories)
+Factories library for your tests. Generate reusable & extensible plain objects, mocks and really persisted data by specifying fixtures.
+
+
 ## Philosophy
 - FP first
 - Productivity oriented
