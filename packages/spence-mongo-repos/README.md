@@ -76,7 +76,7 @@ spence automatically generates timestamp keys `createdAt` & `updatedAt`. Overrid
 #### mutable
 defaults to true. if false the `updatedAt` timestamp will not be set.
 #### mockIdGenerator
-Set this value so that your @spencejs/spence-factories can generate ids of the correct type without persisting data to the db.
+Set this value so that your [spence-factories](../spence-factories) can generate ids of the correct type without persisting data to the db.
 
 ### Extensions
 Extensions can be passed into the Repo. They can override the implementation of any of the operaitons listed below. They can be used for modifying any of the arguments then delgating, or completely reimplementing an operation.
