@@ -1,6 +1,6 @@
 {
   "name": "@spencejs/spence-api",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "main": "./src/index.js",
   "license": "MIT",
   "publishConfig": {
@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@spencejs/spence-config": "^0.7.0",
-    "@spencejs/spence-mongo-repos": "^0.7.1",
+    "@spencejs/spence-mongo-repos": "^0.7.2",
     "@spencejs/spence-pg-repos": "^0.7.1",
     "@types/lodash": "~4.14.149",
     "@types/node": "~13.9.5",
