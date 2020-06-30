@@ -2,6 +2,8 @@
 
 Test Factories is engineering applied to managing your data. Factories make it easy to create, manage, reuse & extend data sets needed for making great integration & e2e tests
 
+Data can be either generated for creation tests, or persisted to databases. Mocks, which look like persisted data but are not added to any database are also supported.
+
 ## Getting started
 Lets say you have a user object like this
 ```js
@@ -52,19 +54,6 @@ You can use overrides to change the data for a specific test
    //}   
 ```
 
-You can use mock persisted data for the database you are using
-```js
-   const user = await createdUser({lastName: "Rodgers"});
-   //{
-   //  _id: ObjectID("507f191e810c19729de860ea"),
-   //  firstName: "Fred",
-   //  lastName: "Rodgers",
-   //  dob: "1899-05-10",
-   //  createdAt: Date(2020-06-22T17:55:32Z)
-   //  updatedAt: Date(2020-06-22T17:55:32Z)
-   //}   
-```
-
 You can even persist into the database
 ```js
    const user = await persistUser({lastName: "Rodgers"});
@@ -86,6 +75,22 @@ You can even persist into the database
    //  createdAt: Date(2020-06-22T17:55:32Z)
    //  updatedAt: Date(2020-06-22T17:55:32Z)
    //} 
+```
+
+You can use mock persisted data that creates data that conforms to what it would look like if persisted, but doesnt actually persist anything. These are useful for when stubbing out api calls to apis or microservices.
+```js
+   const user = await createdUser({lastName: "Rodgers"});
+   //{
+   //  _id: ObjectID("507f191e810c19729de860ea"),
+   //  firstName: "Fred",
+   //  lastName: "Rodgers",
+   //  dob: "1899-05-10",
+   //  createdAt: Date(2020-06-22T17:55:32Z)
+   //  updatedAt: Date(2020-06-22T17:55:32Z)
+   //}   
+   
+   const dbUser = await userRepo.findById(user._id);
+   // throws Not found error
 ```
 
 ## Nested Documents & Relationships
