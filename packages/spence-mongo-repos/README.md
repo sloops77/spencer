@@ -38,8 +38,8 @@ function initExampleRepo() {
 Happy databasing!
 ```js
 const exampleRepo = initExampleRepo();
-const insertedDoc = await repo.insert({aVal: "foobar", manyVals: []}); 
-console.info(await repo.findById(insertedDoc._id));
+const insertedDoc = await exampleRepo.insert({aVal: "foobar", manyVals: []}); 
+console.info(await exampleRepo.findById(insertedDoc._id));
 ```
 
 Output
