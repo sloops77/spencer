@@ -1,4 +1,4 @@
-# Spencejs mongo-repos
+# SpenceJs: Mongo Repos
 
 ## Introduction
 Spencer repos are a way to share the most common logic of your data layer, making it easy to do the most common queries or persistence operations.
@@ -82,9 +82,19 @@ Set this value so that your @spencejs/spence-factories can generate ids of the c
 Extensions can be passed into the Repo. They can override the implementation of any of the operaitons listed below. They can be used for modifying any of the arguments then delgating, or completely reimplementing an operation.
 
 ### RepoRegistry
-The repo registry caches intializations of repo so that 
+The repo registry caches intializations of repo so that there is only ever one created in the entire system across all modules that make up the system. Enables the [reposPlugin](#Fastify-Plugins)
 
-## Fastify plugins
+## Fastify Plugins
+spence is made with fastify in mind. That means it comes out of the box with plugins that make using fastify easy.
+
+```js
+  const { mongodbPlugin, reposPlugin } = require('@spencejs/spence-mongo-repos');
+  
+  fastify.register(require("fastify-env");
+  fastify.register(mongodbPlugin); // initializes the mongo db. Uses mongo_connection
+  
+  fastify.register(reposPlugin); // attaches req.repos which contains all initialized repos to the request object
+```
 
 ## Operations
 ### `find({ filter, limit, skip, sort }, projection)`
