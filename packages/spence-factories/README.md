@@ -7,8 +7,8 @@ Lets say you have a user object like this
 ```js
 {
     firstName: "Fred",
-    lastName: "Astair",
-    dob: "1911-07-12"
+    lastName: "Astaire",
+    dob: "1899-05-10"
 }
 ```
 
@@ -20,8 +20,8 @@ const { register } = require("@spencejs/spence-factories");
 const userRepo = require("./user-repo");
 module.exports = register("user", userRepo, (overrides) => ({
     firstName: "Fred",
-    lastName: "Astair",
-    dob: "1911-07-12",
+    lastName: "Astaire",
+    dob: "1899-05-10",
     ...overrides()
 }));
 ```
@@ -37,8 +37,8 @@ Create a new user to send in a payload
   const user = newUser()
   //{
   //  firstName: "Fred",
-  //  lastName: "Astair",
-  //  dob: "1911-07-12"
+  //  lastName: "Astaire",
+  //  dob: "1899-05-10"
   //}
 ```
 
@@ -48,7 +48,7 @@ You can use overrides to change the data for a specific test
    //{
    //  firstName: "Fred",
    //  lastName: "Rodgers",
-   //  dob: "1911-07-12"
+   //  dob: "1899-05-10"
    //}   
 ```
 
@@ -59,7 +59,7 @@ You can use mock persisted data for the database you are using
    //  _id: ObjectID("507f191e810c19729de860ea"),
    //  firstName: "Fred",
    //  lastName: "Rodgers",
-   //  dob: "1911-07-12",
+   //  dob: "1899-05-10",
    //  createdAt: Date(2020-06-22T17:55:32Z)
    //  updatedAt: Date(2020-06-22T17:55:32Z)
    //}   
@@ -72,7 +72,7 @@ You can even persist into the database
    //  _id: ObjectID("507f191e810c19729de860ea"),
    //  firstName: "Fred",
    //  lastName: "Rodgers",
-   //  dob: "1911-07-12",
+   //  dob: "1899-05-10",
    //  createdAt: Date(2020-06-22T17:55:32Z)
    //  updatedAt: Date(2020-06-22T17:55:32Z)
    //} 
@@ -82,7 +82,7 @@ You can even persist into the database
    //  _id: ObjectID("507f191e810c19729de860ea"),
    //  firstName: "Fred",
    //  lastName: "Rodgers",
-   //  dob: "1911-07-12",
+   //  dob: "1899-05-10",
    //  createdAt: Date(2020-06-22T17:55:32Z)
    //  updatedAt: Date(2020-06-22T17:55:32Z)
    //} 
@@ -113,14 +113,14 @@ async function examples() {
   const group = newGroup()
   //{
   //  name: "Dancing Stars"
-  //  admin: { firstName: "Fred", lastName: "Astair", dob: "1911-07-12" }
+  //  admin: { firstName: "Fred", lastName: "Astaire", dob: "1899-05-10" }
   // }
 
   const mockGroup = await createdGroup();
   //{
   //  _id: ObjectID("507f191e810c19729de860ea"),
   //  name: "Dancing Stars"
-  //  admin: { _id: ObjectID("5efb07ac9baa66d86149b695"), firstName: "Fred", lastName: "Astair", dob: "1911-07-12", createdAt: Date(2020-06-22T17:55:32Z), updatedAt: Date(2020-06-22T17:55:32Z) },
+  //  admin: { _id: ObjectID("5efb07ac9baa66d86149b695"), firstName: "Fred", lastName: "Astaire", dob: "1899-05-10", createdAt: Date(2020-06-22T17:55:32Z), updatedAt: Date(2020-06-22T17:55:32Z) },
   //  createdAt: Date(2020-06-22T17:55:32Z)
   //  updatedAt: Date(2020-06-22T17:55:32Z)
   // }
@@ -129,7 +129,7 @@ async function examples() {
   //{
   //  _id: ObjectID("5efb07b7c2bb549ef5611262"),
   //  name: "Dancing Stars"
-  //  admin: { _id: ObjectID("5123f19112319f729de860df"), firstName: "Fred", lastName: "Astair", dob: "1911-07-12", createdAt: Date(2020-06-22T17:55:32Z), updatedAt: Date(2020-06-22T17:55:32Z) },
+  //  admin: { _id: ObjectID("5123f19112319f729de860df"), firstName: "Fred", lastName: "Astaire", dob: "1899-05-10", createdAt: Date(2020-06-22T17:55:32Z), updatedAt: Date(2020-06-22T17:55:32Z) },
   //  createdAt: Date(2020-06-22T17:55:32Z)
   //  updatedAt: Date(2020-06-22T17:55:32Z)
   // }
@@ -176,8 +176,8 @@ async function testData() {
   //{
   //  _id: ObjectID("507f191e810c19729de860ea"),
   //  firstName: "Fred",
-  //  lastName: "Rodgers",
-  //  dob: "1911-07-12",
+  //  lastName: "Astaire",
+  //  dob: "1899-05-10",
   //  createdAt: Date(2020-06-22T17:55:32Z)
   //  updatedAt: Date(2020-06-22T17:55:32Z)
   //} 
