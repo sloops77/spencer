@@ -152,7 +152,7 @@ describe("test pg factories", () => {
     let complexFactory;
 
     beforeEach(() => {
-      complexFactory = register("complex", complexTable, async (overrides, getOrBuild) => {
+      complexFactory = register("complex", complexTable, async (overrides, { getOrBuild }) => {
         const simpleVal = await getOrBuild("simpleVal", _.noop);
         const simple = await getOrBuild("simple", simpleFactory, { aVal: simpleVal });
         const aComplexVal = await getOrBuild("aComplexVal", uuidv1);

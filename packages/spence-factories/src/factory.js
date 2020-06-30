@@ -32,7 +32,7 @@ function commonFactoryType(baseFactory, itemType) {
       return _.pickBy((v, k) => v != null && !_.includes(k, manualProperties), rawOverrides);
     }
 
-    return baseFactory(overrides, getOrBuild, rawOverrides);
+    return baseFactory(overrides, { getOrBuild }, rawOverrides);
   };
 }
 
