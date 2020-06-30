@@ -1,4 +1,4 @@
-#Spencejs: Factories
+# Spencejs: Factories
 
 Test Factories is engineering applied to managing your data. Factories make it easy to create, manage, reuse & extend data sets needed for making great integration & e2e tests
 
@@ -87,3 +87,100 @@ You can even persist into the database
    //  updatedAt: Date(2020-06-22T17:55:32Z)
    //} 
 ```
+
+## Nested Documents & Relationships
+### Nested Documents
+More complex object graphs describe relationships that exist in the data that is persisted. Factories allow you to specify these relationships once only. spence supports creating the graphs as follows:
+
+```js
+const { register } = require("@spencejs/spence-factories");
+const userFactory = require("./user-factory");
+const groupRepo = require("./group-repo");
+module.exports = register("group", groupRepo, (overrides, { getOrBuild }) => ({
+    name: "Dancing Stars",
+    admin: getOrBuild(userFactory),
+    ...overrides()
+}));
+```
+
+Such a factory allows you build complex objects as easily as
+
+```js
+const { newUser, createdUser, persistUser } = require("./user-factory.js");
+const { newGroup, createGroup, persistGroup } = require("./group-factory.js");
+
+async function examples() {
+  const group = newGroup()
+  //{
+  //  name: "Dancing Stars"
+  //  admin: { firstName: "Fred", lastName: "Astair", dob: "1911-07-12" }
+  // }
+
+  const mockGroup = await createdGroup();
+  //{
+  //  _id: ObjectID("507f191e810c19729de860ea"),
+  //  name: "Dancing Stars"
+  //  admin: { _id: ObjectID("5efb07ac9baa66d86149b695"), firstName: "Fred", lastName: "Astair", dob: "1911-07-12", createdAt: Date(2020-06-22T17:55:32Z), updatedAt: Date(2020-06-22T17:55:32Z) },
+  //  createdAt: Date(2020-06-22T17:55:32Z)
+  //  updatedAt: Date(2020-06-22T17:55:32Z)
+  // }
+
+  const dbGroup = await persistGroup();
+  //{
+  //  _id: ObjectID("5efb07b7c2bb549ef5611262"),
+  //  name: "Dancing Stars"
+  //  admin: { _id: ObjectID("5123f19112319f729de860df"), firstName: "Fred", lastName: "Astair", dob: "1911-07-12", createdAt: Date(2020-06-22T17:55:32Z), updatedAt: Date(2020-06-22T17:55:32Z) },
+  //  createdAt: Date(2020-06-22T17:55:32Z)
+  //  updatedAt: Date(2020-06-22T17:55:32Z)
+  // }
+  ```
+
+  Overriding is of course supported
+  ```js
+  const admin = newUser({ firstName: "Lucille", lastName: "Ball", dob: "1911-08-06" })
+  const group = newGroup({ admin });
+
+  //{
+  //  _id: ObjectID("5efb0911c425921f99415f33"),
+  //  name: "Dancing Stars"
+  //  admin: { _id: ObjectID("5efb09096d38f572cf104a03"), firstName: "Lucille", lastName: "Ball", dob: "1911-08-06", createdAt: Date(2020-06-22T17:55:32Z), updatedAt: Date(2020-06-22T17:55:32Z) },
+  //  createdAt: Date(2020-06-22T17:55:32Z)
+  //  updatedAt: Date(2020-06-22T17:55:32Z)
+  // }
+}
+```
+
+### Modelling foreign keys
+
+```js
+const { register } = require("@spencejs/spence-factories");
+const userFactory = require("./user-factory");
+const groupRepo = require("./group-repo");
+const groupFactory = register("group", groupRepo, (overrides, { getOrBuild }) => ({
+    name: "Dancing Stars",
+    adminId: getOrBuild(userFactory).id,
+    ...overrides()
+}));
+
+async function testData() {
+  const dbGroup = await persistGroup();
+  //{
+  //  _id: ObjectID("5efb07b7c2bb549ef5611262"),
+  //  name: "Dancing Stars"
+  //  admin: ObjectID("5123f19112319f729de860df"),
+  //  createdAt: Date(2020-06-22T17:55:32Z)
+  //  updatedAt: Date(2020-06-22T17:55:32Z)
+  // }
+
+  const dbUser = await userRepo.findById(dbGroup._id);
+  //{
+  //  _id: ObjectID("507f191e810c19729de860ea"),
+  //  firstName: "Fred",
+  //  lastName: "Rodgers",
+  //  dob: "1911-07-12",
+  //  createdAt: Date(2020-06-22T17:55:32Z)
+  //  updatedAt: Date(2020-06-22T17:55:32Z)
+  //} 
+}
+```
+
