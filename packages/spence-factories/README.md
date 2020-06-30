@@ -103,7 +103,7 @@ const userFactory = require("./user-factory");
 const groupRepo = require("./group-repo");
 module.exports = register("group", groupRepo, (overrides, { getOrBuild }) => ({
     name: "Dancing Stars",
-    admin: getOrBuild(userFactory),
+    admin: getOrBuild("admin", userFactory),
     ...overrides()
 }));
 ```
