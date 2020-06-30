@@ -90,8 +90,8 @@ spence is made with fastify in mind. That means it comes out of the box with plu
 ```js
   const { mongodbPlugin, reposPlugin } = require('@spencejs/spence-mongo-repos');
   
-  fastify.register(require("fastify-env");
-  fastify.register(mongodbPlugin); // initializes the mongo db. Uses mongo_connection
+  fastify.register(require("fastify-env"); // spence-mongo-repos plugins assumes that fastify.config attribute has been set such as by using fastify-env
+  fastify.register(mongodbPlugin); // initializes the mongo db. Uses the folowing config from fastify.config: { mongoConnection, nodeEnv, debug }
   
   fastify.register(reposPlugin); // attaches req.repos which contains all initialized repos to the request object
 ```
