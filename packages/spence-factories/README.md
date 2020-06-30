@@ -17,7 +17,8 @@ Your first factory can be defined in a file like this
 ```js 
 // user-factory.js
 const { register } = require("@spencejs/spence-factories");
-module.exports = register("simple", simpleCollection, (overrides) => ({
+const userRepo = require("./user-repo");
+module.exports = register("user", userRepo, (overrides) => ({
     firstName: "Fred",
     lastName: "Astair",
     dob: "1911-07-12",
