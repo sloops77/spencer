@@ -3,7 +3,7 @@
 ## Introduction
 Spencer repos are a way to share the most common logic of your data layer, making it easy to do the most common queries or persistence operations.
 - easy to use
-- simple (only 400 lines of code)
+- simple (only 500 lines of code)
 - offers access to the full power of the mongo driver to the user when they need to do more complex queries such as aggregation pipelines. No point building an abstraction over that
 - manage sideeffects in a decoupled way by using @spencejs/spence-events. Bootstrap your Event Driven Architecture! 
 - very similar api to relational database using knex means you can migrate easily if you need to.
