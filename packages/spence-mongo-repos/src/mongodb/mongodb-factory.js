@@ -35,7 +35,7 @@ function mongoClose() {
 function mongoFactory({ log, config: { nodeEnv, mongoConnection, debug } }, ready) {
   if (mongoConnection === lastConnection) {
     throw new Error(
-      `Initializiong mongo twice to ${mongoConnection} is not possible. Please remove one of the initializations`
+      `Initializing mongo twice to ${mongoConnection} is not possible. Please remove one of the initializations`
     );
   }
   lastConnection = mongoConnection;
