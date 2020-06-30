@@ -22,7 +22,7 @@ Opinionated API Framework For Fastify and Postgres for FAST coding and EXTREME e
 - Performance is important
 - ORMs - only change a db for specialization reasons. The native query language is usually the best
 What is familiar but of no benefit:
-- DI - (mocking can be done in other ways)
+- DI - IoC & mocking can be done in other ways
 - Classes - (statics, singletons pointless)
 
 ## Controllers
