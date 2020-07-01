@@ -8,4 +8,5 @@ module.exports = {
   collectCoverage: true,
   coveragePathIgnorePatterns: ["(test/.*).(jsx?|tsx?)$"],
   verbose: true,
+  testEnvironment: "node",
 };
