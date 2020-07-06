@@ -103,7 +103,7 @@ const userFactory = require("./user-factory");
 const groupRepo = require("./group-repo");
 module.exports = register("group", groupRepo, (overrides, { getOrBuild }) => ({
     name: "Dancing Stars",
-    admin: getOrBuild("admin", userFactory),
+    admin: await getOrBuild("admin", userFactory),
     ...overrides()
 }));
 ```
@@ -115,7 +115,7 @@ const { newUser, createdUser, persistUser } = require("./user-factory.js");
 const { newGroup, createGroup, persistGroup } = require("./group-factory.js");
 
 async function examples() {
-  const group = newGroup()
+  const group = await newGroup() // NOTE: newGroup must now use async/await
   //{
   //  name: "Dancing Stars"
   //  admin: { firstName: "Fred", lastName: "Astaire", dob: "1899-05-10" }
@@ -163,7 +163,7 @@ const userFactory = require("./user-factory");
 const groupRepo = require("./group-repo");
 const groupFactory = register("group", groupRepo, (overrides, { getOrBuild }) => ({
     name: "Dancing Stars",
-    adminId: getOrBuild("admin", userFactory).id,
+    adminId: (await getOrBuild("admin", userFactory)).id,
     ...overrides()
 }));
 
