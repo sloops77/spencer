@@ -5,12 +5,12 @@ const shortid = require("shortid");
 const { ObjectID } = require("mongodb");
 const { log, env } = require("@spencejs/spence-config");
 
-const flexibleIdExtension = require("../src/extensions/flexibleIdsExtension");
+const flexibleIdExtension = require("../src/extensions/autoboxIdsExtension");
 const { mongoFactory, mongoClose, mongoDb } = require("../src/mongodb");
 
 const { clearTableRegistry, ready } = require("../src/repos/repo-registry");
 
-describe("mongo repo persistence and queries", () => {
+describe("autoconvert ids mongo behaviour", () => {
   let simpleTable = null;
   const schemaName = shortid.generate();
 

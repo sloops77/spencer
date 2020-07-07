@@ -5,7 +5,7 @@ const OBJECT_ID_FORMAT = /^[0-9a-fA-F]{24}$/;
 
 const convertId = (id) => (_.isString(id) && OBJECT_ID_FORMAT.test(id) ? ObjectID(id) : id);
 
-function flexibleIdExtension(parent) {
+function autoboxIdExtension(parent) {
   return {
     ...parent,
     findById(id, ...rest) {
@@ -17,8 +17,8 @@ function flexibleIdExtension(parent) {
     del(id, ...rest) {
       return parent.del(convertId(id), ...rest);
     },
-    extensions: parent.extensions.concat(["flexibleIds"]),
+    extensions: parent.extensions.concat(["autoboxIds"]),
   };
 }
 
-module.exports = flexibleIdExtension;
+module.exports = autoboxIdExtension;
