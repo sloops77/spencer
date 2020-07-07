@@ -1,5 +1,6 @@
 /* eslint-disable global-require */
 const { repoFactory, addContext, ready, clearTableRegistry } = require("./repos/repo-registry");
+const autoboxIdsExtension = require("./extensions/autoboxIdsExtension");
 
 module.exports = {
   ...require("./mongodb"),
@@ -10,4 +11,5 @@ module.exports = {
   ready,
   bindRepo: addContext,
   clearTableRegistry,
+  autoboxIdsExtension,
 };
