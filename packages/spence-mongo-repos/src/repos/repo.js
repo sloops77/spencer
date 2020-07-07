@@ -146,7 +146,7 @@ function init({ collection, extensions = [] }) {
     }
 
     function update(id, val, projection = applied.defaultColumnsSelection) {
-      return doUpdateById(id, applied.prepModification(val), projection).then((result) => {
+      return applied.doUpdateById(id, applied.prepModification(val), projection).then((result) => {
         publish(collection.entityName, `updated`, { state: result, changes: { kind: "patch", val } }, context);
         return result;
       });
@@ -195,7 +195,7 @@ function init({ collection, extensions = [] }) {
     }
 
     function touch(id, returning) {
-      return doUpdateById(id, { [collection.timestampKeys.updatedAt]: new Date() }, returning);
+      return applied.doUpdateById(id, { [collection.timestampKeys.updatedAt]: new Date() }, returning);
     }
 
     function del(id) {
@@ -235,6 +235,7 @@ function init({ collection, extensions = [] }) {
       touch,
       update,
       updateUsingFilter,
+      doUpdateById,
       del,
       delUsingFilter,
       count,
