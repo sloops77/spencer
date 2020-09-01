@@ -53,7 +53,7 @@ function init({ collection, extensions = [] }) {
       } = {},
       projection = applied.defaultColumnsSelection
     ) {
-      return applied.collection
+      return applied.collection()
         .find(filter, {
           limit,
           skip: skip || offset,
@@ -78,7 +78,7 @@ function init({ collection, extensions = [] }) {
     }
 
     function count({ filter = {} }) {
-      return applied.collection().count(filter)();
+      return applied.collection().countDocuments(filter);
     }
 
     function insert(document, projection = applied.defaultColumnsSelection) {
@@ -222,7 +222,7 @@ function init({ collection, extensions = [] }) {
     }
 
     function del(id) {
-      return applied.collection
+      return applied.collection()
         .deleteOne({ _id: id })
         .then(
           // @ts-ignore
@@ -242,7 +242,7 @@ function init({ collection, extensions = [] }) {
     async function delUsingFilter({ filter }) {
       // use find to get the affected id's. This is subject to race conditions, so consumers must be aware they may receive a deleted message twice
       const affectedIds = _.map("_id", await applied.find({ filter }, { _id: 1 }));
-      return applied.collection.deleteMany(filter).then(() => {
+      return applied.collection().deleteMany(filter).then(() => {
         _.forEach((id) => publish(collection.entityName, `deleted`, { id }, context), affectedIds);
         return affectedIds;
       });

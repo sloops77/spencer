@@ -135,7 +135,7 @@ describe("autoconvert ids mongo behaviour", () => {
 
     const result = await wrap(async (context) => {
       const insertedVals = await simpleTable(context).insertMany(vals);
-      return simpleTable(context).count({ _id: { $in: _.map("_id", insertedVals) } });
+      return simpleTable(context).count({ filter: { _id: { $in: _.map("_id", insertedVals) } } });
     });
 
     expect(result).toEqual(3);
@@ -210,7 +210,7 @@ describe("autoconvert ids mongo behaviour", () => {
     const val = { aVal: "foo1" };
     const insertedVal = await simpleTable().insert(val);
     const updatedVal = await wrap(async (context) =>
-      simpleTable(context).updateUsingFilter({ aVal: "foo1" }, { aVal: "bar" })
+      simpleTable(context).updateUsingFilter({ filter: { aVal: "foo1" } }, { aVal: "bar" })
     );
     expect(updatedVal).toEqual([{ ...insertedVal, updatedAt: expect.any(Date), aVal: "bar" }]);
   });
@@ -230,7 +230,7 @@ describe("autoconvert ids mongo behaviour", () => {
   it("should be able to delete using filter", async () => {
     const val = { aVal: "foo2" };
     const insertedVal = await simpleTable().insert(val);
-    expect(await wrap(async (context) => simpleTable(context).delUsingFilter({ aVal: "foo2" }))).toEqual([
+    expect(await wrap(async (context) => simpleTable(context).delUsingFilter({ filter: { aVal: "foo2" } }))).toEqual([
       insertedVal._id,
     ]);
     await expect(simpleTable().findById(val.id)).rejects.toEqual(new Error(`simple ${val.id} not found`));

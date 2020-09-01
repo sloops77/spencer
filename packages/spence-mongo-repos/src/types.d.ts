@@ -1,4 +1,4 @@
-import {Collection as MongoCollection, ObjectID} from "mongodb";
+import {ObjectID} from "mongodb";
 
 export interface Log {
     debug: Function,
@@ -51,103 +51,90 @@ export type Extension = typeof ExtensionFn;
 export interface RepoInstance {
     /**
      * Deletes the document by id
-     * @param {string|ObjectID} id
-     * @returns {Promise<string>} the deleted id
+     * @param id
      */
     del(id: string|ObjectID): Promise<string>,
     /**
      * Deletes the object using a query
      * @param query
-     * @returns the deleted ids
      */
     delUsingFilter({ filter }: Query): Promise<string[]>,
     /**
      * Just modifies the updatedAt timestamp.
-     * @param {string|ObjectID} id
-     * @param {Projection} projection
-     * @returns {Promise<Document>}
+     * @param id
+     * @param projection
      */
     touch(id: string|ObjectID, projection: Projection): Promise<Document>,
 
     /**
      * Finds a single document by id
-     * @param {string|ObjectID} id
-     * @param {Projection} projection
-     * @returns {Promise<Document>}
+     * @param id
+     * @param projection
      */
     findById(id: string|ObjectID, projection?: Projection): Promise<Document>,
     /**
      * Finds a list of documents by using a query
-     * @param {Query} query
-     * @param {Projection} projection
+     * @param query
+     * @param projection
      * @returns {Promise<Document[]>}
      */
     find(query?: Query, projection?: Projection): Promise<Document[]>,
     /**
      * Finds a single document by using a query
-     * @param {Query} query
-     * @param {Projection} projection
-     * @returns {Promise<Document | null>}
+     * @param query
+     * @param projection
      */
     findOne({ filter, sort, }?: Query, projection?: Projection): Promise<Document | null>,
     /**
      * Counts the documents by using a query
-     * @param {Query} query
-     * @returns {Promise<number>}
+     * @param query
      */
     count({ filter }: Query): Promise<number>,
     /**
      * Inserts a document into the collection
-     * @param {Document} document
-     * @param {Projection} projection
-     * @returns {Promise<Document>}
+     * @param document
+     * @param projection
      */
     insert(document: Document, projection?: Projection): Promise<Document>,
     /**
      * Inserts documents into the collection
-     * @param {Document[]} documents
-     * @param {Projection} projection
-     * @returns {Promise<Document[]>}
+     * @param documents
+     * @param projection
      */
     insertMany(documents: Document[], projection?: Projection): Promise<Document[]>,
     /**
      * Finds a document by the natural key values in the passed document. If not found, then the document is inserted.
-     * @param {Document} document
-     * @param {string[]} naturalKey
-     * @param {Projection} projection
-     * @returns {Promise<Document>}
+     * @param document
+     * @param naturalKey
+     * @param projection
      */
     findOrInsert(document: Document, naturalKey: string[], projection?: Projection): Promise<Document>,
     /**
      * Does an update by id
-     * @param {string|ObjectID} id
-     * @param {Document | (() => Document)} setStatement
-     * @param {Projection} projection
-     * @returns {Promise<Document>}
+     * @param id
+     * @param setStatement
+     * @param projection
      */
     doUpdateById(id: string|ObjectID, setStatement: Document | (() => Document), projection?: Projection): Promise<Document>,
     /**
      * Does an update by id
-     * @param {string|ObjectID} id
-     * @param {Document} val
-     * @param {Projection} projection
-     * @returns {Promise<Document>}
+     * @param id
+     * @param val
+     * @param projection
      */
     update(id: string|ObjectID, val: Document, projection?: Projection): Promise<Document>,
     /**
      * Does an update by filter
-     * @param {Query} query
-     * @param {Document} val
-     * @param {Projection} projection
-     * @returns {Promise<Document[]>}
+     * @param query
+     * @param val
+     * @param projection
      */
     updateUsingFilter({ filter }: Query, val: Document, projection?: Projection): Promise<Document[]>,
     /**
      * Upserts the value
-     * @param {string|ObjectID} id
-     * @param {Document} val
-     * @param {Projection} projection
-     * @returns {Promise<Document>}
+     * @param id
+     * @param val
+     * @param projection
      */
     upsert(id: string|ObjectID, val: Document, projection?: Projection): Promise<Document>,
     readonly defaultColumnsSelection: Projection,
