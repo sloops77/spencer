@@ -14,8 +14,8 @@
     "lodash": "~4.17.15"
   },
   "peerDependencies": {
-    "@spencejs/spence-mongo-repos": "^0.7.4",
-    "@spencejs/spence-pg-repos": "^0.7.1",
+    "@spencejs/spence-mongo-repos": "^0.7.5",
+    "@spencejs/spence-pg-repos": "^0.7.5",
     "fastify": "~2.15.1"
   },
   "devDependencies": {
