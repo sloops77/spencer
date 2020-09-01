@@ -1,6 +1,6 @@
 {
   "name": "@spencejs/spence-mongo-repos",
-  "version": "0.7.4",
+  "version": "0.7.5",
   "main": "./src/index.js",
   "types": "./types/index.d.ts",
   "license": "MIT",
@@ -8,17 +8,17 @@
     "access": "public"
   },
   "dependencies": {
-    "@spencejs/spence-events": "^0.7.0",
+    "@spencejs/spence-events": "^0.7.5",
     "fastify-plugin": "1.6.1",
     "http-errors": "^1.7.3",
     "lodash": "~4.17.15"
   },
   "devDependencies": {
-    "@spencejs/spence-config": "^0.7.0",
-    "@types/lodash": "~4.14.149",
-    "@types/node": "~13.9.5",
-    "@types/mongodb": "^3.5.26",
+    "@spencejs/spence-config": "^0.7.5",
     "@types/http-errors": "^1.8.0",
+    "@types/lodash": "~4.14.149",
+    "@types/mongodb": "^3.5.26",
+    "@types/node": "~13.9.5",
     "await-sleep": "~0.0.1",
     "eslint": "~6.8.0",
     "eslint-config-airbnb-base": "~14.1.0",

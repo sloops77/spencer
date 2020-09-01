@@ -1,6 +1,6 @@
 {
   "name": "@spencejs/spence-events",
-  "version": "0.7.0",
+  "version": "0.7.5",
   "main": "src/index.js",
   "types": "types/index.d.ts",
   "license": "MIT",
@@ -12,7 +12,7 @@
     "uuid": "~7.0.2"
   },
   "devDependencies": {
-    "@spencejs/spence-config": "^0.7.0",
+    "@spencejs/spence-config": "^0.7.5",
     "@types/lodash": "~4.14.149",
     "@types/node": "~13.9.5",
     "@types/uuid": "^8.3.0",
@@ -26,8 +26,8 @@
     "jest-junit": "~10.0.0",
     "pino-pretty": "~3.6.1",
     "prettier": "~2.0.2",
-    "typescript": "~3.9.7",
-    "tsd": "^0.13.1"
+    "tsd": "^0.13.1",
+    "typescript": "~3.9.7"
   },
   "scripts": {
     "lint": "eslint src test --fix",
