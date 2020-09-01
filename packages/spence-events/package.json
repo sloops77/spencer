@@ -2,6 +2,7 @@
   "name": "@spencejs/spence-events",
   "version": "0.7.0",
   "main": "src/index.js",
+  "types": "types/index.d.ts",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -14,6 +15,7 @@
     "@spencejs/spence-config": "^0.7.0",
     "@types/lodash": "~4.14.149",
     "@types/node": "~13.9.5",
+    "@types/uuid": "^8.3.0",
     "await-sleep": "~0.0.1",
     "eslint": "~6.8.0",
     "eslint-config-airbnb-base": "~14.1.0",
@@ -24,7 +26,8 @@
     "jest-junit": "~10.0.0",
     "pino-pretty": "~3.6.1",
     "prettier": "~2.0.2",
-    "typescript": "~3.8.3"
+    "typescript": "~3.9.7",
+    "tsd": "^0.13.1"
   },
   "scripts": {
     "lint": "eslint src test --fix",

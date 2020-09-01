@@ -1,25 +1,54 @@
 const _ = require("lodash/fp");
-const EventEmitter = require("events");
+const { EventEmitter } = require("events");
 const { v1: idGenerator } = require("uuid");
+
+/**
+ * @typedef { import("./types").Context } Context
+ * @typedef { import("./types").Log } Log
+ * @typedef { import("./types").Event } Event
+ * @typedef { import("./types").ErrorHandler } ErrorHandler
+ */
 
 const nexus = new EventEmitter();
 let connectedChannels = ["*"];
 
 let errorHandler = _.noop;
+
+/**
+ * @param {ErrorHandler} _errorHandler
+ * @return void
+ */
 function setErrorHandler(_errorHandler) {
   errorHandler = _errorHandler;
 }
 
+/** @type {Log} */
 let log = console;
+
+/**
+ * @param {Log} _log
+ */
 function setLog(_log) {
   log = _log;
 }
 
 let selectedContext = _.pick(["source", "tenant", "user", "userId"]);
+
+/**
+ * @param {string[]} contextKeys
+ */
 function setSelectedContext(contextKeys) {
   selectedContext = _.pick(contextKeys);
 }
 
+/**
+ * publishes the event
+ * @param {string} topic
+ * @param {string} eventName
+ * @param {Event} payload
+ * @param {Context} context
+ * @return {Promise<void>}
+ */
 async function publish(topic, eventName, payload, context) {
   const event = {
     meta: { ...selectedContext(context), id: idGenerator(), topic, eventName },
@@ -31,7 +60,7 @@ async function publish(topic, eventName, payload, context) {
     return;
   }
   try {
-    log.debug({ eventId: event.id, meta: _.omit(["tables"], event.meta) }, `publishing event`);
+    log.debug({ meta: _.omit(["tables"], event.meta) }, `publishing event`);
     // doesnt use emit directly because we want to support async callbacks AND to have a general exception handler
     const callbacks = nexus.listeners(channel);
     await Promise.all(_.map((callback) => callback(event), callbacks));
@@ -44,6 +73,11 @@ async function publish(topic, eventName, payload, context) {
   }
 }
 
+/**
+ * @template T
+ * @param {Event} event
+ * @return {(returnVal: T) => T}
+ */
 function logSubscribe(event) {
   return (returnVal) => {
     if (returnVal != null) {
@@ -53,6 +87,11 @@ function logSubscribe(event) {
   };
 }
 
+/**
+ * @param {string} topic
+ * @param {string} eventName
+ * @param {(event: Event) => any | PromiseLike<any>} listener
+ */
 function subscribe(topic, eventName, listener) {
   nexus.on(`${topic}.${eventName}`, (event) => {
     const returnVal = listener(event);
@@ -67,10 +106,18 @@ function subscribe(topic, eventName, listener) {
   });
 }
 
+/**
+ * Disconnects all channels
+ * @return void
+ */
 function disconnect() {
   connectedChannels = [];
 }
 
+/**
+ * Connects the specified channels
+ * @param {string[]} channels
+ */
 function connect(...channels) {
   if (_.isEmpty(channels)) {
     connectedChannels = ["*"];

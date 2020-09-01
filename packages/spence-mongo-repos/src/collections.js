@@ -1,7 +1,18 @@
 const { ObjectID } = require("mongodb");
 const _ = require("lodash/fp");
 const { mongoDb, mongoClientPromise } = require("./mongodb/mongodb-factory");
+/**
+ * @typedef { import("./types").Projection } Projection
+ * @typedef { import("./types").CollectionConfig } CollectionConfig
+ * @typedef { import("./types").Collection } Collection
+ */
 
+/**
+ * Initializes a collection
+ * @param {CollectionConfig} config
+ * @param {() => void} ready
+ * @returns {Collection}
+ */
 function init(
   {
     name,
@@ -26,7 +37,7 @@ function init(
     timestampKeys,
     mutable,
     idKey: "_id",
-    mockIdGenerator: () => ObjectID().toHexString(),
+    mockIdGenerator: () => new ObjectID().toHexString(),
   });
 
   mongoClientPromise()

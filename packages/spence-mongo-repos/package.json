@@ -2,6 +2,7 @@
   "name": "@spencejs/spence-mongo-repos",
   "version": "0.7.4",
   "main": "./src/index.js",
+  "types": "./types/index.d.ts",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -16,6 +17,8 @@
     "@spencejs/spence-config": "^0.7.0",
     "@types/lodash": "~4.14.149",
     "@types/node": "~13.9.5",
+    "@types/mongodb": "^3.5.26",
+    "@types/http-errors": "^1.8.0",
     "await-sleep": "~0.0.1",
     "eslint": "~6.8.0",
     "eslint-config-airbnb-base": "~14.1.0",

@@ -3,8 +3,21 @@ const { ObjectID } = require("mongodb");
 
 const OBJECT_ID_FORMAT = /^[0-9a-fA-F]{24}$/;
 
-const convertId = (id) => (_.isString(id) && OBJECT_ID_FORMAT.test(id) ? ObjectID(id) : id);
+/**
+ * @typedef { import("../types").RepoInstance } RepoInstance
+ */
 
+/**
+ * @param {string|ObjectID} id
+ * @return {string|ObjectID}
+ */
+const convertId = (id) => (_.isString(id) && OBJECT_ID_FORMAT.test(id) ? new ObjectID(id) : id);
+
+/**
+ * @template T
+ * @template U
+ * @type {(parent: RepoInstance) => RepoInstance}
+ */
 function autoboxIdExtension(parent) {
   return {
     ...parent,

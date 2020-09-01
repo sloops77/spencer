@@ -66,4 +66,4 @@ function persistFactoryType(baseFactory, repo) {
     JSON.parse(JSON.stringify(await repo.insert(await commonFactoryType(baseFactory, "persist")(overrides))));
 }
 
-module.exports = { register, createdFactoryType, persistFactoryType, commonFactoryType };
+module.exports = { register };

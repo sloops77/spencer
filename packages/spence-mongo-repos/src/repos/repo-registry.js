@@ -2,10 +2,26 @@ const _ = require("lodash/fp");
 const initCollection = require("../collections");
 const initRepo = require("./repo");
 
+/**
+ * @typedef { import("../types").Context } Context
+ * @typedef { import("../types").CollectionConfig } CollectionConfig
+ * @typedef { import("../types").Repo } Repo
+ * @typedef { import("../types").RepoInstance } RepoInstance
+ * @typedef { import("../types").Extension } Extension
+ */
+
+/** @type {{[name: string]: Repo}} */
 const repoRegistry = {};
+/** @type {{[name: string]: boolean}} */
 const waiting = {};
+/** @type {(err?: Error) => void} */
 let readyCb;
 
+/**
+ * @param {{ extensions: Extension[]} & CollectionConfig } config
+ * @param {Context} context
+ * @returns {Repo}
+ */
 function repoFactory({ extensions, ...collectionConfig }, context) {
   if (repoRegistry[collectionConfig.name]) {
     return repoRegistry[collectionConfig.name];
@@ -24,10 +40,20 @@ function clearTableRegistry() {
   }
 }
 
+/**
+ * Adds context to the collection
+ * @param {Context} context
+ * @returns {{[key: string]: RepoInstance}}
+ */
 function addContext(context) {
   return _.mapValues((repo) => repo(context), repoRegistry);
 }
 
+/**
+ * Calls the ready callback when appropriate
+ * @param {string} name
+ * @param {Context} context
+ */
 function onTableReady(name, context) {
   waiting[name] = true;
   return (err) => {
@@ -45,6 +71,11 @@ function onTableReady(name, context) {
   };
 }
 
+/**
+ *
+ * @param {(err?: Error) => void} cb
+ * @returns {Promise<undefined>|undefined}
+ */
 function ready(cb) {
   if (cb == null) {
     return new Promise((resolve, reject) => {
