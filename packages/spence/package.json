@@ -9,7 +9,7 @@
   "dependencies": {
     "@spencejs/spence-api": "^0.7.4",
     "@spencejs/spence-events": "^0.7.0",
-    "fastify": "~2.13.0"
+    "fastify": "~2.15.1"
   },
   "scripts": {
     "lint": "eslint src test --fix",
