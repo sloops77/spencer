@@ -14,10 +14,6 @@ function init(
   { tag, schemas: { create: createSchema, update: updateSchema, reply: replySchema }, repo: repoParam, tableName },
   extend
 ) {
-  /**
-   * @param {{ slack: any }} options
-   * @returns {addRoutesFn}
-   */
   return function addRoutes(router, opts, next) {
     if (extend == null && !_.isFunction(extend)) {
       next(

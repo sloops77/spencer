@@ -2,6 +2,7 @@
   "name": "@spencejs/spence-api",
   "version": "0.7.4",
   "main": "./src/index.js",
+  "types": "types/index.d.ts",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

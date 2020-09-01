@@ -1,20 +1,11 @@
 const { MongoClient, Logger } = require("mongodb");
 
-/**
- * @typedef { import("mongodb").Db } Db
- * @typedef { import("../types").Log} Log
- */
-
-/** @type {MongoClient|null} */
 let mongoClientInstance = null;
 
-/** @type {Promise<MongoClient>|null} */
 let mongoClientPromiseInstance = null;
 
-/** @type {string | null} */
 let lastConnection = null;
 
-/** @type {() => Promise<MongoClient>} */
 function mongoClientPromise() {
   if (mongoClientPromiseInstance == null) {
     throw new Error(`Mongo not initialized yet. Call mongoFactory() before using mongoClientPromise()`);
@@ -23,7 +14,6 @@ function mongoClientPromise() {
   return mongoClientPromiseInstance;
 }
 
-/** @type {() => MongoClient} */
 function mongoClient() {
   if (mongoClientInstance == null) {
     throw new Error(
@@ -34,18 +24,15 @@ function mongoClient() {
   return mongoClientInstance;
 }
 
-/** @type {() => Db} */
 function mongoDb() {
   return mongoClient().db();
 }
 
-/** @type {() => Promise<void>} */
 function mongoClose() {
   lastConnection = null;
   return mongoClient().close();
 }
 
-/** @type {({ log, config: { nodeEnv, mongoConnection, debug } }: {log: Log; config: any}, ready: (err?: Error) => void) => Promise<MongoClient>} */
 function mongoFactory({ log, config: { nodeEnv, mongoConnection, debug } }, ready) {
   if (mongoConnection === lastConnection) {
     throw new Error(

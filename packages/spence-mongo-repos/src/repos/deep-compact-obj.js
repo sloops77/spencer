@@ -1,6 +1,5 @@
 const _ = require("lodash/fp");
 
-// @ts-ignore
 function reducer(val) {
   if (_.isArray(val)) {
     return _.map(reducer, val);
@@ -11,13 +10,7 @@ function reducer(val) {
   return deepCompactObj(val);
 }
 
-/**
- * Compacts the complete object graph
- * @param {{[name: string]: any}} obj
- * @return {{[name: string]: any}}
- */
 const deepCompactObj = (obj) => {
-  /** @type {{[name: string]: any}} */
   const initialValue = {};
   return _.reduce(
     (acc, k) => {
