@@ -44,7 +44,7 @@ describe("collection registry", () => {
       const baseCollection = simpleRepoFactory({ schemaName });
       await ready();
       expect(tableRegistry.simples).not.toBeNull();
-      expect(tableRegistry.simples()).toBe(baseCollection());
+      expect(baseCollection).toBe(tableRegistry.simples);
     });
     it("should register a collection and its extensions and retrieve it", async () => {
       const baseCollection = simpleRepoFactory({ schemaName, extensions: [simpleTableSpec.testExtension] });
@@ -62,7 +62,7 @@ describe("collection registry", () => {
       });
       expect(repo.callCounterRef.current).toEqual(1);
       expect(repo.contextRef.current).toBe(context);
-      expect(registeredTables.simples).toBe(repo);
+      expect(registeredTables.simples.callCounterRef.current).not.toEqual(repo.callCounterRef.current);
     });
     it("should register a collection running multiple contextualisations should have no effect", async () => {
       await simpleRepoFactory({ schemaName, extensions: [simpleTableSpec.testExtension] });

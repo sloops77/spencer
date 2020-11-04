@@ -270,9 +270,7 @@ function init({ collection, extensions = [] }) {
       count,
       collection,
       prepModification,
-      get defaultColumnsSelection() {
-        return collection.defaultProjection;
-      },
+      defaultColumnsSelection: collection.defaultProjection,
       extensions: [],
     };
 
