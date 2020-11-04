@@ -7,7 +7,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@spencejs/spence-events": "^0.7.5",
+    "@spencejs/spence-events": "0.7.5",
     "fastify-plugin": "1.6.1",
     "http-errors": "^1.7.3",
     "knex": "sloops77/knex#b72652a279b94dfff3fb4c73dd916f086f5b1bb0",
@@ -18,7 +18,7 @@
     "uuid": "~7.0.2"
   },
   "devDependencies": {
-    "@spencejs/spence-config": "^0.7.5",
+    "@spencejs/spence-config": "0.7.5",
     "@types/lodash": "~4.14.149",
     "@types/node": "~13.9.5",
     "await-sleep": "~0.0.1",

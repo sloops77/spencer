@@ -7,9 +7,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@spencejs/spence-api": "^0.7.6",
-    "@spencejs/spence-events": "^0.7.5",
-    "fastify": "~2.15.1"
+    "@spencejs/spence-api": "0.7.6",
+    "@spencejs/spence-events": "0.7.5",
+    "fastify": "~2.15.3"
   },
   "scripts": {
     "lint": "eslint src test --fix",

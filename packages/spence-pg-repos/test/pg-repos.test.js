@@ -13,6 +13,14 @@ afterAll(async () => {
   await knex().destroy();
 });
 
+// describe('pg snake case', () => {
+//   const columnCase = "snake";
+//   const transactions = false;
+
+// describe('pg camel case', () => {
+//   const columnCase = "camel";
+//   const transactions = true;
+
 describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "camel", transactions: true }]])(
   "simple table %j",
   ({ columnCase, transactions }) => {

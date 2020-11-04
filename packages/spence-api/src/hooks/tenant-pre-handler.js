@@ -8,7 +8,7 @@ function tenantPreHandler(app, { rootDomain }, next) {
   }
 
   function getTenant(hostname) {
-    switch (app.env.nodeEnv) {
+    switch (app.config.nodeEnv) {
       case "test":
         return "test-tenant";
       case "development":

@@ -1,7 +1,7 @@
 const _ = require("lodash/fp");
 const { v4: uuidv4 } = require("uuid");
 
-const { knex } = require("../knex");
+const { knexPromise } = require("../knex");
 
 async function buildColumnInfoFromDb(table, ignoreColumns) {
   const rawColumnInfo = await table().columnInfo();
@@ -24,29 +24,35 @@ function init(
   },
   ready
 ) {
-  function tableFn(context = {}) {
-    const knexTable = connection(context)(name);
-    return schemaName ? knexTable.withSchema(schemaName) : knexTable;
-  }
-
   // eslint-disable-next-line no-underscore-dangle
   let _columnInfo;
-  buildColumnInfoFromDb(tableFn, ignoreColumns)
+  // eslint-disable-next-line no-underscore-dangle
+  let _knexInstance;
+
+  knexPromise
+    .then((knexInstance) => {
+      _knexInstance = knexInstance;
+    })
+    .then(() => buildColumnInfoFromDb(tableFn, ignoreColumns))
     .then((result) => {
       _columnInfo = result;
       ready();
     })
     .catch(ready);
 
+  function tableFn(context = {}) {
+    const knexTable = connection(context)(name);
+    return schemaName ? knexTable.withSchema(schemaName) : knexTable;
+  }
+
   function connection(context) {
-    return (context && context.trx) || knex();
+    return (context && context.trx) || _knexInstance;
   }
 
   const table = Object.assign(tableFn, {
     schemaName,
     tableName: name,
     entityName,
-    knex: knex(),
     connection,
     transformCase,
     timestampKeys,
@@ -67,6 +73,15 @@ function init(
         throw new Error("Table not initialized yet. Wait for the ready() signal");
       }
       return _.keys(_columnInfo);
+    },
+  });
+
+  Object.defineProperty(table, "knex", {
+    get() {
+      if (_knexInstance == null) {
+        throw new Error("Knex not initialized yet. Wait for the ready() signal");
+      }
+      return _knexInstance;
     },
   });
 

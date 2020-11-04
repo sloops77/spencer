@@ -13,6 +13,7 @@ const DATE_OID = 1082;
 const parseDate = (value) => value;
 let knexInstance = null;
 let lastConnection = null;
+let knexResolver;
 
 function knex(...args) {
   if (lastConnection == null) {
@@ -25,6 +26,10 @@ function knex(...args) {
 
   return knexInstance;
 }
+
+const knexPromise = new Promise((resolve) => {
+  knexResolver = resolve;
+});
 
 function knexClose() {
   return knex().destroy();
@@ -75,7 +80,9 @@ function knexFactory({ log, config: { nodeEnv, pgConnection } }) {
     },
   });
 
-  return knex();
+  knexResolver(knexInstance);
+
+  return knexInstance;
 }
 
-module.exports = { knexFactory, knex, knexClose };
+module.exports = { knexFactory, knex, knexClose, knexPromise };
