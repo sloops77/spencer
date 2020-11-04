@@ -1,7 +1,7 @@
 const _ = require("lodash/fp");
 const { v4: uuidv4 } = require("uuid");
 
-const { knexPromise, knex } = require("../knex");
+const { knexPromise } = require("../knex");
 
 async function buildColumnInfoFromDb(table, ignoreColumns) {
   const rawColumnInfo = await table().columnInfo();
