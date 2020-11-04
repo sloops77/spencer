@@ -1,13 +1,13 @@
 {
   "name": "@spencejs/spence-pg-repos",
-  "version": "0.7.5",
+  "version": "0.7.7",
   "main": "./src/index.js",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@spencejs/spence-events": "0.7.5",
+    "@spencejs/spence-events": "^0.7.7",
     "fastify-plugin": "1.6.1",
     "http-errors": "^1.7.3",
     "knex": "sloops77/knex#b72652a279b94dfff3fb4c73dd916f086f5b1bb0",
