@@ -22,7 +22,7 @@ function calcPickOmitLists(projection) {
 function init({ collection, extensions = [] }) {
   const prepModification = initPrepModification(collection);
 
-  return _.memoize((context = { log: console }) => {
+  return (context = { log: console }) => {
     function findById(id, projection = applied.defaultColumnsSelection) {
       return applied
         .collection()
@@ -296,7 +296,7 @@ function init({ collection, extensions = [] }) {
     );
 
     return applied;
-  });
+  };
 }
 
 module.exports = init;

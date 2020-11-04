@@ -12,7 +12,7 @@
     "uuid": "~7.0.2"
   },
   "devDependencies": {
-    "@spencejs/spence-config": "^0.7.5",
+    "@spencejs/spence-config": "0.7.6",
     "@types/lodash": "~4.14.149",
     "@types/node": "~13.9.5",
     "@types/uuid": "^8.3.0",
