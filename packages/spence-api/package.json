@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@spencejs/spence-events": "^0.7.7",
-    "fastify-plugin": "~1.6.1",
+    "fastify-plugin": "~3.0.0",
     "http-errors": "^1.7.3",
     "lodash": "~4.17.15"
   },
