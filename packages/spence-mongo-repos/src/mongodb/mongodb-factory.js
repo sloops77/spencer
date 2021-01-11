@@ -61,11 +61,13 @@ function mongoFactory({ log, config: { nodeEnv, mongoConnection, debug } }, read
     .connect()
     .then((connectedClient) => {
       mongoClientInstance = connectedClient;
-      ready();
+      if (ready) ready();
       return mongoClientInstance;
     })
     .catch((err) => log.error(err))
-    .catch(ready);
+    .catch((err) => {
+      if (ready) ready(err);
+    });
 
   return mongoClientPromiseInstance;
 }

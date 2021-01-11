@@ -3,7 +3,7 @@
 const _ = require("lodash/fp");
 const shortid = require("shortid");
 const { ObjectID } = require("mongodb");
-const { log, env } = require("@spencejs/spence-config");
+const { env } = require("@spencejs/spence-config");
 
 const { mongoFactory, mongoClose, mongoDb } = require("../src/mongodb");
 
@@ -15,7 +15,7 @@ describe("mongo repo persistence and queries", () => {
   const schemaName = shortid.generate();
 
   beforeAll(async () => {
-    await mongoFactory({ log, config: env });
+    await mongoFactory({ log: console, config: env });
     const {
       // simpleTableCreator,
       simpleRepoFactory,

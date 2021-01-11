@@ -11,12 +11,14 @@ Spencer repos are a way to share the most common logic of your data layer, makin
 
 ## Getting Started
 For saving documents like:
-```json
+```js
+{
       _id: ObjectId("507f1f77bcf86cd799439011"),
       aVal: "foobar",
       manyVals: [1,2,3],
       createdAt: "2019-12-22T07:27:33Z",
       updatedAt: "2019-12-22T07:27:33Z"
+}
 ```
 
 Intialize a repo like this:
@@ -33,22 +35,26 @@ function initExampleRepo() {
       updatedAt: 1,
     }
   });
+}
 ```
 
 Happy databasing!
 ```js
+await mongoFactory({log: console, config: {mongoConnection: "mongodb://localhost:27017"}});
 const exampleRepo = initExampleRepo();
 const insertedDoc = await exampleRepo.insert({aVal: "foobar", manyVals: []}); 
 console.info(await exampleRepo.findById(insertedDoc._id));
 ```
 
 Output
-```json
+```js
+{
       _id: ObjectId("507f1f77bcf86cd799439011"),
       aVal: "foobar",
       manyVals: [],
       createdAt: "2020-06-29T12:22:56Z",
       updatedAt: "2020-06-29T12:22:56Z"
+}
 ```
 
 ## Repos
