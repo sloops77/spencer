@@ -2,16 +2,19 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "$id": "mutable-entity",
-  "allOf": [
-    "immutable-entity#",
-    {
-      "properties": {
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
     }
-  ],
+  },
   "required": ["id", "createdAt", "updatedAt"]
 }
