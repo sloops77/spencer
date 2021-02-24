@@ -27,7 +27,7 @@
     "pino-pretty": "~4.3.0",
     "prettier": "~2.1.2",
     "tsd": "^0.13.1",
-    "typescript": "~3.9.7"
+    "typescript": "~4.2.2"
   },
   "scripts": {
     "lint": "eslint src test --fix",
