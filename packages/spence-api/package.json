@@ -1,6 +1,6 @@
 {
   "name": "@spencejs/spence-api",
-  "version": "0.7.10",
+  "version": "0.7.11",
   "main": "./src/index.js",
   "types": "types/index.d.ts",
   "license": "MIT",
