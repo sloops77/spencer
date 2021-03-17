@@ -4,8 +4,7 @@
   "$id": "mutable-entity",
   "properties": {
     "id": {
-      "type": "string",
-      "format": "uuid"
+      "type": "string"
     },
     "createdAt": {
       "type": "string",
