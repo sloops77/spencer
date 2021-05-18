@@ -8,14 +8,19 @@ const convertId = (id) => (_.isString(id) && OBJECT_ID_FORMAT.test(id) ? new Obj
 function autoboxIdExtension(parent) {
   return {
     ...parent,
-    findById(id, ...rest) {
-      return parent.findById(convertId(id), ...rest);
-    },
-    doUpdateById(id, ...rest) {
-      return parent.doUpdateById(convertId(id), ...rest);
-    },
-    del(id, ...rest) {
-      return parent.del(convertId(id), ...rest);
+    prepFilter(filter) {
+      if (filter == null || filter._id == null) {
+        return filter;
+      }
+      if (Array.isArray(filter._id.$in)) {
+        // eslint-disable-next-line no-param-reassign
+        filter._id.$in = _.map(convertId, filter._id.$in);
+        return filter;
+      }
+
+      // eslint-disable-next-line no-param-reassign
+      filter._id = convertId(filter._id);
+      return filter;
     },
     extensions: parent.extensions.concat(["autoboxIds"]),
   };

@@ -222,19 +222,44 @@ describe("autoconvert ids mongo behaviour", () => {
   it("should be able to delete by id", async () => {
     const val = { aVal: "foo" };
     const insertedVal = await simpleTable().insert(val);
-    expect(await wrap(async (context) => simpleTable(context).del(insertedVal._id.toString()))).toEqual(
-      insertedVal._id
-    );
+    const result = await wrap(async (context) => simpleTable(context).del(insertedVal._id.toString()));
+    expect(result).toEqual(insertedVal._id);
     await expect(simpleTable().findById(val.id)).rejects.toEqual(new Error(`simple ${val.id} not found`));
   });
   it("should be able to delete using filter", async () => {
     const val = { aVal: "foo2" };
     const insertedVal = await simpleTable().insert(val);
-    expect(await wrap(async (context) => simpleTable(context).delUsingFilter({ filter: { aVal: "foo2" } }))).toEqual([
-      insertedVal._id,
-    ]);
+    const result = await wrap(async (context) => simpleTable(context).delUsingFilter({ filter: { aVal: "foo2" } }));
+    expect(result).toEqual([insertedVal._id]);
     await expect(simpleTable().findById(val.id)).rejects.toEqual(new Error(`simple ${val.id} not found`));
   });
+
+  it("should be able to delete using filter by id as objectids", async () => {
+    const vals = [{ aVal: "foo1" }, { aVal: "foo2" }, { aVal: "foo3" }];
+    const insertedVals = await simpleTable().insertMany(vals);
+    const insertedIds = _.map(({ _id }) => _id, insertedVals);
+    const result = await wrap(async (context) =>
+      simpleTable(context).delUsingFilter({ filter: { _id: { $in: insertedIds } } })
+    );
+    expect(result).toEqual(insertedIds);
+    await expect(simpleTable().findById(insertedIds[0].id)).rejects.toEqual(
+      new Error(`simple ${insertedIds[0].id} not found`)
+    );
+  });
+
+  it("should be able to delete using filter by id as strings", async () => {
+    const vals = [{ aVal: "foo1" }, { aVal: "foo2" }, { aVal: "foo3" }];
+    const insertedVals = await simpleTable().insertMany(vals);
+    const insertedIds = _.map(({ _id }) => _id, insertedVals);
+    const result = await wrap(async (context) =>
+      simpleTable(context).delUsingFilter({ filter: { _id: { $in: _.map((i) => i.toString(), insertedIds) } } })
+    );
+    expect(result).toEqual(insertedIds);
+    await expect(simpleTable().findById(insertedIds[0].id)).rejects.toEqual(
+      new Error(`simple ${insertedIds[0].id} not found`)
+    );
+  });
+
   it("delete should error if cannot be found", async () => {
     await expect(simpleTable().del("1")).rejects.toEqual(new Error("simple 1 not found"));
   });
