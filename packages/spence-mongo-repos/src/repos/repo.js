@@ -247,7 +247,7 @@ function init({ collection, extensions = [] }) {
     async function delUsingFilter({ filter }) {
       // use find to get the affected id's. This is subject to race conditions, so consumers must be aware they may receive a deleted message twice
       const finalFilter = applied.prepFilter(filter);
-      const affectedIds = _.map("_id", await applied.find({filter: finalFilter}, { _id: 1 }));
+      const affectedIds = _.map("_id", await applied.find({ filter: finalFilter }, { _id: 1 }));
       return applied
         .collection()
         .deleteMany({ _id: { $in: affectedIds } })
