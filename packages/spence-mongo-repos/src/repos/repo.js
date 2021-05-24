@@ -77,7 +77,7 @@ function init({ collection, extensions = [] }) {
       } = {},
       projection = applied.defaultColumnsSelection
     ) {
-      return applied.collection().findOne(filter, { sort, projection });
+      return applied.collection().findOne(applied.prepFilter(filter), { sort, projection });
     }
 
     function count({ filter = {} }) {
