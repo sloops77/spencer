@@ -46,6 +46,7 @@ function mongoFactory({ log, config: { nodeEnv, mongoConnection, debug } }, read
   // create a client, passing in additional options
   const client = new MongoClient(mongoConnection, {
     poolSize: maxPool,
+    useUnifiedTopology: true,
   });
 
   Logger.setLevel(debug ? "debug" : "info");

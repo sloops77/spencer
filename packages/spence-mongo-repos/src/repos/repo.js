@@ -22,11 +22,13 @@ function calcPickOmitLists(projection) {
 function init({ collection, extensions = [] }) {
   const prepModification = initPrepModification(collection);
 
+  const prepFilter = (filter) => filter;
+
   return (context = { log: console }) => {
     function findById(id, projection = applied.defaultColumnsSelection) {
       return applied
         .collection()
-        .findOne({ _id: id }, { projection })
+        .findOne(applied.prepFilter({ _id: id }), { projection })
         .then(
           // @ts-ignore
           (result) => {
@@ -55,7 +57,7 @@ function init({ collection, extensions = [] }) {
     ) {
       return applied
         .collection()
-        .find(filter, {
+        .find(applied.prepFilter(filter), {
           limit,
           skip: skip || offset,
           sort: sort || orderBy,
@@ -79,7 +81,7 @@ function init({ collection, extensions = [] }) {
     }
 
     function count({ filter = {} }) {
-      return applied.collection().countDocuments(filter);
+      return applied.collection().countDocuments(applied.prepFilter(filter));
     }
 
     function insert(document, projection = applied.defaultColumnsSelection) {
@@ -125,7 +127,7 @@ function init({ collection, extensions = [] }) {
       const result = await applied
         .collection()
         .findOneAndUpdate(
-          _.pick(naturalKey, preppedVal),
+          applied.prepFilter(_.pick(naturalKey, preppedVal)),
           { $setOnInsert: preppedVal },
           { upsert: true, returnOriginal: false, projection }
         );
@@ -146,7 +148,7 @@ function init({ collection, extensions = [] }) {
       return applied
         .collection()
         .findOneAndUpdate(
-          { _id: id },
+          applied.prepFilter({ _id: id }),
           { $set: _.isFunction(setStatement) ? setStatement() : setStatement },
           {
             returnOriginal: false,
@@ -181,7 +183,7 @@ function init({ collection, extensions = [] }) {
         $setOnInsert: { [collection.timestampKeys.createdAt]: preppedVal[collection.timestampKeys.createdAt] },
       };
 
-      const result = await applied.collection().findOneAndUpdate({ _id: id }, updates, {
+      const result = await applied.collection().findOneAndUpdate(applied.prepFilter({ _id: id }), updates, {
         upsert: true,
         returnOriginal: false,
         projection,
@@ -201,7 +203,7 @@ function init({ collection, extensions = [] }) {
       return (
         applied
           .collection()
-          .updateMany(filter, { $set: applied.prepModification(val) })
+          .updateMany(applied.prepFilter(filter), { $set: applied.prepModification(val) })
           .then(() => applied.find({ filter: { _id: { $in: affectedIds } } }, projection))
           // in mongo its not possible to figure return the objects that were updated as the id's of the updated docs are not returned
           .then(
@@ -223,30 +225,32 @@ function init({ collection, extensions = [] }) {
     }
 
     function del(id) {
+      const filter = applied.prepFilter({ _id: id });
       return applied
         .collection()
-        .deleteOne({ _id: id })
+        .deleteOne(filter)
         .then(
           // @ts-ignore
           (result) => {
             if (result.deletedCount === 0) {
               throw new newError.NotFound(`${collection.entityName} ${id} not found`);
             }
-            return id;
+            return filter._id;
           }
         )
         .then(() => {
           publish(collection.entityName, `deleted`, { id }, context);
-          return id;
+          return filter._id;
         });
     }
 
     async function delUsingFilter({ filter }) {
       // use find to get the affected id's. This is subject to race conditions, so consumers must be aware they may receive a deleted message twice
-      const affectedIds = _.map("_id", await applied.find({ filter }, { _id: 1 }));
+      const finalFilter = applied.prepFilter(filter);
+      const affectedIds = _.map("_id", await applied.find({ filter: finalFilter }, { _id: 1 }));
       return applied
         .collection()
-        .deleteMany(filter)
+        .deleteMany({ _id: { $in: affectedIds } })
         .then(() => {
           _.forEach((id) => publish(collection.entityName, `deleted`, { id }, context), affectedIds);
           return affectedIds;
@@ -270,6 +274,7 @@ function init({ collection, extensions = [] }) {
       count,
       collection,
       prepModification,
+      prepFilter,
       defaultColumnsSelection: collection.defaultProjection,
       extensions: [],
     };

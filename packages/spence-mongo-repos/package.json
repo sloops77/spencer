@@ -1,6 +1,6 @@
 {
   "name": "@spencejs/spence-mongo-repos",
-  "version": "0.7.9",
+  "version": "0.7.13",
   "main": "./src/index.js",
   "types": "./types/index.d.ts",
   "license": "MIT",
@@ -18,7 +18,7 @@
     "@types/http-errors": "^1.8.0",
     "@types/lodash": "~4.14.149",
     "@types/mongodb": "^3.5.26",
-    "@types/node": "~13.9.5",
+    "@types/node": "~15.3.0",
     "await-sleep": "~0.0.1",
     "eslint": "~6.8.0",
     "eslint-config-airbnb-base": "~14.2.0",
@@ -31,7 +31,7 @@
     "pino-pretty": "~4.3.0",
     "prettier": "~2.1.2",
     "shortid": "^2.2.15",
-    "typescript": "~3.8.3",
+    "typescript": "~4.2.4",
     "uuid": "~7.0.2"
   },
   "peerDependencies": {

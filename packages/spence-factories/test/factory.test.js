@@ -90,7 +90,18 @@ describe("test pg factories", () => {
   let schemaName = null;
 
   beforeAll(async () => {
-    await knexFactory({ log, config: env });
+    const knex = await knexFactory({ log, config: env });
+    await knex.raw(`create extension if not exists "uuid-ossp"`);
+    await knex.raw(
+      `CREATE OR REPLACE FUNCTION trigger_set_timestamp()
+          RETURNS TRIGGER AS $$
+          BEGIN
+            NEW."updatedAt" = NOW();
+            RETURN NEW;
+          END;
+          $$ LANGUAGE plpgsql;`
+    );
+
     schemaName = `simpleTest-${Date.now()}`;
     await createSchema({
       schemaName,
