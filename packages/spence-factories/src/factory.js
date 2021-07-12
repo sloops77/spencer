@@ -5,10 +5,9 @@ function register(name, ...args) {
   let defaultRepo;
   let baseFactory;
   if (args.length === 1) {
-    baseFactory = args[0];
+    [baseFactory] = args;
   } else {
-    defaultRepo = args[0];
-    baseFactory = args[1];
+    [defaultRepo, baseFactory] = args;
   }
 
   const capitalizedName = `${_.capitalize(name[0])}${name.slice(1)}`;
@@ -18,8 +17,8 @@ function register(name, ...args) {
   return {
     name,
     capitalizedName,
-    [`new${capitalizedName}`]: async (...args) => {
-      const { item } = await commonFactory("created")(...args);
+    [`new${capitalizedName}`]: async (...commonFactoryArgs) => {
+      const { item } = await commonFactory("created")(...commonFactoryArgs);
       return item;
     },
     [`created${capitalizedName}`]: createdFactoryType(commonFactory),
@@ -55,7 +54,7 @@ function commonFactoryType(baseFactory, defaultRepo) {
   };
 }
 
-function createdFactoryType(commonFactory, defaultRepo) {
+function createdFactoryType(commonFactory) {
   return async (overrides = {}) => {
     const { item, repo } = await commonFactory("created")(overrides);
     const idKey = _.getOr("id", "collection.idKey", repo);
@@ -70,7 +69,7 @@ function createdFactoryType(commonFactory, defaultRepo) {
   };
 }
 
-function persistFactoryType(commonFactory, defaultRepo) {
+function persistFactoryType(commonFactory) {
   return async (overrides = {}) => {
     const { item, repo } = await commonFactory("persist")(overrides);
     const value = await repo.insert(item);
