@@ -1,23 +1,34 @@
 const _ = require("lodash/fp");
 const { v1: uuidv1 } = require("uuid");
 
-function register(name, baseFactory) {
+function register(name, ...args) {
+  let defaultRepo;
+  let baseFactory;
+  if (args.length === 1) {
+    baseFactory = args[0];
+  } else {
+    defaultRepo = args[0];
+    baseFactory = args[1];
+  }
+
   const capitalizedName = `${_.capitalize(name[0])}${name.slice(1)}`;
+
+  const commonFactory = commonFactoryType(baseFactory, defaultRepo);
 
   return {
     name,
     capitalizedName,
     [`new${capitalizedName}`]: async (...args) => {
-      const { item } = await commonFactoryType(baseFactory, "created")(...args);
+      const { item } = await commonFactory("created")(...args);
       return item;
     },
-    [`created${capitalizedName}`]: createdFactoryType(baseFactory),
-    [`persist${capitalizedName}`]: persistFactoryType(baseFactory),
+    [`created${capitalizedName}`]: createdFactoryType(commonFactory),
+    [`persist${capitalizedName}`]: persistFactoryType(commonFactory),
   };
 }
 
-function commonFactoryType(baseFactory, itemType) {
-  return (rawOverrides = {}) => {
+function commonFactoryType(baseFactory, defaultRepo) {
+  return (itemType) => async (rawOverrides = {}) => {
     const manualProperties = [];
 
     async function getOrBuild(property, valFactory, ...valFactoryArgs) {
@@ -35,13 +46,18 @@ function commonFactoryType(baseFactory, itemType) {
       return _.pickBy((v, k) => v != null && !_.includes(k, manualProperties), rawOverrides);
     }
 
-    return baseFactory(overrides, { getOrBuild }, rawOverrides);
+    const val = await baseFactory(overrides, { getOrBuild }, rawOverrides);
+    if (val.repo) {
+      return val;
+    }
+
+    return { item: val, repo: defaultRepo };
   };
 }
 
-function createdFactoryType(baseFactory) {
+function createdFactoryType(commonFactory, defaultRepo) {
   return async (overrides = {}) => {
-    const { item, repo } = await commonFactoryType(baseFactory, "created")(overrides);
+    const { item, repo } = await commonFactory("created")(overrides);
     const idKey = _.getOr("id", "collection.idKey", repo);
     const mockIdGenerator = _.getOr(uuidv1, "collection.mockIdGenerator", repo);
     const timestampKeys = _.getOr({ createdAt: "createdAt", updatedAt: "updatedAt" }, "collection.timestampKeys", repo);
@@ -54,9 +70,9 @@ function createdFactoryType(baseFactory) {
   };
 }
 
-function persistFactoryType(baseFactory) {
+function persistFactoryType(commonFactory, defaultRepo) {
   return async (overrides = {}) => {
-    const { item, repo } = await commonFactoryType(baseFactory, "persist")(overrides);
+    const { item, repo } = await commonFactory("persist")(overrides);
     const value = await repo.insert(item);
     return JSON.parse(JSON.stringify(value));
   };
