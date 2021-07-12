@@ -1,6 +1,6 @@
 {
   "name": "@spencejs/spence-mongo-repos",
-  "version": "0.7.14",
+  "version": "0.7.15",
   "main": "./src/index.js",
   "types": "./types/index.d.ts",
   "license": "MIT",
