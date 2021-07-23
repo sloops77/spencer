@@ -129,7 +129,7 @@ function init({ collection, extensions = [] }) {
         .findOneAndUpdate(
           applied.prepFilter(_.pick(naturalKey, preppedVal)),
           { $setOnInsert: preppedVal },
-          { upsert: true, returnOriginal: false, projection }
+          { upsert: true, returnDocument: "after", projection }
         );
 
       if (_.get("lastErrorObject.upserted", result) != null) {
