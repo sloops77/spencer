@@ -25,7 +25,69 @@ const {
 } = require("../../spence-pg-repos/test/helpers/test-tables");
 const { UUID_FORMAT, ISO_DATETIME_FORMAT, OBJECT_ID_FORMAT } = require("../../spence-api/test/helpers/regexes");
 
-describe("test mongo factories", () => {
+describe("test mongo factories with dynamic repos", () => {
+  let simpleCollection = null;
+  let schemaName = null;
+
+  beforeAll(async () => {
+    await mongoFactory({ log, config: env });
+    schemaName = `simpleTest-${Date.now()}`;
+    simpleCollection = simpleRepoFactory({ schemaName })();
+  });
+
+  afterAll(async () => {
+    clearMongoCollectionRegistry();
+    await mongoClose();
+  });
+
+  let simpleFactory;
+  beforeEach(async () => {
+    simpleFactory = register("simple", (overrides) => ({
+      item: {
+        aVal: "test",
+        ...overrides(),
+      },
+      repo: simpleCollection,
+    }));
+    return simpleCollection.collection().deleteMany({});
+  });
+
+  it("should create a new struct without an id", async () => {
+    const { newSimple } = simpleFactory;
+    expect(await newSimple()).toEqual({ aVal: "test" });
+  });
+  it("should create a new struct with an id", async () => {
+    const { createdSimple } = simpleFactory;
+    expect(await createdSimple()).toEqual({
+      _id: expect.stringMatching(OBJECT_ID_FORMAT),
+      aVal: "test",
+      createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
+      updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
+    });
+  });
+  it("should create a new persisted struct", async () => {
+    const { persistSimple } = simpleFactory;
+    const simpleInstance = await persistSimple();
+    expect(simpleInstance).toEqual({
+      _id: expect.stringMatching(OBJECT_ID_FORMAT),
+      aVal: "test",
+      createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
+      updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
+    });
+    const allInstances = await simpleCollection.find({});
+    expect(allInstances).toEqual([
+      {
+        ...simpleInstance,
+        // eslint-disable-next-line no-underscore-dangle
+        _id: ObjectID.createFromHexString(simpleInstance._id),
+        createdAt: new Date(simpleInstance.createdAt),
+        updatedAt: new Date(simpleInstance.updatedAt),
+      },
+    ]);
+  });
+});
+
+describe("test mongo factories with static repos", () => {
   let simpleCollection = null;
   let schemaName = null;
 
@@ -49,13 +111,13 @@ describe("test mongo factories", () => {
     return simpleCollection.collection().deleteMany({});
   });
 
-  it("should create a new struct without an id", () => {
+  it("should create a new struct without an id", async () => {
     const { newSimple } = simpleFactory;
-    expect(newSimple()).toEqual({ aVal: "test" });
+    expect(await newSimple()).toEqual({ aVal: "test" });
   });
-  it("should create a new struct with an id", () => {
+  it("should create a new struct with an id", async () => {
     const { createdSimple } = simpleFactory;
-    expect(createdSimple()).toEqual({
+    expect(await createdSimple()).toEqual({
       _id: expect.stringMatching(OBJECT_ID_FORMAT),
       aVal: "test",
       createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
@@ -120,20 +182,23 @@ describe("test pg factories", () => {
 
   let simpleFactory;
   beforeEach(() => {
-    simpleFactory = register("simple", simpleTable, (overrides) => ({
-      aVal: "test",
-      ...overrides(),
+    simpleFactory = register("simple", (overrides) => ({
+      item: {
+        aVal: "test",
+        ...overrides(),
+      },
+      repo: simpleTable,
     }));
     simpleTable.table.knex.truncate();
   });
 
-  it("should create a new struct without an id", () => {
+  it("should create a new struct without an id", async () => {
     const { newSimple } = simpleFactory;
-    expect(newSimple()).toEqual({ aVal: "test" });
+    expect(await newSimple()).toEqual({ aVal: "test" });
   });
-  it("should create a new struct with an id", () => {
+  it("should create a new struct with an id", async () => {
     const { createdSimple } = simpleFactory;
-    expect(createdSimple()).toEqual({
+    expect(await createdSimple()).toEqual({
       id: expect.stringMatching(UUID_FORMAT),
       aVal: "test",
       createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
@@ -153,9 +218,9 @@ describe("test pg factories", () => {
   });
 
   describe("test overrides", () => {
-    it("should create a new struct without an id", () => {
+    it("should create a new struct without an id", async () => {
       const { newSimple } = simpleFactory;
-      expect(newSimple({ aVal: "test2" })).toEqual({ aVal: "test2" });
+      expect(await newSimple({ aVal: "test2" })).toEqual({ aVal: "test2" });
     });
   });
 
@@ -163,14 +228,17 @@ describe("test pg factories", () => {
     let complexFactory;
 
     beforeEach(() => {
-      complexFactory = register("complex", complexTable, async (overrides, { getOrBuild }) => {
+      complexFactory = register("complex", async (overrides, { getOrBuild }) => {
         const simpleVal = await getOrBuild("simpleVal", _.noop);
         const simple = await getOrBuild("simple", simpleFactory, { aVal: simpleVal });
         const aComplexVal = await getOrBuild("aComplexVal", uuidv1);
         return {
-          aComplexVal,
-          simpleId: simple.id,
-          ...overrides(),
+          item: {
+            aComplexVal,
+            simpleId: simple.id,
+            ...overrides(),
+          },
+          repo: complexTable,
         };
       });
     });

@@ -1,5 +1,5 @@
 # spence - an simple nodejs API Framework
-Opinionated API Framework For Fastify and Postgres for FAST coding and EXTREME extensibility
+Opinionated API Framework For Fastify and Postgres or MongoDB for FAST coding and EXTREME extensibility
 
 [![CircleCI](https://circleci.com/gh/sloops77/spencer.svg?style=svg)](https://circleci.com/gh/sloops77/spencer)
 [![codecov](https://codecov.io/gh/sloops77/spencer/branch/master/graph/badge.svg)](https://codecov.io/gh/sloops77/spencer)
@@ -40,8 +40,8 @@ Factories library for your tests. Generate reusable & extensible plain objects, 
 - Performance is important
 - ORMs - only change a db for specialization reasons. The native query language is usually the best
 What is familiar but of no benefit:
-- DI - IoC & mocking can be done in other ways
-- Classes - (statics, singletons pointless)
+- DI - IoC & mocking can be done using currying or if the only purpose is testing then use module mocking.
+- Functions and Modules over Classes and Singletons
 
 ## Controllers
 - adding extra routes
