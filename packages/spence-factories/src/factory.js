@@ -27,31 +27,32 @@ function register(name, ...args) {
 }
 
 function commonFactoryType(baseFactory, defaultRepo) {
-  return (itemType) => async (rawOverrides = {}) => {
-    const manualProperties = [];
+  return (itemType) =>
+    async (rawOverrides = {}) => {
+      const manualProperties = [];
 
-    async function getOrBuild(property, valFactory, ...valFactoryArgs) {
-      if (rawOverrides[property] != null) {
-        manualProperties.push(property);
-        return rawOverrides[property];
+      async function getOrBuild(property, valFactory, ...valFactoryArgs) {
+        if (rawOverrides[property] != null) {
+          manualProperties.push(property);
+          return rawOverrides[property];
+        }
+        if (_.isFunction(valFactory)) {
+          return valFactory(...valFactoryArgs);
+        }
+        return valFactory[`${itemType}${valFactory.capitalizedName}`](...valFactoryArgs);
       }
-      if (_.isFunction(valFactory)) {
-        return valFactory(...valFactoryArgs);
+
+      function overrides() {
+        return _.pickBy((v, k) => v != null && !_.includes(k, manualProperties), rawOverrides);
       }
-      return valFactory[`${itemType}${valFactory.capitalizedName}`](...valFactoryArgs);
-    }
 
-    function overrides() {
-      return _.pickBy((v, k) => v != null && !_.includes(k, manualProperties), rawOverrides);
-    }
+      const val = await baseFactory(overrides, { getOrBuild }, rawOverrides);
+      if (val.repo) {
+        return val;
+      }
 
-    const val = await baseFactory(overrides, { getOrBuild }, rawOverrides);
-    if (val.repo) {
-      return val;
-    }
-
-    return { item: val, repo: defaultRepo };
-  };
+      return { item: val, repo: defaultRepo };
+    };
 }
 
 function createdFactoryType(commonFactory) {
