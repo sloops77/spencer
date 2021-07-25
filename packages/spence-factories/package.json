@@ -1,6 +1,6 @@
 {
   "name": "@spencejs/spence-factories",
-  "version": "0.7.15",
+  "version": "0.7.16",
   "main": "src/factory.js",
   "license": "MIT",
   "dependencies": {
@@ -8,9 +8,9 @@
     "uuid": "~8.3.2"
   },
   "devDependencies": {
-    "@spencejs/spence-config": "^0.7.14",
-    "@spencejs/spence-mongo-repos": "^0.7.15",
-    "@spencejs/spence-pg-repos": "^0.7.14",
+    "@spencejs/spence-config": "^0.7.16",
+    "@spencejs/spence-mongo-repos": "^0.7.16",
+    "@spencejs/spence-pg-repos": "^0.7.16",
     "@types/lodash": "^4.14.149",
     "@types/node": "~16.4.1",
     "eslint": "~7.31.0",
