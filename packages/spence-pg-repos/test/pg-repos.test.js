@@ -199,11 +199,7 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
         wrap(async (context) => arrayTable(context).addToArray(val.id, "manyVals", [7, 9]))
       ).resolves.toEqual([1, 3, 7, 9]);
       await expect(wrap(async (context) => arrayTable(context).addToArray(val.id, "manyVals", 11))).resolves.toEqual([
-        1,
-        3,
-        7,
-        9,
-        11,
+        1, 3, 7, 9, 11,
       ]);
     });
 
