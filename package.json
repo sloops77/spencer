@@ -7,7 +7,7 @@
   "peerDependencies": {},
   "devDependencies": {
     "jest-junit": "~12.2.0",
-    "lerna": "~3.22.1",
+    "lerna": "~4.0.0",
     "pino-pretty": "~5.1.2"
   },
   "scripts": {
