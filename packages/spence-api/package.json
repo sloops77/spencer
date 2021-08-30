@@ -21,7 +21,7 @@
     "@spencejs/spence-mongo-repos": "^0.7.16",
     "@spencejs/spence-pg-repos": "^0.7.16",
     "@types/lodash": "~4.14.149",
-    "@types/node": "~16.4.1",
+    "@types/node": "~16.7.6",
     "await-sleep": "~0.0.1",
     "eslint": "~7.31.0",
     "eslint-config-airbnb-base": "~14.2.0",
