@@ -233,7 +233,7 @@ describe("mongo repo persistence and queries", () => {
           .findOneAndUpdate(
             { _id: insertedVal._id },
             { $push: { manyVals: { $each: [1, 3] } }, $set: { updatedAt: new Date() } },
-            { projection: arrayTable(context).collection.defaultProjection, returnOriginal: false }
+            { projection: arrayTable(context).collection.defaultProjection, returnDocument: "after" }
           )
           .then(_.get("value"))
       )
