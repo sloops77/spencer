@@ -13,7 +13,7 @@
     "@spencejs/spence-pg-repos": "^0.7.16",
     "@types/lodash": "^4.14.149",
     "@types/node": "~16.7.13",
-    "eslint": "~7.31.0",
+    "eslint": "~7.32.0",
     "eslint-config-airbnb-base": "~14.2.0",
     "eslint-config-prettier": "~6.15.0",
     "eslint-plugin-import": "~2.23.3",
