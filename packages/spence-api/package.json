@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@spencejs/spence-events": "^0.7.16",
-    "fastify-plugin": "~1.6.1",
+    "fastify-plugin": "~3.0.0",
     "http-errors": "^1.7.3",
     "lodash": "~4.17.15"
   },
@@ -21,21 +21,21 @@
     "@spencejs/spence-mongo-repos": "^0.7.16",
     "@spencejs/spence-pg-repos": "^0.7.16",
     "@types/lodash": "~4.14.149",
-    "@types/node": "~16.4.1",
+    "@types/node": "~16.7.13",
     "await-sleep": "~0.0.1",
-    "eslint": "~7.31.0",
+    "eslint": "~7.32.0",
     "eslint-config-airbnb-base": "~14.2.0",
     "eslint-config-prettier": "~6.15.0",
-    "eslint-plugin-import": "~2.23.3",
-    "eslint-plugin-prettier": "~3.4.0",
+    "eslint-plugin-import": "~2.24.2",
+    "eslint-plugin-prettier": "~4.0.0",
     "fastify": "~2.15.3",
-    "jest": "27.0.6",
+    "jest": "27.1.0",
     "jest-junit": "~12.2.0",
     "mongodb": "~3.6.2",
     "pino-pretty": "~5.1.2",
     "prettier": "~2.3.2",
     "shortid": "^2.2.15",
-    "typescript": "~4.3.5"
+    "typescript": "~4.4.2"
   },
   "scripts": {
     "lint": "eslint src test --fix",
