@@ -151,7 +151,7 @@ function init({ collection, extensions = [] }) {
           applied.prepFilter({ _id: id }),
           { $set: _.isFunction(setStatement) ? setStatement() : setStatement },
           {
-            returnOriginal: false,
+            returnDocument: "after",
             projection,
           }
         )
@@ -185,7 +185,7 @@ function init({ collection, extensions = [] }) {
 
       const result = await applied.collection().findOneAndUpdate(applied.prepFilter({ _id: id }), updates, {
         upsert: true,
-        returnOriginal: false,
+        returnDocument: "after",
         projection,
       });
 
