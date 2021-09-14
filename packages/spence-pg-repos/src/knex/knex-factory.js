@@ -1,5 +1,5 @@
 const { types } = require("pg");
-const initKnex = require("knex");
+const { knex: initKnex } = require("knex");
 const flow = require("lodash/fp/flow");
 const pick = require("lodash/fp/pick");
 const pickBy = require("lodash/fp/pickBy");
