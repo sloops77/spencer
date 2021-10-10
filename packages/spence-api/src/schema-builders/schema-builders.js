@@ -37,8 +37,12 @@ function init(tag) {
     };
   }
 
+  function rpc(body, result, { notFound = true, successStatusCode = 200 }) {
+    return { body, response: responses({ [successStatusCode]: result }, { notFound }) };
+  }
+
   return {
-    ..._.mapValues((fn) => _.flow(fn, tagify), { insertOne, findOne, updateOne, deleteOne, findMany }),
+    ..._.mapValues((fn) => _.flow(fn, tagify), { insertOne, findOne, updateOne, deleteOne, findMany, rpc }),
     responses,
     idParam,
   };

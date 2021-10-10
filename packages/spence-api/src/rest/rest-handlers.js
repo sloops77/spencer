@@ -83,4 +83,17 @@ const del = {
   },
 };
 
+const remoteProcedure = {
+  method: "POST",
+  path: "/rpc",
+  schema({ schemas: { createSchema, replySchema, options }, schemaBuilders: { rpc } }) {
+    return rpc(createSchema, replySchema, options);
+  },
+  handler() {
+    return async (req, reply) => {
+      reply.code(200).send();
+    };
+  },
+};
+
 module.exports = { create, getById, getAll, del, update };
