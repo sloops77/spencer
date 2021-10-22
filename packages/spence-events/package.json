@@ -14,7 +14,7 @@
   "devDependencies": {
     "@spencejs/spence-config": "^0.7.17",
     "@types/lodash": "~4.14.149",
-    "@types/node": "~16.9.1",
+    "@types/node": "~16.11.2",
     "@types/uuid": "^8.3.0",
     "await-sleep": "~0.0.1",
     "eslint": "7.32.0",
