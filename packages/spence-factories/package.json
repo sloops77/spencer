@@ -1,6 +1,6 @@
 {
   "name": "@spencejs/spence-factories",
-  "version": "0.7.17",
+  "version": "0.7.18",
   "main": "src/factory.js",
   "license": "MIT",
   "dependencies": {
@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "@spencejs/spence-config": "^0.7.17",
-    "@spencejs/spence-mongo-repos": "^0.7.17",
+    "@spencejs/spence-mongo-repos": "^0.7.18",
     "@spencejs/spence-pg-repos": "^0.7.17",
     "@types/lodash": "^4.14.149",
     "@types/node": "~16.9.1",

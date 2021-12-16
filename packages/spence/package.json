@@ -1,13 +1,13 @@
 {
   "name": "@spencejs/spence",
-  "version": "0.7.17",
+  "version": "0.7.18",
   "main": "./src/index.js",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@spencejs/spence-api": "^0.7.17",
+    "@spencejs/spence-api": "^0.7.18",
     "@spencejs/spence-events": "^0.7.17",
     "fastify": "~2.15.3"
   },
