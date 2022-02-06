@@ -17,7 +17,7 @@
     "@spencejs/spence-config": "^0.7.17",
     "@types/http-errors": "^1.8.0",
     "@types/lodash": "~4.14.149",
-    "@types/mongodb": "~3.6.20",
+    "@types/mongodb": "~4.0.7",
     "@types/node": "~16.9.1",
     "await-sleep": "~0.0.1",
     "eslint": "~7.32.0",
@@ -27,7 +27,7 @@
     "eslint-plugin-prettier": "~4.0.0",
     "jest": "27.4.7",
     "jest-junit": "~12.2.0",
-    "mongodb": "~3.7.0",
+    "mongodb": "~4.3.1",
     "pino-pretty": "~7.0.0",
     "prettier": "~2.5.1",
     "shortid": "^2.2.15",
@@ -35,7 +35,7 @@
     "uuid": "~8.3.2"
   },
   "peerDependencies": {
-    "mongodb": "~3.3.5"
+    "mongodb": "~4.3.1"
   },
   "scripts": {
     "lint": "eslint src test --fix",

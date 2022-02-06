@@ -5,6 +5,7 @@ let mongoClientInstance = null;
 let mongoClientPromiseInstance = null;
 
 let lastConnection = null;
+let currentDbName = null;
 
 function mongoClientPromise() {
   if (mongoClientPromiseInstance == null) {
@@ -25,7 +26,7 @@ function mongoClient() {
 }
 
 function mongoDb() {
-  return mongoClient().db();
+  return mongoClient().db(currentDbName);
 }
 
 function mongoClose() {
@@ -33,20 +34,20 @@ function mongoClose() {
   return mongoClient().close();
 }
 
-function mongoFactory({ log, config: { nodeEnv, mongoConnection, debug } }, ready) {
+function mongoFactory({ log, config: { nodeEnv, mongoConnection, debug, dbName } }, ready) {
   if (mongoConnection === lastConnection) {
     throw new Error(
       `Initializing mongo twice to ${mongoConnection} is not possible. Please remove one of the initializations`
     );
   }
   lastConnection = mongoConnection;
+  currentDbName = dbName;
 
   const maxPool = nodeEnv !== "test" ? 10 : 1;
 
   // create a client, passing in additional options
   const client = new MongoClient(mongoConnection, {
-    poolSize: maxPool,
-    useUnifiedTopology: true,
+    maxPoolSize: maxPool,
   });
 
   Logger.setLevel(debug ? "debug" : "info");

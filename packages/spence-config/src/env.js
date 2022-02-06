@@ -17,9 +17,7 @@ const dbName = getEnv("DB_NAME")
 const pgConnection = getEnv("DATABASE_URL")
   .default(`postgresql://postgres@localhost:5432/${_.snakeCase(dbName)}`)
   .asString();
-const mongoConnection = getEnv("MONGO_URL")
-  .default(`mongodb://localhost:27017/?connectTimeoutMS=10000&t.databases=${_.kebabCase(dbName)}`)
-  .asString();
+const mongoConnection = getEnv("MONGO_URL").default(`mongodb://localhost:27017/?connectTimeoutMS=10000`).asString();
 const source = getEnv("NODE_SOURCE").default("spence-node").asString();
 
 const config = {
