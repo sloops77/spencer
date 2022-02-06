@@ -1,6 +1,6 @@
 {
   "name": "@spencejs/spence-api",
-  "version": "0.7.18",
+  "version": "0.8.0",
   "main": "./src/index.js",
   "types": "types/index.d.ts",
   "license": "MIT",
@@ -8,7 +8,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@spencejs/spence-events": "^0.7.17",
+    "@spencejs/spence-events": "^0.8.0",
     "fastify-plugin": "~3.0.0",
     "http-errors": "^1.7.3",
     "lodash": "~4.17.15"
@@ -17,9 +17,9 @@
     "fastify": "~2.15.1"
   },
   "devDependencies": {
-    "@spencejs/spence-config": "^0.7.17",
-    "@spencejs/spence-mongo-repos": "^0.7.18",
-    "@spencejs/spence-pg-repos": "^0.7.17",
+    "@spencejs/spence-config": "^0.8.0",
+    "@spencejs/spence-mongo-repos": "^0.8.0",
+    "@spencejs/spence-pg-repos": "^0.8.0",
     "@types/lodash": "~4.14.149",
     "@types/node": "~17.0.15",
     "await-sleep": "~0.0.1",
