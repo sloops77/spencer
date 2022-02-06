@@ -1,6 +1,6 @@
 const _ = require("lodash/fp");
 const { v1: uuidv1 } = require("uuid");
-const { ObjectID } = require("mongodb");
+const { ObjectId } = require("mongodb");
 const { log, env } = require("@spencejs/spence-config");
 const {
   knexFactory,
@@ -79,7 +79,7 @@ describe("test mongo factories with dynamic repos", () => {
       {
         ...simpleInstance,
         // eslint-disable-next-line no-underscore-dangle
-        _id: ObjectID.createFromHexString(simpleInstance._id),
+        _id: ObjectId(simpleInstance._id),
         createdAt: new Date(simpleInstance.createdAt),
         updatedAt: new Date(simpleInstance.updatedAt),
       },
@@ -138,7 +138,7 @@ describe("test mongo factories with static repos", () => {
       {
         ...simpleInstance,
         // eslint-disable-next-line no-underscore-dangle
-        _id: ObjectID.createFromHexString(simpleInstance._id),
+        _id: ObjectId(simpleInstance._id),
         createdAt: new Date(simpleInstance.createdAt),
         updatedAt: new Date(simpleInstance.updatedAt),
       },
