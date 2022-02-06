@@ -30,7 +30,7 @@
     "eslint-plugin-prettier": "~4.0.0",
     "fastify": "~2.15.3",
     "jest": "27.4.7",
-    "jest-junit": "~12.2.0",
+    "jest-junit": "~13.0.0",
     "mongodb": "~4.3.1",
     "pino-pretty": "~7.0.0",
     "prettier": "~2.5.1",
