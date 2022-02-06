@@ -241,7 +241,8 @@ describe("autoconvert ids mongo behaviour", () => {
     const result = await wrap(async (context) =>
       simpleTable(context).delUsingFilter({ filter: { _id: { $in: insertedIds } } })
     );
-    expect(result).toEqual(insertedIds);
+    expect(result).toEqual(expect.arrayContaining(insertedIds));
+    expect(result).toHaveLength(3);
     await expect(simpleTable().findById(insertedIds[0].id)).rejects.toEqual(
       new Error(`simple ${insertedIds[0].id} not found`)
     );
@@ -254,7 +255,8 @@ describe("autoconvert ids mongo behaviour", () => {
     const result = await wrap(async (context) =>
       simpleTable(context).delUsingFilter({ filter: { _id: { $in: _.map((i) => i.toString(), insertedIds) } } })
     );
-    expect(result).toEqual(insertedIds);
+    expect(result).toEqual(expect.arrayContaining(insertedIds));
+    expect(result).toHaveLength(3);
     await expect(simpleTable().findById(insertedIds[0].id)).rejects.toEqual(
       new Error(`simple ${insertedIds[0].id} not found`)
     );
