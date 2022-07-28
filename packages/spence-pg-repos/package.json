@@ -14,7 +14,7 @@
     "lodash": "~4.17.15",
     "p-settle": "^4.0.1",
     "pg": "8.7.3",
-    "pg-types": "~3.0.0",
+    "pg-types": "~4.0.0",
     "uuid": "~8.3.2"
   },
   "devDependencies": {
