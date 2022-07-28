@@ -10,7 +10,7 @@
   "dependencies": {
     "@spencejs/spence-events": "^0.8.0",
     "fastify-plugin": "~3.0.0",
-    "http-errors": "^1.7.3",
+    "http-errors": "^2.0.0",
     "lodash": "~4.17.15"
   },
   "peerDependencies": {
