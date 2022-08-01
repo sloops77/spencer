@@ -1,4 +1,4 @@
-{
+  {
   "name": "spence",
   "version": "0.1.4",
   "private": true,
@@ -17,7 +17,7 @@
     "db:migrate:production": "NODE_ENV=production knex migrate:latest --env production",
     "db:prepare:test": "yarn db:migrate:test",
     "lint": "lerna exec -- 'eslint src test --fix'",
-    "lint:ci": "lerna exec -- 'eslint src test --format junit -o ./reports/junit/lint-results.xml'",
+    "lint:ci": "lerna exec -- 'eslint src test'",
     "schema:create:dev": "NODE_ENV=development node scripts/create-schema",
     "schema:create:test": "NODE_ENV=test node scripts/create-schema",
     "schema:create:production": "NODE_ENV=production node scripts/create-schema",
