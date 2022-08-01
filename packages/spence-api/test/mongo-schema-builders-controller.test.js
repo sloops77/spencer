@@ -34,9 +34,7 @@ function simpleMongoController(fastify, options, next) {
         response: fastify.schemaBuilders.responses(fastify.schemaBuilders.idParam),
       },
     },
-    async (req) => {
-      return req.repos.simple.findById(req.params.id);
-    }
+    async (req) => req.repos.simple.findById(req.params.id)
   );
 
   next();
