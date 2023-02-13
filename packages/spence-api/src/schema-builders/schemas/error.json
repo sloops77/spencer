@@ -10,6 +10,9 @@
     },
     "statusCode": {
       "type": "integer"
+    },
+    "errorCode": {
+      "type": "string"
     }
   },
   "additionalProperties": true
