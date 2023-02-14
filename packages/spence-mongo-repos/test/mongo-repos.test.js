@@ -131,12 +131,12 @@ describe("mongo repo persistence and queries", () => {
   });
 
   it("upsert should insert if doesnt exist already", async () => {
-    const val = { _id: ObjectId(), aVal: "foo" };
+    const val = { _id: new ObjectId(), aVal: "foo" };
     const result = await wrap(async (context) => simpleTable(context).upsert(val._id, val));
     expect(result).toEqual({ ...val, createdAt: expect.any(Date), updatedAt: expect.any(Date) });
   });
   it("upsert should update if it does exist already", async () => {
-    const val = { _id: ObjectId(), aVal: "foo" };
+    const val = { _id: new ObjectId(), aVal: "foo" };
     const result = await wrap(async (context) => {
       await simpleTable(context).insert(val);
       return simpleTable(context).upsert(val._id, { ...val, aVal: "boo" });
@@ -144,12 +144,12 @@ describe("mongo repo persistence and queries", () => {
     expect(result).toEqual({ ...val, aVal: "boo", createdAt: expect.any(Date), updatedAt: expect.any(Date) });
   });
   it("findOrInsert should insert if doesnt exist already", async () => {
-    const val = { _id: ObjectId(), aVal: "foo" };
+    const val = { _id: new ObjectId(), aVal: "foo" };
     const result = await wrap(async (context) => simpleTable(context).findOrInsert(val, ["_id"]));
     expect(result).toEqual({ ...val, createdAt: expect.any(Date), updatedAt: expect.any(Date) });
   });
   it("findOrInsert should find if it does exist already", async () => {
-    const val = { _id: ObjectId(), aVal: "foo" };
+    const val = { _id: new ObjectId(), aVal: "foo" };
     const result = await wrap(async (context) => {
       await simpleTable(context).insert(val);
       return simpleTable(context).findOrInsert({ ...val, aVal: "boo" }, ["_id"]);
