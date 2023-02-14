@@ -14,7 +14,6 @@ const newSimpleSchema = {
       items: {
         type: "string",
       },
-      defaults: [],
     },
   },
   required: ["aVal"],
@@ -25,7 +24,7 @@ const simpleSchema = {
   $schema: "http://json-schema.org/draft-07/schema#",
   $id: "simple",
   type: "object",
-  allOf: ["immutable-entity#", "new-simple#"],
+  allOf: [{ $ref: "immutable-entity#" }, { $ref: "new-simple#" }],
   required: ["id", "createdAt", "aVal"],
 };
 
