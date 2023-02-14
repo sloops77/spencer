@@ -6,7 +6,7 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/node:16
-      - image: circleci/postgres:14.7
+      - image: circleci/postgres:14
         environment:
           POSTGRES_USER: postgres
           POSTGRES_DB: spence_test
