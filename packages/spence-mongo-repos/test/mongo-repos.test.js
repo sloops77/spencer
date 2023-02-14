@@ -2,7 +2,7 @@
 
 const _ = require("lodash/fp");
 const shortid = require("shortid");
-const { ObjectID } = require("mongodb");
+const { ObjectId } = require("mongodb");
 const { env } = require("@spencejs/spence-config");
 
 const { mongoFactory, mongoClose, mongoDb } = require("../src/mongodb");
@@ -50,7 +50,7 @@ describe("mongo repo persistence and queries", () => {
     const val = { aVal: "foo" };
     const result = await wrap((context) => simpleTable(context).insert(val));
     expect(result).toEqual({
-      _id: expect.any(ObjectID),
+      _id: expect.any(ObjectId),
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
       ...val,
@@ -79,7 +79,7 @@ describe("mongo repo persistence and queries", () => {
     const vals = [val(), val(), val()];
     const result = await wrap(async (context) => simpleTable(context).insertMany(vals));
     const expected = _.map(
-      (v) => ({ ...v, _id: expect.any(ObjectID), createdAt: expect.any(Date), updatedAt: expect.any(Date) }),
+      (v) => ({ ...v, _id: expect.any(ObjectId), createdAt: expect.any(Date), updatedAt: expect.any(Date) }),
       vals
     );
     expect(result).toEqual(expected);
@@ -97,7 +97,7 @@ describe("mongo repo persistence and queries", () => {
 
     expect(result).toEqual({
       ...val,
-      _id: expect.any(ObjectID),
+      _id: expect.any(ObjectId),
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     });
@@ -113,7 +113,7 @@ describe("mongo repo persistence and queries", () => {
     });
 
     expect(result).toEqual({
-      _id: expect.any(ObjectID),
+      _id: expect.any(ObjectId),
       createdAt: expect.any(Date),
     });
   });
@@ -131,12 +131,12 @@ describe("mongo repo persistence and queries", () => {
   });
 
   it("upsert should insert if doesnt exist already", async () => {
-    const val = { _id: ObjectID(), aVal: "foo" };
+    const val = { _id: ObjectId(), aVal: "foo" };
     const result = await wrap(async (context) => simpleTable(context).upsert(val._id, val));
     expect(result).toEqual({ ...val, createdAt: expect.any(Date), updatedAt: expect.any(Date) });
   });
   it("upsert should update if it does exist already", async () => {
-    const val = { _id: ObjectID(), aVal: "foo" };
+    const val = { _id: ObjectId(), aVal: "foo" };
     const result = await wrap(async (context) => {
       await simpleTable(context).insert(val);
       return simpleTable(context).upsert(val._id, { ...val, aVal: "boo" });
@@ -144,12 +144,12 @@ describe("mongo repo persistence and queries", () => {
     expect(result).toEqual({ ...val, aVal: "boo", createdAt: expect.any(Date), updatedAt: expect.any(Date) });
   });
   it("findOrInsert should insert if doesnt exist already", async () => {
-    const val = { _id: ObjectID(), aVal: "foo" };
+    const val = { _id: ObjectId(), aVal: "foo" };
     const result = await wrap(async (context) => simpleTable(context).findOrInsert(val, ["_id"]));
     expect(result).toEqual({ ...val, createdAt: expect.any(Date), updatedAt: expect.any(Date) });
   });
   it("findOrInsert should find if it does exist already", async () => {
-    const val = { _id: ObjectID(), aVal: "foo" };
+    const val = { _id: ObjectId(), aVal: "foo" };
     const result = await wrap(async (context) => {
       await simpleTable(context).insert(val);
       return simpleTable(context).findOrInsert({ ...val, aVal: "boo" }, ["_id"]);
@@ -166,7 +166,7 @@ describe("mongo repo persistence and queries", () => {
     await simpleTable().insert(val);
 
     await expect(wrap((context) => simpleTable(context).find({ filter: { aVal: "unique" } }))).resolves.toEqual([
-      { ...val, _id: expect.any(ObjectID), createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+      { ...val, _id: expect.any(ObjectId), createdAt: expect.any(Date), updatedAt: expect.any(Date) },
     ]);
   });
 
@@ -178,7 +178,7 @@ describe("mongo repo persistence and queries", () => {
     });
 
     expect(result).toEqual({
-      _id: expect.any(ObjectID),
+      _id: expect.any(ObjectId),
       createdAt: expect.any(Date),
     });
   });

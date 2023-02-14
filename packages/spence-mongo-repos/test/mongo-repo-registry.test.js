@@ -1,6 +1,6 @@
 const _ = require("lodash/fp");
 const shortid = require("shortid");
-const { ObjectID } = require("mongodb");
+const { ObjectId } = require("mongodb");
 const { log, env } = require("@spencejs/spence-config");
 
 const { mongoFactory, mongoDb, mongoClose } = require("../src/mongodb");
@@ -28,7 +28,7 @@ describe("collection registry", () => {
     await mongoClose();
   });
 
-  describe("initialization errors of the regsitry", () => {
+  describe("initialization errors of the registry", () => {
     it("should error if the registry isn't ready yet", async () => {
       expect(() => simpleRepoFactory({ schemaName })).toThrow(
         new Error("Mongo not initialized yet. Call mongoFactory() before using mongoClientPromise()")
@@ -56,7 +56,7 @@ describe("collection registry", () => {
       const result = await repo.insert(val);
       expect(result).toEqual({
         ...val,
-        _id: expect.any(ObjectID),
+        _id: expect.any(ObjectId),
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
       });

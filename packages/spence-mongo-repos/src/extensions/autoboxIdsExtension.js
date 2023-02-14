@@ -1,9 +1,9 @@
 const _ = require("lodash/fp");
-const { ObjectID } = require("mongodb");
+const { ObjectId } = require("mongodb");
 
 const OBJECT_ID_FORMAT = /^[0-9a-fA-F]{24}$/;
 
-const convertId = (id) => (_.isString(id) && OBJECT_ID_FORMAT.test(id) ? new ObjectID(id) : id);
+const convertId = (id) => (_.isString(id) && OBJECT_ID_FORMAT.test(id) ? new ObjectId(id) : id);
 
 function autoboxIdExtension(parent) {
   return {

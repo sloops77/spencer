@@ -1,5 +1,5 @@
 const _ = require("lodash/fp");
-const { ObjectID } = require("mongodb");
+const { ObjectId } = require("mongodb");
 const { mongodbPlugin, reposPlugin, mongoDb, clearTableRegistry, ready } = require("@spencejs/spence-mongo-repos");
 const shortId = require("shortid");
 const initFastify = require("./helpers/init-fastify");
@@ -9,7 +9,7 @@ const { schemaBuildingDecorator } = require("../src/schema-builders");
 
 function simpleMongoController(fastify, options, next) {
   fastify.get("/:id", { schemas: fastify.schemaBuilders.findOne(simpleSchema) }, async (req) =>
-    req.repos.examples.findById(new ObjectID(req.params.id))
+    req.repos.examples.findById(new ObjectId(req.params.id))
   );
   fastify.get("/", { schemas: fastify.schemaBuilders.findMany(simpleSchema) }, async (req) =>
     req.repos.examples.find({})
@@ -18,10 +18,10 @@ function simpleMongoController(fastify, options, next) {
     req.repos.examples.insert(req.body)
   );
   fastify.put("/:id", { schemas: fastify.schemaBuilders.updateOne(newSimpleSchema, simpleSchema) }, async (req) =>
-    req.repos.examples.update(new ObjectID(req.params.id), req.body)
+    req.repos.examples.update(new ObjectId(req.params.id), req.body)
   );
   fastify.delete("/:id", { schemas: fastify.schemaBuilders.deleteOne() }, async (req, reply) => {
-    await req.repos.examples.del(new ObjectID(req.params.id));
+    await req.repos.examples.del(new ObjectId(req.params.id));
     reply.code(204).send();
   });
 

@@ -1,4 +1,4 @@
-const { MongoClient, Logger } = require("mongodb");
+const { MongoClient } = require("mongodb");
 
 let mongoClientInstance = null;
 
@@ -34,7 +34,7 @@ function mongoClose() {
   return mongoClient().close();
 }
 
-function mongoFactory({ log, config: { nodeEnv, mongoConnection, debug, dbName } }, ready) {
+function mongoFactory({ log, config: { nodeEnv, mongoConnection, dbName, debug, mongoOptions = {} } }, ready) {
   if (mongoConnection === lastConnection) {
     throw new Error(
       `Initializing mongo twice to ${mongoConnection} is not possible. Please remove one of the initializations`
@@ -48,15 +48,21 @@ function mongoFactory({ log, config: { nodeEnv, mongoConnection, debug, dbName }
   // create a client, passing in additional options
   const client = new MongoClient(mongoConnection, {
     maxPoolSize: maxPool,
+    monitorCommands: debug === true,
+    ...mongoOptions,
   });
 
-  Logger.setLevel(debug ? "debug" : "info");
-
-  Logger.setCurrentLogger((msg, context) => {
-    log.info(context, msg);
-  });
-
-  // Logger.filter('class', ['Db']);
+  if (debug) {
+    client.on("commandStarted", (event) => {
+      log.debug({ mongoCommandStarted: event });
+    });
+    client.on("commandSucceeded", (event) => {
+      log.debug({ mongoCommandSucceeded: event });
+    });
+    client.on("commandFailed", (event) => {
+      log.debug({ mongoCommandFailed: event });
+    });
+  }
 
   // Use connect method to connect to the server
   mongoClientPromiseInstance = client

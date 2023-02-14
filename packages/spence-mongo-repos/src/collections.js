@@ -1,4 +1,4 @@
-const { ObjectID } = require("mongodb");
+const { ObjectId } = require("mongodb");
 const _ = require("lodash/fp");
 const { mongoDb, mongoClientPromise } = require("./mongodb/mongodb-factory");
 
@@ -26,7 +26,7 @@ function init(
     timestampKeys,
     mutable,
     idKey: "_id",
-    mockIdGenerator: () => new ObjectID().toHexString(),
+    mockIdGenerator: () => new ObjectId().toHexString(),
   });
 
   mongoClientPromise()
