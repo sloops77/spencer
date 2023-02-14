@@ -5,12 +5,12 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/node:14
-      - image: circleci/postgres:11.5
+      - image: circleci/node:16
+      - image: circleci/postgres:14.7
         environment:
           POSTGRES_USER: postgres
           POSTGRES_DB: spence_test
-      - image: mongo:4
+      - image: mongo:5
 
     working_directory: ~/repo
 
