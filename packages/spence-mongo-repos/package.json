@@ -1,6 +1,6 @@
 {
   "name": "@spencejs/spence-mongo-repos",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "main": "./src/index.js",
   "types": "./types/index.d.ts",
   "license": "MIT",
@@ -8,13 +8,13 @@
     "access": "public"
   },
   "dependencies": {
-    "@spencejs/spence-events": "^0.8.1",
+    "@spencejs/spence-events": "^0.9.0",
     "fastify-plugin": "4.5.0",
     "http-errors": "^2.0.0",
     "lodash": "~4.17.15"
   },
   "devDependencies": {
-    "@spencejs/spence-config": "^0.8.1",
+    "@spencejs/spence-config": "^0.9.0",
     "@types/http-errors": "^1.8.0",
     "@types/lodash": "~4.14.149",
     "@types/mongodb": "~4.0.7",

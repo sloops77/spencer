@@ -1,6 +1,6 @@
 {
   "name": "@spencejs/spence-events",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "main": "src/index.js",
   "types": "types/index.d.ts",
   "license": "MIT",
@@ -12,7 +12,7 @@
     "uuid": "~9.0.0"
   },
   "devDependencies": {
-    "@spencejs/spence-config": "^0.8.1",
+    "@spencejs/spence-config": "^0.9.0",
     "@types/lodash": "~4.14.149",
     "@types/node": "~18.13.0",
     "@types/uuid": "^9.0.0",
