@@ -79,7 +79,7 @@ describe("test mongo factories with dynamic repos", () => {
       {
         ...simpleInstance,
         // eslint-disable-next-line no-underscore-dangle
-        _id: ObjectId(simpleInstance._id),
+        _id: new ObjectId(simpleInstance._id),
         createdAt: new Date(simpleInstance.createdAt),
         updatedAt: new Date(simpleInstance.updatedAt),
       },
@@ -138,7 +138,7 @@ describe("test mongo factories with static repos", () => {
       {
         ...simpleInstance,
         // eslint-disable-next-line no-underscore-dangle
-        _id: ObjectId(simpleInstance._id),
+        _id: new ObjectId(simpleInstance._id),
         createdAt: new Date(simpleInstance.createdAt),
         updatedAt: new Date(simpleInstance.updatedAt),
       },
