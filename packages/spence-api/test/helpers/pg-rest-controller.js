@@ -14,7 +14,6 @@ const newSimpleSchema = {
       items: {
         type: "string",
       },
-      default: [],
     },
   },
   required: ["aVal"],
