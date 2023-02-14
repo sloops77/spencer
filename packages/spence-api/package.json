@@ -14,7 +14,7 @@
     "lodash": "~4.17.15"
   },
   "peerDependencies": {
-    "fastify": "~2.15.1"
+    "fastify": "~4.13.0"
   },
   "devDependencies": {
     "@spencejs/spence-config": "^0.8.1",
