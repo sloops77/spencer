@@ -19,6 +19,7 @@ const pgConnection = getEnv("DATABASE_URL")
   .asString();
 const mongoConnection = getEnv("MONGO_URL").default(`mongodb://localhost:27017/?connectTimeoutMS=10000`).asString();
 const source = getEnv("NODE_SOURCE").default("spence-node").asString();
+const mongoOptions = getEnv("MONGO_OPTIONS").default("{}").asJsonObject();
 
 const config = {
   nodeEnv,
@@ -27,6 +28,7 @@ const config = {
   dbNamePrefix,
   pgConnection,
   mongoConnection,
+  mongoOptions,
   source,
 };
 

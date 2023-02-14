@@ -2,7 +2,7 @@
 
 const _ = require("lodash/fp");
 const shortid = require("shortid");
-const { ObjectID } = require("mongodb");
+const { ObjectId } = require("mongodb");
 const { log, env } = require("@spencejs/spence-config");
 
 const flexibleIdExtension = require("../src/extensions/autoboxIdsExtension");
@@ -46,7 +46,7 @@ describe("autoconvert ids mongo behaviour", () => {
     const val = { aVal: "foo" };
     const result = await wrap((context) => simpleTable(context).insert(val));
     expect(result).toEqual({
-      _id: expect.any(ObjectID),
+      _id: expect.any(ObjectId),
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
       ...val,
@@ -75,7 +75,7 @@ describe("autoconvert ids mongo behaviour", () => {
     const vals = [val(), val(), val()];
     const result = await wrap(async (context) => simpleTable(context).insertMany(vals));
     const expected = _.map(
-      (v) => ({ ...v, _id: expect.any(ObjectID), createdAt: expect.any(Date), updatedAt: expect.any(Date) }),
+      (v) => ({ ...v, _id: expect.any(ObjectId), createdAt: expect.any(Date), updatedAt: expect.any(Date) }),
       vals
     );
     expect(result).toEqual(expected);
@@ -93,7 +93,7 @@ describe("autoconvert ids mongo behaviour", () => {
 
     expect(result).toEqual({
       ...val,
-      _id: expect.any(ObjectID),
+      _id: expect.any(ObjectId),
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     });
@@ -108,7 +108,7 @@ describe("autoconvert ids mongo behaviour", () => {
 
     expect(result).toEqual({
       ...val,
-      _id: expect.any(ObjectID),
+      _id: expect.any(ObjectId),
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
     });
@@ -124,7 +124,7 @@ describe("autoconvert ids mongo behaviour", () => {
     });
 
     expect(result).toEqual({
-      _id: expect.any(ObjectID),
+      _id: expect.any(ObjectId),
       createdAt: expect.any(Date),
     });
   });
@@ -142,12 +142,12 @@ describe("autoconvert ids mongo behaviour", () => {
   });
 
   it("upsert should insert if doesnt exist already", async () => {
-    const val = { _id: ObjectID(), aVal: "foo" };
+    const val = { _id: ObjectId(), aVal: "foo" };
     const result = await wrap(async (context) => simpleTable(context).upsert(val._id, val));
     expect(result).toEqual({ ...val, createdAt: expect.any(Date), updatedAt: expect.any(Date) });
   });
   it("upsert should update if it does exist already", async () => {
-    const val = { _id: ObjectID(), aVal: "foo" };
+    const val = { _id: ObjectId(), aVal: "foo" };
     const result = await wrap(async (context) => {
       await simpleTable(context).insert(val);
       return simpleTable(context).upsert(val._id, { ...val, aVal: "boo" });
@@ -155,12 +155,12 @@ describe("autoconvert ids mongo behaviour", () => {
     expect(result).toEqual({ ...val, aVal: "boo", createdAt: expect.any(Date), updatedAt: expect.any(Date) });
   });
   it("findOrInsert should insert if doesnt exist already", async () => {
-    const val = { _id: ObjectID(), aVal: "foo" };
+    const val = { _id: ObjectId(), aVal: "foo" };
     const result = await wrap(async (context) => simpleTable(context).findOrInsert(val, ["_id"]));
     expect(result).toEqual({ ...val, createdAt: expect.any(Date), updatedAt: expect.any(Date) });
   });
   it("findOrInsert should find if it does exist already", async () => {
-    const val = { _id: ObjectID(), aVal: "foo" };
+    const val = { _id: ObjectId(), aVal: "foo" };
     const result = await wrap(async (context) => {
       await simpleTable(context).insert(val);
       return simpleTable(context).findOrInsert({ ...val, aVal: "boo" }, ["_id"]);
@@ -177,7 +177,7 @@ describe("autoconvert ids mongo behaviour", () => {
     await simpleTable().insert(val);
 
     await expect(wrap((context) => simpleTable(context).find({ filter: { aVal: "unique" } }))).resolves.toEqual([
-      { ...val, _id: expect.any(ObjectID), createdAt: expect.any(Date), updatedAt: expect.any(Date) },
+      { ...val, _id: expect.any(ObjectId), createdAt: expect.any(Date), updatedAt: expect.any(Date) },
     ]);
   });
 
@@ -189,7 +189,7 @@ describe("autoconvert ids mongo behaviour", () => {
     });
 
     expect(result).toEqual({
-      _id: expect.any(ObjectID),
+      _id: expect.any(ObjectId),
       createdAt: expect.any(Date),
     });
   });
