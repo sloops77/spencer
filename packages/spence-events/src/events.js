@@ -30,11 +30,14 @@ async function publish(topic, eventName, payload, context) {
   };
   const channel = `${topic}.${eventName}`;
   if (_.isEmpty(_.intersection(connectedChannels, ["*", channel]))) {
-    log.info(event, `events channel "${channel}" is disconnected: not publishing event`);
+    log.info({
+      ...event,
+      message: `events channel "${channel}" is disconnected: not publishing event`,
+    });
     return;
   }
   try {
-    log.debug({ meta: _.omit(["tables"], event.meta) }, `publishing event`);
+    log.debug({ meta: _.omit(["tables"], event.meta), message: `publishing event` });
     // doesnt use emit directly because we want to support async callbacks AND to have a general exception handler
     const callbacks = nexus.listeners(channel);
     await Promise.all(_.map((callback) => callback(event), callbacks));
@@ -42,7 +45,8 @@ async function publish(topic, eventName, payload, context) {
     try {
       errorHandler(event, selectedContext(context), error);
     } catch (nestedError) {
-      log.error(nestedError, `Bad error handler has been set using setErrorHandler, it should clean up its own errors`);
+      log.error(nestedError);
+      log.warn(`Bad error handler has been set using setErrorHandler, it should clean up its own errors`);
     }
   }
 }
