@@ -7,7 +7,7 @@
   "devDependencies": {
     "jest-junit": "~15.0.0",
     "lerna": "~6.6.2",
-    "pino-pretty": "~9.2.0"
+    "pino-pretty": "~10.2.0"
   },
   "scripts": {
     "bootstrap": "yarn install --frozen-lockfile",
