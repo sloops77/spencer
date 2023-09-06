@@ -6439,9 +6439,9 @@ pg-types@^2.1.0:
     postgres-interval "^1.1.0"
 
 pg-types@~4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/pg-types/-/pg-types-4.0.0.tgz#85edef788ed13acad990ce233b8dfa995552b5d9"
-  integrity sha512-q4I7zG+d2mDg52WdrOA0TmBvab9ZBC8DE8+opl3gSegnH5ml+0pKbICOfRKXgwQ5aa6NRjLoF5pEDs0YpGvFrw==
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/pg-types/-/pg-types-4.0.1.tgz#31857e89d00a6c66b06a14e907c3deec03889542"
+  integrity sha512-hRCSDuLII9/LE3smys1hRHcu5QGcLs9ggT7I/TCs0IE+2Eesxi9+9RWAAwZ0yaGjxoWICF/YHLOEjydGujoJ+g==
   dependencies:
     pg-int8 "1.0.1"
     pg-numeric "1.0.2"
