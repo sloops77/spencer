@@ -5,7 +5,7 @@
   "dependencies": {},
   "workspaces": ["packages/*"],
   "devDependencies": {
-    "jest-junit": "~15.0.0",
+    "jest-junit": "~16.0.0",
     "lerna": "~6.6.2",
     "pino-pretty": "~10.2.0"
   },
