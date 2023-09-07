@@ -1,6 +1,6 @@
 import {Context, Projection, Document} from "../types";
 import {Collection} from "../collections";
-import { ObjectID } from "mongodb";
+import { ObjectId } from "mongodb";
 
 export default init;
 
@@ -20,10 +20,10 @@ export type Extension = typeof ExtensionFn;
 export interface RepoInstance {
     /**
      * Deletes the document by id
-     * @param {string|ObjectID} id
+     * @param {string|ObjectId} id
      * @returns {Promise<string>} the deleted id
      */
-    del(id: string|ObjectID): Promise<string>,
+    del(id: string|ObjectId): Promise<string>,
     /**
      * Deletes the object using a query
      * @param query
@@ -32,19 +32,19 @@ export interface RepoInstance {
     delUsingFilter({ filter }: Query): Promise<string[]>,
     /**
      * Just modifies the updatedAt timestamp.
-     * @param {string|ObjectID} id
+     * @param {string|ObjectId} id
      * @param {Projection} projection
      * @returns {Promise<Document>}
      */
-    touch(id: string|ObjectID, projection: Projection): Promise<Document>,
+    touch(id: string|ObjectId, projection: Projection): Promise<Document>,
 
     /**
      * Finds a single document by id
-     * @param {string|ObjectID} id
+     * @param {string|ObjectId} id
      * @param {Projection} projection
      * @returns {Promise<Document>}
      */
-    findById(id: string|ObjectID, projection?: Projection): Promise<Document>,
+    findById(id: string|ObjectId, projection?: Projection): Promise<Document>,
     /**
      * Finds a list of documents by using a query
      * @param {Query} query
@@ -89,20 +89,20 @@ export interface RepoInstance {
     findOrInsert(document: Document, naturalKey: string[], projection?: Projection): Promise<Document>,
     /**
      * Does an update by id
-     * @param {string|ObjectID} id
+     * @param {string|ObjectId} id
      * @param {Document | (() => Document)} setStatement
      * @param {Projection} projection
      * @returns {Promise<Document>}
      */
-    doUpdateById(id: string|ObjectID, setStatement: Document | (() => Document), projection?: Projection): Promise<Document>,
+    doUpdateById(id: string|ObjectId, setStatement: Document | (() => Document), projection?: Projection): Promise<Document>,
     /**
      * Does an update by id
-     * @param {string|ObjectID} id
+     * @param {string|ObjectId} id
      * @param {Document} val
      * @param {Projection} projection
      * @returns {Promise<Document>}
      */
-    update(id: string|ObjectID, val: Document, projection?: Projection): Promise<Document>,
+    update(id: string|ObjectId, val: Document, projection?: Projection): Promise<Document>,
     /**
      * Does an update by filter
      * @param {Query} query
@@ -113,12 +113,12 @@ export interface RepoInstance {
     updateUsingFilter({ filter }: Query, val: Document, projection?: Projection): Promise<Document[]>,
     /**
      * Upserts the value
-     * @param {string|ObjectID} id
+     * @param {string|ObjectId} id
      * @param {Document} val
      * @param {Projection} projection
      * @returns {Promise<Document>}
      */
-    upsert(id: string|ObjectID, val: Document, projection?: Projection): Promise<Document>,
+    upsert(id: string|ObjectId, val: Document, projection?: Projection): Promise<Document>,
     readonly defaultColumnsSelection: Projection,
     collection: Collection,
     prepModification: import("./prep-modification").PrepModification,
