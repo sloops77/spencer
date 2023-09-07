@@ -34,7 +34,7 @@ async function publish(topic, eventName, payload, context) {
     return;
   }
   try {
-    log.debug({ meta: _.omit(["tables"], event.meta) }, `publishing event`);
+    log.debug({ meta: _.omit(["tables", "repos"], event.meta) }, `publishing event`);
     // doesnt use emit directly because we want to support async callbacks AND to have a general exception handler
     const callbacks = nexus.listeners(channel);
     await Promise.all(_.map((callback) => callback(event), callbacks));
