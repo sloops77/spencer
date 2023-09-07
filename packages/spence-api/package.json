@@ -33,7 +33,7 @@
     "jest-junit": "~16.0.0",
     "mongodb": "~5.8.0",
     "pino-pretty": "~10.2.0",
-    "prettier": "~2.8.4",
+    "prettier": "~3.0.3",
     "shortid": "^2.2.15",
     "typescript": "~5.2.2"
   },
