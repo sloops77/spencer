@@ -129,7 +129,7 @@ function init({ collection, extensions = [] }) {
         .findOneAndUpdate(
           applied.prepFilter(_.pick(naturalKey, preppedVal)),
           { $setOnInsert: preppedVal },
-          { upsert: true, returnDocument: "after", projection }
+          { upsert: true, returnDocument: "after", includeResultMetadata: true, projection }
         );
 
       if (_.get("lastErrorObject.upserted", result) != null) {
@@ -152,6 +152,7 @@ function init({ collection, extensions = [] }) {
           { $set: _.isFunction(setStatement) ? setStatement() : setStatement },
           {
             returnDocument: "after",
+            includeResultMetadata: true,
             projection,
           }
         )
@@ -186,6 +187,7 @@ function init({ collection, extensions = [] }) {
       const result = await applied.collection().findOneAndUpdate(applied.prepFilter({ _id: id }), updates, {
         upsert: true,
         returnDocument: "after",
+        includeResultMetadata: true,
         projection,
       });
 
