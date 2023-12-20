@@ -1,10 +1,11 @@
 /* eslint-disable max-lines */
 const _ = require("lodash/fp");
 const newError = require("http-errors");
-const pSettle = require("p-settle");
 const { publish } = require("@spencejs/spence-events");
 const initPrepModification = require("./prep-modification");
 const { dbifyColumn, apifyColumn } = require("../knex/transformations");
+
+const pSettleP = import("p-settle");
 
 function renderArrayRemoveValue(value) {
   if (_.isPlainObject(value)) {
@@ -89,7 +90,7 @@ function init(table, extensions = []) {
     }
 
     function insertMany(vals, selection) {
-      return pSettle(_.map((val) => applied.insert(val, selection), vals));
+      return pSettleP.then(({default: pSettle}) => pSettle(_.map((val) => applied.insert(val, selection), vals)));
     }
 
     async function findOrInsert(val, naturalKey, returning = applied.defaultColumnsSelection) {
