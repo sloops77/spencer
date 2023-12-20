@@ -8,8 +8,8 @@ async function buildColumnInfoFromDb(table, ignoreColumns) {
   return _.fromPairs(
     _.flow(
       _.reject((columnName) => ignoreColumns.includes(columnName)),
-      _.map((columnName) => [columnName, rawColumnInfo[columnName].type])
-    )(_.keys(rawColumnInfo))
+      _.map((columnName) => [columnName, rawColumnInfo[columnName].type]),
+    )(_.keys(rawColumnInfo)),
   );
 }
 
@@ -22,7 +22,7 @@ function init(
     transformCase,
     timestampKeys = { createdAt: "createdAt", updatedAt: "updatedAt" },
   },
-  ready
+  ready,
 ) {
   // eslint-disable-next-line no-underscore-dangle
   let _columnInfo;

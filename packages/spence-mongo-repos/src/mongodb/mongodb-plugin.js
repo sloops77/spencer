@@ -7,7 +7,7 @@ function mongodbPlugin(fastify, options, next) {
       log: fastify.log,
       config: fastify.config,
     },
-    next
+    next,
   );
 
   fastify.addHook("onClose", (instance, closeDone) => {

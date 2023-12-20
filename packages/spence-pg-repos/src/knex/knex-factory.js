@@ -40,7 +40,7 @@ types.setTypeParser(DATE_OID, parseDate);
 function knexFactory({ log, config: { nodeEnv, pgConnection } }) {
   if (pgConnection === lastConnection) {
     throw new Error(
-      `Initializiong knex twice to ${pgConnection} is not possible. Please remove one of the initializations`
+      `Initializiong knex twice to ${pgConnection} is not possible. Please remove one of the initializations`,
     );
   }
 

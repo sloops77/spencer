@@ -9,16 +9,16 @@ const { schemaBuildingDecorator } = require("../src/schema-builders");
 
 function simpleMongoController(fastify, options, next) {
   fastify.get("/:id", { schemas: fastify.schemaBuilders.findOne(simpleSchema) }, async (req) =>
-    req.repos.examples.findById(new ObjectId(req.params.id))
+    req.repos.examples.findById(new ObjectId(req.params.id)),
   );
   fastify.get("/", { schemas: fastify.schemaBuilders.findMany(simpleSchema) }, async (req) =>
-    req.repos.examples.find({})
+    req.repos.examples.find({}),
   );
   fastify.post("/", { schemas: fastify.schemaBuilders.insertOne(newSimpleSchema, simpleSchema) }, async (req) =>
-    req.repos.examples.insert(req.body)
+    req.repos.examples.insert(req.body),
   );
   fastify.put("/:id", { schemas: fastify.schemaBuilders.updateOne(newSimpleSchema, simpleSchema) }, async (req) =>
-    req.repos.examples.update(new ObjectId(req.params.id), req.body)
+    req.repos.examples.update(new ObjectId(req.params.id), req.body),
   );
   fastify.delete("/:id", { schemas: fastify.schemaBuilders.deleteOne() }, async (req, reply) => {
     await req.repos.examples.del(new ObjectId(req.params.id));
@@ -34,7 +34,7 @@ function simpleMongoController(fastify, options, next) {
         response: fastify.schemaBuilders.responses(fastify.schemaBuilders.idParam),
       },
     },
-    async (req) => req.repos.simple.findById(req.params.id)
+    async (req) => req.repos.simple.findById(req.params.id),
   );
 
   next();
@@ -123,7 +123,7 @@ describe("schemaBuilder decorated controller", () => {
             aVal: "toast",
           },
         }),
-      ])
+      ]),
     );
 
     const findResponse = await fastify.injectJson({ method: "GET", url: `/examples` });
@@ -141,7 +141,7 @@ describe("schemaBuilder decorated controller", () => {
             aVal: "test",
           },
         }),
-      ])
+      ]),
     );
     const updateResponse = await fastify.injectJson({
       method: "PUT",
@@ -166,7 +166,7 @@ describe("schemaBuilder decorated controller", () => {
             aVal: "test",
           },
         }),
-      ])
+      ]),
     );
     const delResponse = await fastify.injectJson({ method: "DELETE", url: `/examples/${createResponses[0]._id}` });
     expect(delResponse.statusCode).toEqual(204);

@@ -22,7 +22,7 @@ const deepCompactObj = (obj) => {
       return acc;
     },
     initialValue,
-    _.keys(obj)
+    _.keys(obj),
   );
 };
 

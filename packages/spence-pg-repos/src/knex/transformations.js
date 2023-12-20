@@ -13,7 +13,7 @@ const dbifyColumn = _.memoize((transformCase) =>
         }
         return [...names.slice(0, -1), _.snakeCase(names[names.length - 1])].join(".");
       }
-    : _.identity
+    : _.identity,
 );
 
 module.exports = { apifyColumn, apifyResult, apifyResultArray, dbifyColumn };

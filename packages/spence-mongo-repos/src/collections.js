@@ -11,7 +11,7 @@ function init(
     mutable = true,
     timestampKeys = { createdAt: "createdAt", updatedAt: "updatedAt" },
   },
-  ready
+  ready,
 ) {
   const collectionName = _.isEmpty(schemaName) ? name : `${schemaName}.${name}`;
 

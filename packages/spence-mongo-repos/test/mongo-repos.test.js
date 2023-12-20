@@ -80,7 +80,7 @@ describe("mongo repo persistence and queries", () => {
     const result = await wrap(async (context) => simpleTable(context).insertMany(vals));
     const expected = _.map(
       (v) => ({ ...v, _id: expect.any(ObjectId), createdAt: expect.any(Date), updatedAt: expect.any(Date) }),
-      vals
+      vals,
     );
     expect(result).toEqual(expected);
 
@@ -184,7 +184,7 @@ describe("mongo repo persistence and queries", () => {
   });
   it("find by filter should error if cannot be found", async () => {
     await expect(wrap(async (context) => simpleTable(context).find({ filter: { aVal: "notfound" } }))).resolves.toEqual(
-      []
+      [],
     );
   });
   it("should be able to update by id", async () => {
@@ -197,13 +197,13 @@ describe("mongo repo persistence and queries", () => {
     const val = { aVal: "foo1" };
     const insertedVal = await simpleTable().insert(val);
     const updatedVal = await wrap(async (context) =>
-      simpleTable(context).updateUsingFilter({ filter: { aVal: "foo1" } }, { aVal: "bar" })
+      simpleTable(context).updateUsingFilter({ filter: { aVal: "foo1" } }, { aVal: "bar" }),
     );
     expect(updatedVal).toEqual([{ ...insertedVal, updatedAt: expect.any(Date), aVal: "bar" }]);
   });
   it("update should error if cannot be found", async () => {
     await expect(wrap(async (context) => simpleTable(context).update("1", { aVal: "bar" }))).rejects.toEqual(
-      new Error("simple 1 not found")
+      new Error("simple 1 not found"),
     );
   });
   it("should be able to delete by id", async () => {
@@ -237,10 +237,10 @@ describe("mongo repo persistence and queries", () => {
               projection: arrayTable(context).collection.defaultProjection,
               returnDocument: "after",
               includeResultMetadata: true,
-            }
+            },
           )
-          .then(_.get("value"))
-      )
+          .then(_.get("value")),
+      ),
     ).resolves.toEqual({ ...insertedVal, manyVals: [1, 3], updatedAt: expect.any(Date) });
     // await expect(wrap(async (context) => arrayTable(context).addToArray(val.id, "manyVals", [7, 9]))).resolves.toEqual([
     //   1,

@@ -9,7 +9,7 @@ function init(table) {
     return _.flow(
       _.filter(([, type]) => type === "json" || type === "jsonb"),
       _.map(_.first),
-      _.map(apifyColumn(table.transformCase))
+      _.map(apifyColumn(table.transformCase)),
     )(_.toPairs(columnInfo));
   }
 
