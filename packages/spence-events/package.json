@@ -26,7 +26,7 @@
     "jest-junit": "~16.0.0",
     "pino-pretty": "~10.3.0",
     "prettier": "~2.8.4",
-    "tsd": "^0.29.0",
+    "tsd": "^0.30.0",
     "typescript": "~5.2.2"
   },
   "scripts": {
