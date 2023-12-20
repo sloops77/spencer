@@ -76,7 +76,7 @@ describe("autoconvert ids mongo behaviour", () => {
     const result = await wrap(async (context) => simpleTable(context).insertMany(vals));
     const expected = _.map(
       (v) => ({ ...v, _id: expect.any(ObjectId), createdAt: expect.any(Date), updatedAt: expect.any(Date) }),
-      vals
+      vals,
     );
     expect(result).toEqual(expected);
 
@@ -195,14 +195,14 @@ describe("autoconvert ids mongo behaviour", () => {
   });
   it("find by filter should error if cannot be found", async () => {
     await expect(wrap(async (context) => simpleTable(context).find({ filter: { aVal: "notfound" } }))).resolves.toEqual(
-      []
+      [],
     );
   });
   it("should be able to update by id", async () => {
     const val = { aVal: "foo" };
     const insertedVal = await simpleTable().insert(val);
     const updatedVal = await wrap(async (context) =>
-      simpleTable(context).update(insertedVal._id.toString(), { aVal: "bar" })
+      simpleTable(context).update(insertedVal._id.toString(), { aVal: "bar" }),
     );
     expect(updatedVal).toEqual({ ...insertedVal, updatedAt: expect.any(Date), aVal: "bar" });
   });
@@ -210,13 +210,13 @@ describe("autoconvert ids mongo behaviour", () => {
     const val = { aVal: "foo1" };
     const insertedVal = await simpleTable().insert(val);
     const updatedVal = await wrap(async (context) =>
-      simpleTable(context).updateUsingFilter({ filter: { aVal: "foo1" } }, { aVal: "bar" })
+      simpleTable(context).updateUsingFilter({ filter: { aVal: "foo1" } }, { aVal: "bar" }),
     );
     expect(updatedVal).toEqual([{ ...insertedVal, updatedAt: expect.any(Date), aVal: "bar" }]);
   });
   it("update should error if cannot be found", async () => {
     await expect(wrap(async (context) => simpleTable(context).update("1", { aVal: "bar" }))).rejects.toEqual(
-      new Error("simple 1 not found")
+      new Error("simple 1 not found"),
     );
   });
   it("should be able to delete by id", async () => {
@@ -239,12 +239,12 @@ describe("autoconvert ids mongo behaviour", () => {
     const insertedVals = await simpleTable().insertMany(vals);
     const insertedIds = _.map(({ _id }) => _id, insertedVals);
     const result = await wrap(async (context) =>
-      simpleTable(context).delUsingFilter({ filter: { _id: { $in: insertedIds } } })
+      simpleTable(context).delUsingFilter({ filter: { _id: { $in: insertedIds } } }),
     );
     expect(result).toEqual(expect.arrayContaining(insertedIds));
     expect(result).toHaveLength(3);
     await expect(simpleTable().findById(insertedIds[0].id)).rejects.toEqual(
-      new Error(`simple ${insertedIds[0].id} not found`)
+      new Error(`simple ${insertedIds[0].id} not found`),
     );
   });
 
@@ -253,12 +253,12 @@ describe("autoconvert ids mongo behaviour", () => {
     const insertedVals = await simpleTable().insertMany(vals);
     const insertedIds = _.map(({ _id }) => _id, insertedVals);
     const result = await wrap(async (context) =>
-      simpleTable(context).delUsingFilter({ filter: { _id: { $in: _.map((i) => i.toString(), insertedIds) } } })
+      simpleTable(context).delUsingFilter({ filter: { _id: { $in: _.map((i) => i.toString(), insertedIds) } } }),
     );
     expect(result).toEqual(expect.arrayContaining(insertedIds));
     expect(result).toHaveLength(3);
     await expect(simpleTable().findById(insertedIds[0].id)).rejects.toEqual(
-      new Error(`simple ${insertedIds[0].id} not found`)
+      new Error(`simple ${insertedIds[0].id} not found`),
     );
   });
 

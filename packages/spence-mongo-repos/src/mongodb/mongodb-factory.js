@@ -18,7 +18,7 @@ function mongoClientPromise() {
 function mongoClient() {
   if (mongoClientInstance == null) {
     throw new Error(
-      `Mongo not initialized yet. Call and await mongoFactory() before using mongoClient(), mongoDb() or mongoClose()`
+      `Mongo not initialized yet. Call and await mongoFactory() before using mongoClient(), mongoDb() or mongoClose()`,
     );
   }
 
@@ -37,7 +37,7 @@ function mongoClose() {
 function mongoFactory({ log, config: { nodeEnv, mongoConnection, dbName, debug, mongoOptions = {} } }, ready) {
   if (mongoConnection === lastConnection) {
     throw new Error(
-      `Initializing mongo twice to ${mongoConnection} is not possible. Please remove one of the initializations`
+      `Initializing mongo twice to ${mongoConnection} is not possible. Please remove one of the initializations`,
     );
   }
   lastConnection = mongoConnection;

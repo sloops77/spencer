@@ -8,7 +8,7 @@ function decorateRestRoutes(app) {
     function restRoutes(...args) {
       return _.map(this.restRoute, args);
     },
-    ["restRoute"]
+    ["restRoute"],
   );
 }
 

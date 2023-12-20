@@ -98,7 +98,7 @@ describe("rest controller", () => {
             aVal: "toast",
           },
         }),
-      ])
+      ]),
     );
     const findResponse = await fastify.injectJson({ method: "GET", url: `/examples` });
     expect(findResponse.json).toEqual([createResponses[1], createResponses[0]]);
@@ -115,7 +115,7 @@ describe("rest controller", () => {
             aVal: "test",
           },
         }),
-      ])
+      ]),
     );
     const updateResponse = await fastify.injectJson({
       method: "PATCH",
@@ -136,7 +136,7 @@ describe("rest controller", () => {
             aVal: "test",
           },
         }),
-      ])
+      ]),
     );
     const delResponse = await fastify.injectJson({ method: "DELETE", url: `/examples/${createResponses[0].id}` });
     expect(delResponse.statusCode).toEqual(204);

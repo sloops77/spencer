@@ -12,7 +12,7 @@ function pluginNotRegisteredFastify(routes) {
 
   _.forEach(
     (route) => app.register(routes[route], { prefix: route }), // .after((err) => err != null && console.error(err)),
-    _.keys(routes)
+    _.keys(routes),
   );
   return app;
 }
@@ -21,7 +21,7 @@ describe("controller plugin errors", () => {
   it("should error if plugin wasnt defined", async () => {
     const app = pluginNotRegisteredFastify({ "/examples": simpleController }, {});
     await expect(app.ready()).rejects.toEqual(
-      new RestConfigurationError("To use @spence, please register the fastifyRest plugin with the fastify server")
+      new RestConfigurationError("To use @spence, please register the fastifyRest plugin with the fastify server"),
     );
   });
 });

@@ -12,19 +12,21 @@ function instantiateRoute(routeSpec, options) {
 
 function init(
   { tag, schemas: { create: createSchema, update: updateSchema, reply: replySchema }, repo: repoParam, tableName },
-  extend
+  extend,
 ) {
   return function addRoutes(router, opts, next) {
     if (extend == null && !_.isFunction(extend)) {
       next(
-        new RestConfigurationError(`last argument must be a function that takes three arguments router, opts, and next`)
+        new RestConfigurationError(
+          `last argument must be a function that takes three arguments router, opts, and next`,
+        ),
       );
       return;
     }
 
     if (router.restRoutes == null) {
       next(
-        new RestConfigurationError(`To use @spence, please register the fastifyRest plugin with the fastify server`)
+        new RestConfigurationError(`To use @spence, please register the fastifyRest plugin with the fastify server`),
       );
       return;
     }

@@ -15,7 +15,7 @@ function calcPickOmitLists(projection) {
       return acc;
     },
     initialVal,
-    _.keys(projection)
+    _.keys(projection),
   );
 }
 
@@ -36,7 +36,7 @@ function init({ collection, extensions = [] }) {
               throw new newError.NotFound(`${collection.entityName} ${id} not found`);
             }
             return result;
-          }
+          },
         );
     }
 
@@ -53,7 +53,7 @@ function init({ collection, extensions = [] }) {
         sort,
         ...otherOptions
       } = {},
-      projection = applied.defaultColumnsSelection
+      projection = applied.defaultColumnsSelection,
     ) {
       return applied
         .collection()
@@ -75,7 +75,7 @@ function init({ collection, extensions = [] }) {
           [`_id`, 1],
         ],
       } = {},
-      projection = applied.defaultColumnsSelection
+      projection = applied.defaultColumnsSelection,
     ) {
       return applied.collection().findOne(applied.prepFilter(filter), { sort, projection });
     }
@@ -98,10 +98,10 @@ function init({ collection, extensions = [] }) {
               collection.entityName,
               `created`,
               { state: result, changes: { kind: "new", val: document } },
-              context
+              context,
             );
             return result;
-          }
+          },
         );
     }
 
@@ -115,7 +115,7 @@ function init({ collection, extensions = [] }) {
       forEachWithIndex(
         (state, i) =>
           publish(collection.entityName, `created`, { state, changes: { kind: "new", val: documents[i] } }, context),
-        preppedVals
+        preppedVals,
       );
 
       const [pickList, omitList] = calcPickOmitLists(projection);
@@ -129,7 +129,7 @@ function init({ collection, extensions = [] }) {
         .findOneAndUpdate(
           applied.prepFilter(_.pick(naturalKey, preppedVal)),
           { $setOnInsert: preppedVal },
-          { upsert: true, returnDocument: "after", includeResultMetadata: true, projection }
+          { upsert: true, returnDocument: "after", includeResultMetadata: true, projection },
         );
 
       if (_.get("lastErrorObject.upserted", result) != null) {
@@ -137,7 +137,7 @@ function init({ collection, extensions = [] }) {
           collection.entityName,
           `created`,
           { state: result.value, changes: { kind: "new", val: document } },
-          context
+          context,
         );
       }
 
@@ -154,7 +154,7 @@ function init({ collection, extensions = [] }) {
             returnDocument: "after",
             includeResultMetadata: true,
             projection,
-          }
+          },
         )
         .then(
           // @ts-ignore
@@ -163,7 +163,7 @@ function init({ collection, extensions = [] }) {
               throw new newError.NotFound(`${collection.entityName} ${id} not found`);
             }
             return result.value;
-          }
+          },
         );
     }
 
@@ -173,7 +173,7 @@ function init({ collection, extensions = [] }) {
         (result) => {
           publish(collection.entityName, `updated`, { state: result, changes: { kind: "patch", val } }, context);
           return result;
-        }
+        },
       );
     }
 
@@ -214,10 +214,10 @@ function init({ collection, extensions = [] }) {
               _.forEach(
                 (state) =>
                   publish(collection.entityName, `updated`, { state, changes: { kind: "patch", val } }, context),
-                result
+                result,
               );
               return result;
-            }
+            },
           )
       );
     }
@@ -238,7 +238,7 @@ function init({ collection, extensions = [] }) {
               throw new newError.NotFound(`${collection.entityName} ${id} not found`);
             }
             return filter._id;
-          }
+          },
         )
         .then(() => {
           publish(collection.entityName, `deleted`, { id }, context);
@@ -297,7 +297,7 @@ function init({ collection, extensions = [] }) {
         return result;
       },
       coreRepo,
-      extensions
+      extensions,
     );
 
     return applied;

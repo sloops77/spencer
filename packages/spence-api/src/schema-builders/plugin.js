@@ -12,7 +12,7 @@ function loader(app) {
       // eslint-disable-next-line global-require,import/no-dynamic-require
       const schema = require(`./schemas/${p}`);
       app.addSchema(schema);
-    })
+    }),
   )(files);
 }
 

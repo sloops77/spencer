@@ -80,7 +80,7 @@ describe("events", () => {
         },
       },
       context,
-      new Error("message")
+      new Error("message"),
     );
     expect(subscriber).toHaveBeenCalledWith({
       payload,

@@ -37,7 +37,7 @@ const pgRestController = initController(
   (router, controllerOptions, next) => {
     router.restRoutes(create, getAll, getById, update, del);
     next();
-  }
+  },
 );
 
 module.exports = {

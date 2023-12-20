@@ -51,7 +51,7 @@ function init(table, extensions = []) {
           [`${table.tableName}.id`, "asc"],
         ],
       } = {},
-      returning = applied.defaultColumnsSelection
+      returning = applied.defaultColumnsSelection,
     ) {
       let query = applied.buildFinderQuery({ filter, params });
       query = query.select(returning);
@@ -193,13 +193,13 @@ function init(table, extensions = []) {
         {
           [field]: table.knex.raw(`?? || ?`, [field, JSON.stringify(val)]),
         },
-        selection
+        selection,
       ).delayThen((result) => {
         publish(
           table.entityName,
           `updated`,
           { state: { id, ...result }, changes: { kind: "add", val: { [field]: _.castArray(val) } } },
-          context
+          context,
         );
         return result[field];
       });
@@ -218,16 +218,16 @@ function init(table, extensions = []) {
         {
           [field]: table.knex.raw(
             `to_jsonb(${wrapRemovals(_.castArray(val), `ARRAY(SELECT jsonb_array_elements(??))`)})`,
-            [field]
+            [field],
           ),
         },
-        selection
+        selection,
       ).delayThen((result) => {
         publish(
           table.entityName,
           `updated`,
           { state: { id, ...result }, changes: { kind: "delete", val: { [field]: _.castArray(val) } } },
-          context
+          context,
         );
         return result[field];
       });
@@ -242,13 +242,13 @@ function init(table, extensions = []) {
         {
           [field]: table.knex.raw(`?? || ?`, [field, JSON.stringify(val)]),
         },
-        selection
+        selection,
       ).delayThen((result) => {
         publish(
           table.entityName,
           `updated`,
           { state: { id, ...result }, changes: { kind: "add", val: { [field]: _.castArray(val) } } },
-          context
+          context,
         );
         return result[field];
       });
@@ -261,13 +261,13 @@ function init(table, extensions = []) {
         {
           [field]: table.knex.raw(`?? - ?${typeSuffix}`, [field, _.isPlainObject(keys) ? JSON.stringify(keys) : keys]),
         },
-        selection
+        selection,
       ).delayThen((result) => {
         publish(
           table.entityName,
           `updated`,
           { state: { id, ...result }, changes: { kind: "delete", val: { [field]: _.castArray(keys) } } },
-          context
+          context,
         );
         return result[field];
       });
@@ -313,7 +313,7 @@ function init(table, extensions = []) {
         return result;
       },
       coreRepo,
-      extensions
+      extensions,
     );
 
     return applied;

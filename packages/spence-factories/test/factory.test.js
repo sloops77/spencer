@@ -161,7 +161,7 @@ describe("test pg factories", () => {
             NEW."updatedAt" = NOW();
             RETURN NEW;
           END;
-          $$ LANGUAGE plpgsql;`
+          $$ LANGUAGE plpgsql;`,
     );
 
     schemaName = `simpleTest-${Date.now()}`;
