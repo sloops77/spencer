@@ -6,8 +6,7 @@
   "workspaces": ["packages/*"],
   "devDependencies": {
     "jest-junit": "~16.0.0",
-    "lerna": "~6.6.2",
-    "pino-pretty": "~10.3.0"
+    "lerna": "~7.4.2"
   },
   "scripts": {
     "bootstrap": "yarn install --frozen-lockfile",
