@@ -31,7 +31,7 @@
     "jest-junit": "~16.0.0",
     "pino-pretty": "~10.3.0",
     "prettier": "~2.8.4",
-    "typescript": "~5.2.2"
+    "typescript": "~5.3.3"
   },
   "scripts": {
     "lint": "eslint src test --fix",

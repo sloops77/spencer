@@ -31,7 +31,7 @@
     "pino-pretty": "~10.3.0",
     "prettier": "~2.8.4",
     "shortid": "^2.2.15",
-    "typescript": "~5.2.2",
+    "typescript": "~5.3.3",
     "uuid": "~9.0.0"
   },
   "peerDependencies": {
