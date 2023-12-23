@@ -1,13 +1,13 @@
 {
   "name": "@spencejs/spence-pg-repos",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "main": "./src/index.js",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@spencejs/spence-events": "^0.10.1",
+    "@spencejs/spence-events": "^0.10.2",
     "fastify-plugin": "4.5.1",
     "http-errors": "^2.0.0",
     "knex": "sloops77/knex#c3dc4f84d6c741b79f0564c1958e251adfdee2a0",
@@ -18,7 +18,7 @@
     "uuid": "~9.0.0"
   },
   "devDependencies": {
-    "@spencejs/spence-config": "^0.10.1",
+    "@spencejs/spence-config": "^0.10.2",
     "@types/lodash": "~4.14.149",
     "@types/node": "~20.10.5",
     "await-sleep": "~0.0.1",
