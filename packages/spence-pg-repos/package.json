@@ -13,7 +13,7 @@
     "knex": "sloops77/knex#c3dc4f84d6c741b79f0564c1958e251adfdee2a0",
     "lodash": "~4.17.15",
     "p-settle": "^4.0.1",
-    "pg": "8.11.3",
+    "pg": "8.11.5",
     "pg-types": "~4.0.0",
     "uuid": "~9.0.0"
   },
