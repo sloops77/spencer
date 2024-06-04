@@ -20,7 +20,7 @@
     "@spencejs/spence-config": "^0.10.2",
     "@spencejs/spence-mongo-repos": "^0.10.2",
     "@spencejs/spence-pg-repos": "^0.10.2",
-    "@types/lodash": "~4.14.149",
+    "@types/lodash": "~4.17.4",
     "@types/node": "~20.11.30",
     "await-sleep": "~0.0.1",
     "eslint": "~8.57.0",
