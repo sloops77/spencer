@@ -1,12 +1,12 @@
 version: 2.1
 orbs:
-  codecov: codecov/codecov@1.0.4
+  codecov: codecov/codecov@4.1.0
 jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: cimg/node:16.20
-      - image: cimg/postgres:14.6
+      - image: cimg/node:20.12.2
+      - image: cimg/postgres:15.6
         environment:
           POSTGRES_USER: postgres
           POSTGRES_DB: spence_test
