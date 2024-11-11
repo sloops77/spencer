@@ -28,7 +28,7 @@
     "jest": "29.7.0",
     "jest-junit": "~16.0.0",
     "mongodb": "~6.3.0",
-    "pino-pretty": "~11.3.0",
+    "pino-pretty": "~13.0.0",
     "prettier": "~3.3.0",
     "shortid": "^2.2.15",
     "typescript": "~5.6.2",
