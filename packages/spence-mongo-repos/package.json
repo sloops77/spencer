@@ -18,7 +18,7 @@
     "@types/http-errors": "^2.0.1",
     "@types/lodash": "~4.17.4",
     "@types/mongodb": "~4.0.7",
-    "@types/node": "~22.9.0",
+    "@types/node": "~22.10.0",
     "await-sleep": "~0.0.1",
     "eslint": "~8.57.0",
     "eslint-config-airbnb-base": "~15.0.0",
