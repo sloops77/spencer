@@ -23,7 +23,7 @@
     "mongodb": "~6.17.0",
     "pino-pretty": "~13.1.1",
     "prettier": "~3.6.0",
-    "typescript": "~5.8.2"
+    "typescript": "~5.9.2"
   },
   "scripts": {
     "lint": "eslint src test --fix",
