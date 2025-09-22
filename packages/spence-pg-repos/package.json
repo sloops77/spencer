@@ -15,7 +15,7 @@
     "p-settle": "^4.0.1",
     "pg": "8.16.3",
     "pg-types": "~4.1.0",
-    "uuid": "~11.1.0"
+    "uuid": "~13.0.0"
   },
   "devDependencies": {
     "@spencejs/spence-config": "^0.10.2",
