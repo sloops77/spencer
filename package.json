@@ -6,7 +6,7 @@
   "workspaces": ["packages/*"],
   "devDependencies": {
     "jest-junit": "~16.0.0",
-    "lerna": "~8.2.0"
+    "lerna": "~9.0.0"
   },
   "scripts": {
     "bootstrap": "yarn install --frozen-lockfile",
