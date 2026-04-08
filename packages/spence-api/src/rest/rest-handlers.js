@@ -56,8 +56,8 @@ const update = {
   method: "PATCH",
   path: "/:id",
   schema({ schemas: { updateSchema, replySchema }, schemaBuilders: { updateOne } }) {
-    if (updateSchema == null && replySchema == null) {
-      throw new RestConfigurationError(`Must specify a update and reply schema when an update route is specified`);
+    if (updateSchema == null || replySchema == null) {
+      throw new RestConfigurationError(`Must specify an update and reply schema when an update route is specified`);
     }
 
     return updateOne(updateSchema, replySchema);

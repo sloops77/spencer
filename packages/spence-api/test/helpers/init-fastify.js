@@ -8,11 +8,12 @@ const { fastifySchemaBuilders } = require("../../src/schema-builders");
 
 async function initFastify(routes, dbPlugin, repoPreHandler, defaultHeaders = {}) {
   const app = fastify({
-    logger: log,
+    loggerInstance: log,
     trustProxy: true,
-    // @ts-ignore
-    caseSensitive: false,
-    ignoreTrailingSlash: true,
+    routerOptions: {
+      caseSensitive: false,
+      ignoreTrailingSlash: true,
+    },
   });
 
   app.decorate("config", env);
@@ -27,24 +28,22 @@ async function initFastify(routes, dbPlugin, repoPreHandler, defaultHeaders = {}
   });
 
   app.setErrorHandler((error, req, reply) => {
-    const { res } = reply;
-
     if (error.validation) {
-      res.log.info({ req: reply.request.raw, body: req.body, res, err: error }, error && error.message);
+      req.log.info({ req, body: req.body, res: reply, err: error }, error && error.message);
       reply.status(422);
     } else {
-      res.log.error({ req: reply.request.raw, body: req.body, res, err: error }, error && error.message);
+      req.log.error({ req, body: req.body, res: reply, err: error }, error && error.message);
     }
 
-    if (res.statusCode >= 500) {
+    if (reply.statusCode >= 500) {
       return reply.send(new Error("Something went wrong"));
     }
 
     return reply.send({
       message: error ? error.message : "",
       errorCode: error.errorCode,
-      statusCode: res.statusCode,
-      statusText: statusCodes[`${res.statusCode}`],
+      statusCode: reply.statusCode,
+      statusText: statusCodes[`${reply.statusCode}`],
       data: error.data,
     });
   });

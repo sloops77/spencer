@@ -4,23 +4,62 @@ const { mongodbPlugin, reposPlugin, mongoDb, clearTableRegistry, ready } = requi
 const shortId = require("shortid");
 const initFastify = require("./helpers/init-fastify");
 const { OBJECT_ID_FORMAT, ISO_DATETIME_FORMAT } = require("./helpers/regexes");
-const { newSimpleSchema, simpleSchema } = require("./helpers/pg-rest-controller");
+const { newSimpleSchema, putSimpleSchema, patchSimpleSchema } = require("./helpers/pg-rest-controller");
 const { schemaBuildingDecorator } = require("../src/schema-builders");
 
+function sortExamples(examples) {
+  return _.orderBy(["createdAt", "_id"], ["desc", "asc"], examples);
+}
+
+const simpleSchema = {
+  $schema: "http://json-schema.org/draft-07/schema#",
+  $id: "mongo-simple",
+  type: "object",
+  properties: {
+    _id: {
+      type: "string",
+    },
+    createdAt: {
+      type: "string",
+      format: "date-time",
+    },
+    updatedAt: {
+      type: "string",
+      format: "date-time",
+    },
+    aVal: {
+      type: "string",
+    },
+    manyVals: {
+      type: "array",
+      items: {
+        type: "string",
+      },
+    },
+  },
+  required: ["_id", "createdAt", "updatedAt", "aVal"],
+};
+
 function simpleMongoController(fastify, options, next) {
-  fastify.get("/:id", { schemas: fastify.schemaBuilders.findOne(simpleSchema) }, async (req) =>
+  fastify.addSchema(newSimpleSchema);
+  fastify.addSchema(simpleSchema);
+
+  fastify.get("/:id", { schema: fastify.schemaBuilders.findOne(simpleSchema) }, async (req) =>
     req.repos.examples.findById(new ObjectId(req.params.id)),
   );
-  fastify.get("/", { schemas: fastify.schemaBuilders.findMany(simpleSchema) }, async (req) =>
-    req.repos.examples.find({}),
+  fastify.get("/", { schema: fastify.schemaBuilders.findMany(simpleSchema) }, async (req) =>
+    req.repos.examples.find(req.query),
   );
-  fastify.post("/", { schemas: fastify.schemaBuilders.insertOne(newSimpleSchema, simpleSchema) }, async (req) =>
+  fastify.post("/", { schema: fastify.schemaBuilders.insertOne(newSimpleSchema, simpleSchema) }, async (req) =>
     req.repos.examples.insert(req.body),
   );
-  fastify.put("/:id", { schemas: fastify.schemaBuilders.updateOne(newSimpleSchema, simpleSchema) }, async (req) =>
+  fastify.put("/:id", { schema: fastify.schemaBuilders.updateOne(putSimpleSchema, simpleSchema) }, async (req) =>
     req.repos.examples.update(new ObjectId(req.params.id), req.body),
   );
-  fastify.delete("/:id", { schemas: fastify.schemaBuilders.deleteOne() }, async (req, reply) => {
+  fastify.patch("/:id", { schema: fastify.schemaBuilders.updateOne(patchSimpleSchema, simpleSchema) }, async (req) =>
+    req.repos.examples.update(new ObjectId(req.params.id), req.body),
+  );
+  fastify.delete("/:id", { schema: fastify.schemaBuilders.deleteOne() }, async (req, reply) => {
     await req.repos.examples.del(new ObjectId(req.params.id));
     reply.code(204).send();
   });
@@ -29,9 +68,9 @@ function simpleMongoController(fastify, options, next) {
   fastify.post(
     "/:id/action",
     {
-      schemas: {
+      schema: {
         params: fastify.schemaBuilders.idParam,
-        response: fastify.schemaBuilders.responses(fastify.schemaBuilders.idParam),
+        response: fastify.schemaBuilders.responses({ 200: fastify.schemaBuilders.idParam }),
       },
     },
     async (req) => req.repos.simple.findById(req.params.id),
@@ -83,6 +122,22 @@ describe("schemaBuilder decorated controller", () => {
     });
   });
 
+  it("rejects invalid create payloads", async () => {
+    const response = await fastify.injectJson({
+      method: "POST",
+      url: "/examples",
+      payload: {},
+    });
+
+    expect(response.statusCode).toEqual(422);
+    expect(response.json).toEqual(
+      expect.objectContaining({
+        statusCode: 422,
+        statusText: "Unprocessable Entity",
+      }),
+    );
+  });
+
   it("find simples", async () => {
     const createResponse = await fastify.injectJson({
       method: "POST",
@@ -127,7 +182,49 @@ describe("schemaBuilder decorated controller", () => {
     );
 
     const findResponse = await fastify.injectJson({ method: "GET", url: `/examples` });
-    expect(findResponse.json).toEqual(_.sortBy((example) => -new Date(example.createdAt).getTime(), createResponses));
+    expect(findResponse.json).toEqual(sortExamples(createResponses));
+  });
+
+  it("find all simples with limit and offset", async () => {
+    const createResponses = _.map(
+      "json",
+      await Promise.all([
+        fastify.injectJson({
+          method: "POST",
+          url: "/examples",
+          payload: {
+            aVal: "test",
+          },
+        }),
+        fastify.injectJson({
+          method: "POST",
+          url: "/examples",
+          payload: {
+            aVal: "toast",
+          },
+        }),
+      ]),
+    );
+
+    const sortedResponses = sortExamples(createResponses);
+    const findResponse = await fastify.injectJson({ method: "GET", url: `/examples?limit=1&offset=1` });
+
+    expect(findResponse.json).toEqual([sortedResponses[1]]);
+  });
+
+  it("rejects non-integer limit and offset", async () => {
+    const response = await fastify.injectJson({
+      method: "GET",
+      url: `/examples?limit=1.5&offset=-1`,
+    });
+
+    expect(response.statusCode).toEqual(422);
+    expect(response.json).toEqual(
+      expect.objectContaining({
+        statusCode: 422,
+        statusText: "Unprocessable Entity",
+      }),
+    );
   });
 
   it("update simples", async () => {
@@ -153,6 +250,55 @@ describe("schemaBuilder decorated controller", () => {
       aVal: "not-test",
       updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
     });
+  });
+
+  it("patch simples", async () => {
+    const createResponses = _.map(
+      "json",
+      await Promise.all([
+        fastify.injectJson({
+          method: "POST",
+          url: "/examples",
+          payload: {
+            aVal: "test",
+          },
+        }),
+      ]),
+    );
+    const updateResponse = await fastify.injectJson({
+      method: "PATCH",
+      url: `/examples/${createResponses[0]._id}`,
+      payload: { aVal: "not-test" },
+    });
+    expect(updateResponse.json).toEqual({
+      ...createResponses[0],
+      aVal: "not-test",
+      updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
+    });
+  });
+
+  it("rejects invalid patch payloads", async () => {
+    const createResponse = await fastify.injectJson({
+      method: "POST",
+      url: "/examples",
+      payload: {
+        aVal: "test",
+      },
+    });
+
+    const response = await fastify.injectJson({
+      method: "PATCH",
+      url: `/examples/${createResponse.json._id}`,
+      payload: {},
+    });
+
+    expect(response.statusCode).toEqual(422);
+    expect(response.json).toEqual(
+      expect.objectContaining({
+        statusCode: 422,
+        statusText: "Unprocessable Entity",
+      }),
+    );
   });
 
   it("del simples", async () => {

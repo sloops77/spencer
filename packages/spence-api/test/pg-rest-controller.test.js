@@ -12,6 +12,10 @@ const initFastify = require("./helpers/init-fastify");
 const { NUMERIC_FORMAT, ISO_DATETIME_FORMAT } = require("./helpers/regexes");
 const { simpleController } = require("./helpers/pg-rest-controller");
 
+function sortExamples(examples) {
+  return _.orderBy(["createdAt", "id"], ["desc", "asc"], examples);
+}
+
 describe("rest controller", () => {
   let schemaName = null;
   let fastify = null;
@@ -59,6 +63,22 @@ describe("rest controller", () => {
     });
   });
 
+  it("rejects invalid create payloads", async () => {
+    const response = await fastify.injectJson({
+      method: "POST",
+      url: "/examples",
+      payload: {},
+    });
+
+    expect(response.statusCode).toEqual(422);
+    expect(response.json).toEqual(
+      expect.objectContaining({
+        statusCode: 422,
+        statusText: "Unprocessable Entity",
+      }),
+    );
+  });
+
   it("find simples", async () => {
     const createResponse = await fastify.injectJson({
       method: "POST",
@@ -101,10 +121,51 @@ describe("rest controller", () => {
       ]),
     );
     const findResponse = await fastify.injectJson({ method: "GET", url: `/examples` });
-    expect(findResponse.json).toEqual([createResponses[1], createResponses[0]]);
+    expect(findResponse.json).toEqual(sortExamples(createResponses));
   });
 
-  it("update simples", async () => {
+  it("find all simples with limit and offset", async () => {
+    const createResponses = _.map(
+      "json",
+      await Promise.all([
+        fastify.injectJson({
+          method: "POST",
+          url: "/examples",
+          payload: {
+            aVal: "test",
+          },
+        }),
+        fastify.injectJson({
+          method: "POST",
+          url: "/examples",
+          payload: {
+            aVal: "toast",
+          },
+        }),
+      ]),
+    );
+
+    const sortedResponses = sortExamples(createResponses);
+    const findResponse = await fastify.injectJson({ method: "GET", url: `/examples?limit=1&offset=1` });
+    expect(findResponse.json).toEqual([sortedResponses[1]]);
+  });
+
+  it("rejects non-integer limit and offset", async () => {
+    const response = await fastify.injectJson({
+      method: "GET",
+      url: `/examples?limit=1.5&offset=-1`,
+    });
+
+    expect(response.statusCode).toEqual(422);
+    expect(response.json).toEqual(
+      expect.objectContaining({
+        statusCode: 422,
+        statusText: "Unprocessable Entity",
+      }),
+    );
+  });
+
+  it("patch simples", async () => {
     const createResponses = _.map(
       "json",
       await Promise.all([
@@ -123,6 +184,30 @@ describe("rest controller", () => {
       payload: { aVal: "not-test" },
     });
     expect(updateResponse.json).toEqual({ ...createResponses[0], aVal: "not-test" });
+  });
+
+  it("rejects invalid patch payloads", async () => {
+    const createResponse = await fastify.injectJson({
+      method: "POST",
+      url: "/examples",
+      payload: {
+        aVal: "test",
+      },
+    });
+
+    const response = await fastify.injectJson({
+      method: "PATCH",
+      url: `/examples/${createResponse.json.id}`,
+      payload: {},
+    });
+
+    expect(response.statusCode).toEqual(422);
+    expect(response.json).toEqual(
+      expect.objectContaining({
+        statusCode: 422,
+        statusText: "Unprocessable Entity",
+      }),
+    );
   });
 
   it("del simples", async () => {
