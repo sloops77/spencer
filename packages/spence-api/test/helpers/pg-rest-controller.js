@@ -31,7 +31,7 @@ const simpleSchema = {
 const pgRestController = initController(
   {
     tag: "examples",
-    schemas: { create: newSimpleSchema, reply: simpleSchema },
+    schemas: { create: newSimpleSchema, update: newSimpleSchema, reply: simpleSchema },
     tableName: "examples",
   },
   (router, controllerOptions, next) => {

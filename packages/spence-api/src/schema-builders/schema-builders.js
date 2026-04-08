@@ -17,7 +17,13 @@ function init(tag) {
 
   function findMany(result, overrides = {}) {
     return _.defaultsDeep(overrides, {
-      querystring: { limit: { type: "number" }, offset: { type: "number" } },
+      querystring: {
+        type: "object",
+        properties: {
+          limit: { type: "number" },
+          offset: { type: "number" },
+        },
+      },
       response: responses({ 200: { type: "array", items: result } }),
     });
   }

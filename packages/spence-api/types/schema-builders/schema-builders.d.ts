@@ -8,7 +8,7 @@ declare interface SchemaBuilders {
 
     findOne<U extends Schema>(result: U): { params: IdSchema, response: ({ 200: U } & ErrorResponses), tags?: string[] }
 
-    findMany<U extends Schema, V>(result: U, overrides: V): V & { querystring: { limit: { type: "number" }, offset: { type: "number" } }, response: ({ 200: { type: "array", items: U } } & ErrorResponses), tags?: string[] }
+    findMany<U extends Schema, V>(result: U, overrides: V): V & { querystring: { type: "object", properties: { limit: { type: "number" }, offset: { type: "number" } } }, response: ({ 200: { type: "array", items: U } } & ErrorResponses), tags?: string[] }
 
     updateOne<T extends Schema, U extends Schema>(body: T, result: T | U): { params: IdSchema, body: T, response: ({ 200: T | U } & ErrorResponses), tags?: string[] }
 
