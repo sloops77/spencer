@@ -13,15 +13,7 @@ const { NUMERIC_FORMAT, ISO_DATETIME_FORMAT } = require("./helpers/regexes");
 const { simpleController } = require("./helpers/pg-rest-controller");
 
 function sortExamples(examples) {
-  return [...examples].sort((left, right) => {
-    const createdAtDiff = new Date(right.createdAt).getTime() - new Date(left.createdAt).getTime();
-
-    if (createdAtDiff !== 0) {
-      return createdAtDiff;
-    }
-
-    return left.id.localeCompare(right.id);
-  });
+  return _.orderBy(["createdAt", "id"], ["desc", "asc"], examples);
 }
 
 describe("rest controller", () => {

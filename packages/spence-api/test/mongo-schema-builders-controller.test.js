@@ -8,15 +8,7 @@ const { newSimpleSchema, putSimpleSchema, patchSimpleSchema } = require("./helpe
 const { schemaBuildingDecorator } = require("../src/schema-builders");
 
 function sortExamples(examples) {
-  return [...examples].sort((left, right) => {
-    const createdAtDiff = new Date(right.createdAt).getTime() - new Date(left.createdAt).getTime();
-
-    if (createdAtDiff !== 0) {
-      return createdAtDiff;
-    }
-
-    return left._id.localeCompare(right._id);
-  });
+  return _.orderBy(["createdAt", "_id"], ["desc", "asc"], examples);
 }
 
 const simpleSchema = {
