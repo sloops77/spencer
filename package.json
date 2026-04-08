@@ -3,6 +3,9 @@
   "version": "0.1.4",
   "private": true,
   "dependencies": {},
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "workspaces": ["packages/*"],
   "devDependencies": {
     "jest-junit": "~16.0.0",
