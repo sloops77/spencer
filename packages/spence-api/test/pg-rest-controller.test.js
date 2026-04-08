@@ -20,7 +20,7 @@ function sortExamples(examples) {
       return createdAtDiff;
     }
 
-    return Number(left.id) - Number(right.id);
+    return left.id.localeCompare(right.id);
   });
 }
 

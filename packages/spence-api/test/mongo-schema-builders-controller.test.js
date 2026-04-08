@@ -7,6 +7,18 @@ const { OBJECT_ID_FORMAT, ISO_DATETIME_FORMAT } = require("./helpers/regexes");
 const { newSimpleSchema, putSimpleSchema, patchSimpleSchema } = require("./helpers/pg-rest-controller");
 const { schemaBuildingDecorator } = require("../src/schema-builders");
 
+function sortExamples(examples) {
+  return [...examples].sort((left, right) => {
+    const createdAtDiff = new Date(right.createdAt).getTime() - new Date(left.createdAt).getTime();
+
+    if (createdAtDiff !== 0) {
+      return createdAtDiff;
+    }
+
+    return left._id.localeCompare(right._id);
+  });
+}
+
 const simpleSchema = {
   $schema: "http://json-schema.org/draft-07/schema#",
   $id: "mongo-simple",
@@ -178,7 +190,7 @@ describe("schemaBuilder decorated controller", () => {
     );
 
     const findResponse = await fastify.injectJson({ method: "GET", url: `/examples` });
-    expect(findResponse.json).toEqual(_.sortBy((example) => -new Date(example.createdAt).getTime(), createResponses));
+    expect(findResponse.json).toEqual(sortExamples(createResponses));
   });
 
   it("find all simples with limit and offset", async () => {
@@ -202,7 +214,7 @@ describe("schemaBuilder decorated controller", () => {
       ]),
     );
 
-    const sortedResponses = _.sortBy((example) => -new Date(example.createdAt).getTime(), createResponses);
+    const sortedResponses = sortExamples(createResponses);
     const findResponse = await fastify.injectJson({ method: "GET", url: `/examples?limit=1&offset=1` });
 
     expect(findResponse.json).toEqual([sortedResponses[1]]);
