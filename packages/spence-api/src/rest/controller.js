@@ -46,7 +46,11 @@ function init(
       router.route(instantiateRoute(handlerSpec, spenceControllerOptions));
     };
 
-    extend(router, spenceControllerOptions, next);
+    try {
+      extend(router, spenceControllerOptions, next);
+    } catch (error) {
+      next(error);
+    }
   };
 }
 

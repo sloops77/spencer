@@ -3,6 +3,8 @@ const _ = require("lodash/fp");
 
 const { reposPlugin } = require("@spencejs/spence-pg-repos");
 const RestConfigurationError = require("../src/rest/RestConfigurationError");
+const initController = require("../src/rest/controller");
+const fastifyRest = require("../src/rest/plugin");
 const { update } = require("../src/rest/rest-handlers");
 const { simpleController } = require("./helpers/pg-rest-controller");
 
@@ -27,12 +29,23 @@ describe("controller plugin errors", () => {
   });
 
   it("should error if update route is defined without an update schema", async () => {
-    expect(() =>
-      update.schema({
-        schemas: { updateSchema: null, replySchema: null },
-        schemaBuilders: { updateOne: _.noop },
-      }),
-    ).toThrow(
+    const brokenUpdateController = initController(
+      {
+        tag: "examples",
+        schemas: { create: null, update: null, reply: null },
+        tableName: "examples",
+      },
+      (router, controllerOptions, next) => {
+        router.restRoutes(update);
+        next();
+      },
+    );
+    const app = fastifyFactory();
+
+    app.register(fastifyRest);
+    app.register(brokenUpdateController, { prefix: "/examples" });
+
+    await expect(app.ready()).rejects.toEqual(
       new RestConfigurationError("Must specify an update and reply schema when an update route is specified"),
     );
   });
