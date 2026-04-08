@@ -10,12 +10,12 @@ if (!preset) {
 const presetMap = {
   lower: {
     fastify: "^4",
-    mongodb: "^5",
+    mongodb: "^6",
     pg: "^8",
   },
   higher: {
     fastify: "^5",
-    mongodb: "^6",
+    mongodb: "^7",
     pg: "^8",
   },
 };

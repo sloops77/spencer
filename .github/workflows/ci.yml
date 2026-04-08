@@ -52,7 +52,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
       mongo:
-        image: mongo:5
+        image: mongo:7
         ports:
           - 27017:27017
         options: >-
@@ -81,14 +81,7 @@ jobs:
       - name: Test
         run: |
           mkdir -p reports/junit
-          JEST_JUNIT_OUTPUT_NAME="./reports/junit/test-results.xml" \
-          ./node_modules/.bin/jest \
-            --config ./jest.config.js \
-            --runInBand \
-            --coverage \
-            --reporters=default \
-            --reporters=jest-junit \
-            --watchman=false
+          yarn test:ci --watchman=false
 
       - name: Upload coverage artifacts
         if: always()
