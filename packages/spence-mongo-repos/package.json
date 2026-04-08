@@ -20,7 +20,6 @@
     "@spencejs/spence-config": "^0.10.2",
     "@types/http-errors": "^2.0.1",
     "@types/lodash": "~4.17.4",
-    "@types/mongodb": "~4.0.7",
     "@types/node": "~25.3.1",
     "await-sleep": "~0.0.1",
     "eslint": "~8.57.0",

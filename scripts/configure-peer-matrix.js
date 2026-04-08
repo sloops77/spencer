@@ -9,14 +9,14 @@ if (!preset) {
 
 const presetMap = {
   lower: {
-    fastify: "^4",
-    mongodb: "^6",
-    pg: "^8",
+    fastify: "4.29.1",
+    mongodb: "6.19.0",
+    pg: "8.19.0",
   },
   higher: {
-    fastify: "^5",
-    mongodb: "^7",
-    pg: "^8",
+    fastify: "5.6.0",
+    mongodb: "7.0.0",
+    pg: "8.19.0",
   },
 };
 

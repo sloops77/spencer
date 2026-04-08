@@ -32,7 +32,7 @@ const expectPersistedMongoInstance = ({ allInstances, simpleInstance }) => {
     updatedAt: new Date(simpleInstance.updatedAt),
   });
   // Compare ObjectIds by value so the assertion survives driver internals across majors.
-  expect(allInstances[0]._id.toString()).toBe(simpleInstance._id);
+  expect(allInstances[0]._id.toHexString()).toBe(simpleInstance._id);
 };
 
 describe("test mongo factories with dynamic repos", () => {
