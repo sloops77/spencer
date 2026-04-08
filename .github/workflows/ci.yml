@@ -27,6 +27,9 @@ jobs:
   test-matrix:
     name: test-${{ matrix.peer_preset }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     strategy:
       fail-fast: false
       matrix:
@@ -70,7 +73,7 @@ jobs:
         run: node scripts/configure-peer-matrix.js "${{ matrix.peer_preset }}"
 
       - name: Install dependencies
-        run: yarn install --no-lockfile
+        run: yarn install
 
       - name: Prepare test schema
         run: yarn db:prepare:test
@@ -93,6 +96,14 @@ jobs:
         with:
           name: coverage-${{ matrix.peer_preset }}
           path: reports/coverage
+
+      - name: Upload coverage to Codecov
+        if: always()
+        uses: codecov/codecov-action@v5
+        with:
+          files: reports/coverage/lcov.info
+          use_oidc: true
+          fail_ci_if_error: false
 
       - name: Upload junit artifacts
         if: always()

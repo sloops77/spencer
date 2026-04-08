@@ -29,6 +29,7 @@ if (selectedPreset == null) {
 const updates = [
   ["packages/spence-api/package.json", "devDependencies", "fastify", selectedPreset.fastify],
   ["packages/spence-api/package.json", "devDependencies", "mongodb", selectedPreset.mongodb],
+  ["packages/spence-factories/package.json", "devDependencies", "mongodb", selectedPreset.mongodb],
   ["packages/spence-mongo-repos/package.json", "devDependencies", "mongodb", selectedPreset.mongodb],
   ["packages/spence-pg-repos/package.json", "devDependencies", "pg", selectedPreset.pg],
 ];
