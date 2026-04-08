@@ -12,6 +12,18 @@ const initFastify = require("./helpers/init-fastify");
 const { NUMERIC_FORMAT, ISO_DATETIME_FORMAT } = require("./helpers/regexes");
 const { simpleController } = require("./helpers/pg-rest-controller");
 
+function sortExamples(examples) {
+  return [...examples].sort((left, right) => {
+    const createdAtDiff = new Date(right.createdAt).getTime() - new Date(left.createdAt).getTime();
+
+    if (createdAtDiff !== 0) {
+      return createdAtDiff;
+    }
+
+    return Number(left.id) - Number(right.id);
+  });
+}
+
 describe("rest controller", () => {
   let schemaName = null;
   let fastify = null;
@@ -117,7 +129,7 @@ describe("rest controller", () => {
       ]),
     );
     const findResponse = await fastify.injectJson({ method: "GET", url: `/examples` });
-    expect(findResponse.json).toEqual([createResponses[1], createResponses[0]]);
+    expect(findResponse.json).toEqual(sortExamples(createResponses));
   });
 
   it("find all simples with limit and offset", async () => {
@@ -141,8 +153,24 @@ describe("rest controller", () => {
       ]),
     );
 
+    const sortedResponses = sortExamples(createResponses);
     const findResponse = await fastify.injectJson({ method: "GET", url: `/examples?limit=1&offset=1` });
-    expect(findResponse.json).toEqual([createResponses[0]]);
+    expect(findResponse.json).toEqual([sortedResponses[1]]);
+  });
+
+  it("rejects non-integer limit and offset", async () => {
+    const response = await fastify.injectJson({
+      method: "GET",
+      url: `/examples?limit=1.5&offset=-1`,
+    });
+
+    expect(response.statusCode).toEqual(422);
+    expect(response.json).toEqual(
+      expect.objectContaining({
+        statusCode: 422,
+        statusText: "Unprocessable Entity",
+      }),
+    );
   });
 
   it("patch simples", async () => {

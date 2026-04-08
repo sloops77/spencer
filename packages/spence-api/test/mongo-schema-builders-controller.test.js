@@ -208,6 +208,21 @@ describe("schemaBuilder decorated controller", () => {
     expect(findResponse.json).toEqual([sortedResponses[1]]);
   });
 
+  it("rejects non-integer limit and offset", async () => {
+    const response = await fastify.injectJson({
+      method: "GET",
+      url: `/examples?limit=1.5&offset=-1`,
+    });
+
+    expect(response.statusCode).toEqual(422);
+    expect(response.json).toEqual(
+      expect.objectContaining({
+        statusCode: 422,
+        statusText: "Unprocessable Entity",
+      }),
+    );
+  });
+
   it("update simples", async () => {
     const createResponses = _.map(
       "json",

@@ -20,8 +20,8 @@ function init(tag) {
       querystring: {
         type: "object",
         properties: {
-          limit: { type: "number" },
-          offset: { type: "number" },
+          limit: { type: "integer", minimum: 0 },
+          offset: { type: "integer", minimum: 0 },
         },
       },
       response: responses({ 200: { type: "array", items: result } }),
