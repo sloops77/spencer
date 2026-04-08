@@ -38,7 +38,7 @@
   },
   "peerDependencies": {
     "knex": "sloops77/knex#c3dc4f84d6c741b79f0564c1958e251adfdee2a0",
-    "pg": "^7.0.0 || ^8.0.0"
+    "pg": "^8.0.0"
   },
   "scripts": {
     "lint": "eslint src test --fix",

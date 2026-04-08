@@ -11,7 +11,7 @@ const presetMap = {
   lower: {
     fastify: "^4",
     mongodb: "^5",
-    pg: "^7",
+    pg: "^8",
   },
   higher: {
     fastify: "^5",
