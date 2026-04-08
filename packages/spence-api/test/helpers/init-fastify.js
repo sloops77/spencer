@@ -55,12 +55,13 @@ async function initFastify(routes, dbPlugin, repoPreHandler, defaultHeaders = {}
   _.forEach((route) => app.register(routes[route], { prefix: route }), _.keys(routes));
 
   app.injectJson = async function injectJson({ method, url, userId, payload, headers }) {
+    const jsonHeaders = payload == null ? {} : { "content-type": "application/json" };
     const response = await app.inject({
       method,
       url,
       payload,
       headers: {
-        "content-type": "application/json",
+        ...jsonHeaders,
         Accept: "application/json",
         "x-user-id": userId || "",
         ...defaultHeaders,

@@ -1,6 +1,5 @@
 const _ = require("lodash/fp");
 const { v1: uuidv1 } = require("uuid");
-const { ObjectId } = require("mongodb");
 const { log, env } = require("@spencejs/spence-config");
 const {
   knexFactory,
@@ -24,6 +23,17 @@ const {
   complexRepoFactory,
 } = require("../../spence-pg-repos/test/helpers/test-tables");
 const { UUID_FORMAT, ISO_DATETIME_FORMAT, OBJECT_ID_FORMAT } = require("../../spence-api/test/helpers/regexes");
+
+const expectPersistedMongoInstance = ({ allInstances, simpleInstance }) => {
+  expect(allInstances).toHaveLength(1);
+  expect(allInstances[0]).toMatchObject({
+    ..._.omit(["_id"], simpleInstance),
+    createdAt: new Date(simpleInstance.createdAt),
+    updatedAt: new Date(simpleInstance.updatedAt),
+  });
+  // Compare ObjectIds by value so the assertion survives driver internals across majors.
+  expect(allInstances[0]._id.toHexString()).toBe(simpleInstance._id);
+};
 
 describe("test mongo factories with dynamic repos", () => {
   let simpleCollection = null;
@@ -75,15 +85,7 @@ describe("test mongo factories with dynamic repos", () => {
       updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
     });
     const allInstances = await simpleCollection.find({});
-    expect(allInstances).toEqual([
-      {
-        ...simpleInstance,
-        // eslint-disable-next-line no-underscore-dangle
-        _id: new ObjectId(simpleInstance._id),
-        createdAt: new Date(simpleInstance.createdAt),
-        updatedAt: new Date(simpleInstance.updatedAt),
-      },
-    ]);
+    expectPersistedMongoInstance({ allInstances, simpleInstance });
   });
 });
 
@@ -134,15 +136,7 @@ describe("test mongo factories with static repos", () => {
       updatedAt: expect.stringMatching(ISO_DATETIME_FORMAT),
     });
     const allInstances = await simpleCollection.find({});
-    expect(allInstances).toEqual([
-      {
-        ...simpleInstance,
-        // eslint-disable-next-line no-underscore-dangle
-        _id: new ObjectId(simpleInstance._id),
-        createdAt: new Date(simpleInstance.createdAt),
-        updatedAt: new Date(simpleInstance.updatedAt),
-      },
-    ]);
+    expectPersistedMongoInstance({ allInstances, simpleInstance });
   });
 });
 
