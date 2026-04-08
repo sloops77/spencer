@@ -6,6 +6,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "dependencies": {
     "@spencejs/spence-api": "^0.10.2",
     "@spencejs/spence-events": "^0.10.2",

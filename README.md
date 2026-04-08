@@ -4,6 +4,9 @@ Opinionated API Framework For Fastify and Postgres or MongoDB for FAST coding an
 [![CircleCI](https://circleci.com/gh/sloops77/spencer.svg?style=svg)](https://circleci.com/gh/sloops77/spencer)
 [![codecov](https://codecov.io/gh/sloops77/spencer/branch/master/graph/badge.svg)](https://codecov.io/gh/sloops77/spencer)
 
+## Requirements
+- Node.js 22 or newer
+
 
 ## Getting started:
 - creating a table
@@ -69,6 +72,5 @@ What is familiar but of no benefit:
 ## Testing
 - jest only
 - factories & testing
-
 
 
