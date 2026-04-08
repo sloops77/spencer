@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@spencejs/spence-api": "^0.10.2",
-    "@spencejs/spence-events": "^0.10.2",
-    "fastify": "~4.13.0"
+    "@spencejs/spence-events": "^0.10.2"
+  },
+  "peerDependencies": {
+    "fastify": "^4.0.0 || ^5.0.0"
   },
   "scripts": {
     "lint": "eslint src test --fix",

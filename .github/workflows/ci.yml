@@ -1,0 +1,102 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Lint
+        run: yarn lint:ci
+
+  test-matrix:
+    name: test-${{ matrix.peer_preset }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        peer_preset:
+          - lower
+          - higher
+
+    services:
+      postgres:
+        image: postgres:15.6
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: spence_test
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d spence_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      mongo:
+        image: mongo:5
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --quiet --eval 'db.adminCommand({ ping: 1 })'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: yarn
+
+      - name: Configure peer preset
+        run: node scripts/configure-peer-matrix.js "${{ matrix.peer_preset }}"
+
+      - name: Install dependencies
+        run: yarn install --no-lockfile
+
+      - name: Prepare test schema
+        run: yarn db:prepare:test
+
+      - name: Test
+        run: |
+          mkdir -p reports/junit
+          JEST_JUNIT_OUTPUT_NAME="./reports/junit/test-results.xml" \
+          ./node_modules/.bin/jest \
+            --config ./jest.config.js \
+            --runInBand \
+            --coverage \
+            --reporters=default \
+            --reporters=jest-junit \
+            --watchman=false
+
+      - name: Upload coverage artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ matrix.peer_preset }}
+          path: reports/coverage
+
+      - name: Upload junit artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: junit-${{ matrix.peer_preset }}
+          path: reports/junit
