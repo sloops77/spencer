@@ -4,7 +4,7 @@
   "main": "src/factory.js",
   "license": "MIT",
   "dependencies": {
-    "lodash": "~4.17.15",
+    "lodash": "~4.18.1",
     "uuid": "~11.1.0"
   },
   "devDependencies": {
