@@ -29,10 +29,10 @@ async function initFastify(routes, dbPlugin, repoPreHandler, defaultHeaders = {}
 
   app.setErrorHandler((error, req, reply) => {
     if (error.validation) {
-      req.log.info({ req: reply.request.raw, body: req.body, res: reply.raw, err: error }, error && error.message);
+      req.log.info({ req, body: req.body, res: reply, err: error }, error && error.message);
       reply.status(422);
     } else {
-      req.log.error({ req: reply.request.raw, body: req.body, res: reply.raw, err: error }, error && error.message);
+      req.log.error({ req, body: req.body, res: reply, err: error }, error && error.message);
     }
 
     if (reply.statusCode >= 500) {

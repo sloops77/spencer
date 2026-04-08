@@ -4,7 +4,7 @@ const { mongodbPlugin, reposPlugin, mongoDb, clearTableRegistry, ready } = requi
 const shortId = require("shortid");
 const initFastify = require("./helpers/init-fastify");
 const { OBJECT_ID_FORMAT, ISO_DATETIME_FORMAT } = require("./helpers/regexes");
-const { newSimpleSchema } = require("./helpers/pg-rest-controller");
+const { newSimpleSchema, putSimpleSchema, patchSimpleSchema } = require("./helpers/pg-rest-controller");
 const { schemaBuildingDecorator } = require("../src/schema-builders");
 
 const simpleSchema = {
@@ -49,10 +49,10 @@ function simpleMongoController(fastify, options, next) {
   fastify.post("/", { schema: fastify.schemaBuilders.insertOne(newSimpleSchema, simpleSchema) }, async (req) =>
     req.repos.examples.insert(req.body),
   );
-  fastify.put("/:id", { schema: fastify.schemaBuilders.updateOne(newSimpleSchema, simpleSchema) }, async (req) =>
+  fastify.put("/:id", { schema: fastify.schemaBuilders.updateOne(putSimpleSchema, simpleSchema) }, async (req) =>
     req.repos.examples.update(new ObjectId(req.params.id), req.body),
   );
-  fastify.patch("/:id", { schema: fastify.schemaBuilders.updateOne(newSimpleSchema, simpleSchema) }, async (req) =>
+  fastify.patch("/:id", { schema: fastify.schemaBuilders.updateOne(patchSimpleSchema, simpleSchema) }, async (req) =>
     req.repos.examples.update(new ObjectId(req.params.id), req.body),
   );
   fastify.delete("/:id", { schema: fastify.schemaBuilders.deleteOne() }, async (req, reply) => {
