@@ -31,7 +31,7 @@
     "jest": "30.3.0",
     "jest-junit": "~16.0.0",
     "knex": "sloops77/knex#c3dc4f84d6c741b79f0564c1958e251adfdee2a0",
-    "pg": "8.19.0",
+    "pg": "8.20.0",
     "pino-pretty": "~13.1.1",
     "prettier": "~3.8.0",
     "typescript": "~5.9.2"
