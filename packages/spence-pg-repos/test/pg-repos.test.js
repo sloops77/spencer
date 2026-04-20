@@ -85,7 +85,9 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
       const result = await wrap(async (context) => simpleTable(context).insertMany(vals));
       const findResults = await simpleTable().find().whereIn("id", _.map("id", vals));
       const expected = _.map((v) => ({ ...v, createdAt: expect.any(Date) }), vals);
-      expect(_.map("value", result)).toEqual(expected);
+      expect(result).toEqual(
+        _.map((value) => ({ isFulfilled: true, isRejected: false, value }), expected),
+      );
       expect(_.sortBy("id", findResults)).toEqual(_.sortBy("id", expected));
     });
 
