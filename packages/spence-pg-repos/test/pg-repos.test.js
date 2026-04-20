@@ -91,11 +91,11 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
 
     if (!transactions) {
       it("should include rejected results when insertMany cannot insert every value", async () => {
-        const duplicateId = uuidv1();
+        const duplicateId = randomUUID();
         const vals = [
           { id: duplicateId, aVal: "first" },
           { id: duplicateId, aVal: "duplicate" },
-          { id: uuidv1(), aVal: "insertMany-success" },
+          { id: randomUUID(), aVal: "insertMany-success" },
         ];
 
         const result = await simpleTable().insertMany(vals);
