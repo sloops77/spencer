@@ -1,5 +1,5 @@
 const _ = require("lodash/fp");
-const { v1: uuidv1 } = require("uuid");
+const { randomUUID } = require("node:crypto");
 const { log, env } = require("@spencejs/spence-config");
 const {
   knexFactory,
@@ -225,7 +225,7 @@ describe("test pg factories", () => {
       complexFactory = register("complex", async (overrides, { getOrBuild }) => {
         const simpleVal = await getOrBuild("simpleVal", _.noop);
         const simple = await getOrBuild("simple", simpleFactory, { aVal: simpleVal });
-        const aComplexVal = await getOrBuild("aComplexVal", uuidv1);
+        const aComplexVal = await getOrBuild("aComplexVal", randomUUID);
         return {
           item: {
             aComplexVal,
@@ -277,7 +277,7 @@ describe("test pg factories", () => {
 
     it("if already persisted it only persist the complex", async () => {
       const { persistComplex } = complexFactory;
-      const simpleId = uuidv1();
+      const simpleId = randomUUID();
       expect(await persistComplex({ simple: { id: simpleId } })).toEqual({
         id: expect.stringMatching(UUID_FORMAT),
         aComplexVal: expect.stringMatching(UUID_FORMAT),

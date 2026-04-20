@@ -1,6 +1,6 @@
 const _ = require("lodash/fp");
 const { EventEmitter } = require("events");
-const { v1: idGenerator } = require("uuid");
+const { randomUUID: idGenerator } = require("node:crypto");
 
 const nexus = new EventEmitter();
 let connectedChannels = ["*"];

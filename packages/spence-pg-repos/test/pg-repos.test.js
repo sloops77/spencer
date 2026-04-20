@@ -1,5 +1,5 @@
 const _ = require("lodash/fp");
-const { v1: uuidv1 } = require("uuid");
+const { randomUUID } = require("node:crypto");
 const { log, env } = require("@spencejs/spence-config");
 const { knex, knexFactory } = require("../src/knex");
 const { createSchema, dropSchema } = require("../src/tables/schemas");
@@ -80,7 +80,7 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
     });
 
     it("should be able to insertMany", async () => {
-      const val = () => ({ id: uuidv1(), aVal: "foo" });
+      const val = () => ({ id: randomUUID(), aVal: "foo" });
       const vals = [val(), val(), val()];
       const result = await wrap(async (context) => simpleTable(context).insertMany(vals));
       const findResults = await simpleTable().find().whereIn("id", _.map("id", vals));
@@ -110,7 +110,7 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
     });
 
     it("should be able to count", async () => {
-      const val = () => ({ id: uuidv1(), aVal: "foo" });
+      const val = () => ({ id: randomUUID(), aVal: "foo" });
       const vals = [val(), val(), val()];
 
       const result = await wrap(async (context) => {

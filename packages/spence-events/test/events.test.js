@@ -1,4 +1,4 @@
-const { v1: uuidv1 } = require("uuid");
+const { randomUUID } = require("node:crypto");
 const { env } = require("@spencejs/spence-config");
 const { publish, subscribe, disconnect, connect, setErrorHandler } = require("../src/events");
 const { UUID_FORMAT } = require("../../spence-api/test/helpers/regexes");
@@ -14,7 +14,7 @@ describe("events", () => {
   });
 
   it("publishing without any subscribers is fine", async () => {
-    const result = await publish(`simple`, `created`, { aVal: "test" }, { userId: uuidv1() });
+    const result = await publish(`simple`, `created`, { aVal: "test" }, { userId: randomUUID() });
     expect(result).toEqual(undefined);
     expect(errorHandler).not.toHaveBeenCalled();
   });
@@ -24,7 +24,7 @@ describe("events", () => {
     subscribe(`simple`, `created`, subscribers[1]);
     subscribe(`simple`, `created`, subscribers[2]);
     const payload = { aVal: "test" };
-    const context = { userId: uuidv1(), source: env.source };
+    const context = { userId: randomUUID(), source: env.source };
     const result = await publish(`simple`, `created`, payload, context);
     expect(result).toEqual(undefined);
     expect(errorHandler).not.toHaveBeenCalled();
@@ -65,7 +65,7 @@ describe("events", () => {
     });
     subscribe(`simple`, `created`, subscriber);
     const payload = { aVal: "test" };
-    const context = { userId: uuidv1(), source: env.source };
+    const context = { userId: randomUUID(), source: env.source };
     const result = await publish(`simple`, `created`, payload, context);
     expect(result).toEqual(undefined);
     expect(errorHandler).toHaveBeenCalledWith(
@@ -98,7 +98,7 @@ describe("events", () => {
     const subscriber = jest.fn();
     subscribe(`simple`, `created`, subscriber);
     const payload = { aVal: "test" };
-    const context = { userId: uuidv1() };
+    const context = { userId: randomUUID() };
     const result = await publish(`simple`, `created`, payload, context);
     expect(result).toEqual(undefined);
     expect(errorHandler).not.toHaveBeenCalled();
@@ -110,7 +110,7 @@ describe("events", () => {
     const subscriber = jest.fn();
     subscribe(`simple`, `created`, subscriber);
     const payload = { aVal: "test" };
-    const context = { userId: uuidv1(), source: env.source };
+    const context = { userId: randomUUID(), source: env.source };
     const result = await publish(`simple`, `created`, payload, context);
     expect(result).toEqual(undefined);
     expect(errorHandler).not.toHaveBeenCalled();
@@ -132,7 +132,7 @@ describe("events", () => {
     const subscriber = jest.fn();
     subscribe(`simple`, `created`, subscriber);
     const payload = { aVal: "test" };
-    const context = { userId: uuidv1(), source: env.source };
+    const context = { userId: randomUUID(), source: env.source };
     const result = await publish(`simple`, `created`, payload, context);
     expect(result).toEqual(undefined);
     expect(errorHandler).not.toHaveBeenCalled();
