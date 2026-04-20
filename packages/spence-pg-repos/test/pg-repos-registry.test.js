@@ -69,7 +69,7 @@ describe("pg table registry", () => {
 
     expect(_.map("simples.callCounterRef.current", registeredTablesArray)).toEqual([1, 1, 1]);
     expect(_.map("simples.contextRef.current", registeredTablesArray)).toEqual(contexts);
-    registeredTablesArray[0].simples.insert({ id: randomUUID(), aVal: "foo" });
+    await registeredTablesArray[0].simples.insert({ id: randomUUID(), aVal: "foo" });
     expect(_.map("simples.callCounterRef.current", registeredTablesArray)).toEqual([2, 1, 1]);
     expect(_.map("simples.contextRef.current", registeredTablesArray)).toEqual(contexts);
   });
