@@ -29,6 +29,7 @@
   },
   "scripts": {
     "lint": "eslint src test --fix",
+    "lint:ci": "eslint src test",
     "test": "jest test --runInBand --coverage"
   },
   "description": "Spence Factories - An opinionated Factory Framework for testing db entities",

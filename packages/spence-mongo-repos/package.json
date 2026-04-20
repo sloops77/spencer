@@ -40,6 +40,7 @@
   },
   "scripts": {
     "lint": "eslint src test --fix",
+    "lint:ci": "eslint src test",
     "test": "jest test --runInBand --coverage"
   },
   "description": "Spencer - An opinionated mongo based persistence framework For nodejs",
