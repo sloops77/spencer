@@ -94,7 +94,7 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
       const vals = [
         { id: duplicateId, aVal: "first" },
         { id: duplicateId, aVal: "duplicate" },
-        { id: uuidv1(), aVal: "unique" },
+        { id: uuidv1(), aVal: "insertMany-success" },
       ];
 
       const result = await simpleTable().insertMany(vals);
