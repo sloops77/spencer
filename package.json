@@ -8,6 +8,8 @@
     "node": ">=22.0.0"
   },
   "devDependencies": {
+    "@eslint/js": "9.26.0",
+    "globals": "17.5.0",
     "jest": "30.3.0",
     "jest-junit": "~16.0.0",
     "lerna": "~9.0.7"

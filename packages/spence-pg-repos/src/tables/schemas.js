@@ -1,12 +1,19 @@
 const _ = require("lodash/fp");
 const { knex: defaultKnex } = require("../knex");
 
-async function createSchema({
-  knex = defaultKnex(),
-  schemaName = "public",
-  softDelete = false,
-  tableCreators = [],
-} = {}) {
+function normalizeSchemaOptions(options) {
+  const { knex, schemaName, softDelete, tableCreators } = options || {};
+
+  return {
+    knex: knex ?? defaultKnex(),
+    schemaName: schemaName ?? "public",
+    softDelete: softDelete ?? false,
+    tableCreators: tableCreators ?? [],
+  };
+}
+
+async function createSchema(options) {
+  const { knex, schemaName, softDelete, tableCreators } = normalizeSchemaOptions(options);
   await knex.raw(`CREATE SCHEMA IF NOT EXISTS "${schemaName}"`);
 
   if (softDelete) {
@@ -23,7 +30,9 @@ async function createSchema({
   await _.reduce((acc, tableCreator) => tableCreator(acc), schemaBuilder, tableCreators);
 }
 
-async function dropSchema({ knex = defaultKnex(), schemaName = "public", softDelete = false }) {
+async function dropSchema(options) {
+  const { knex, schemaName, softDelete } = normalizeSchemaOptions(options);
+
   if (softDelete) {
     await knex.raw(`DROP SCHEMA IF EXISTS ${schemaName}_combined CASCADE;`);
     await knex.raw(`DROP SCHEMA IF EXISTS ${schemaName}_deleted CASCADE;`);
