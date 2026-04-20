@@ -23,11 +23,7 @@ describe("rest controller", () => {
   beforeAll(async () => {
     fastify = await initFastify({ "/examples": simpleController }, knexPlugin, reposPlugin, {});
 
-    const {
-      exampleTableCreator,
-      examplesRepoFactory,
-      // eslint-disable-next-line global-require
-    } = require("../../spence-pg-repos/test/helpers/test-tables");
+    const { exampleTableCreator, examplesRepoFactory } = require("../../spence-pg-repos/test/helpers/test-tables");
 
     schemaName = `simpleTest--${Date.now()}`;
     await createSchema({

@@ -18,7 +18,6 @@ describe("pg table registry", () => {
     schemaName = `simpleTest-${Date.now()}`;
     knexFactory({ log, config: env });
     await createSchema({ schemaName, tableCreators: [simpleTableSpec.simpleTableCreator()] });
-    // eslint-disable-next-line prefer-destructuring
     simpleRepoFactory = simpleTableSpec.simpleRepoFactory;
   });
 

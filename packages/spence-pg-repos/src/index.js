@@ -1,4 +1,3 @@
-/* eslint-disable global-require */
 const { repoFactory, addContext, ready, clearTableRegistry } = require("./repos/repo-registry");
 
 module.exports = {
