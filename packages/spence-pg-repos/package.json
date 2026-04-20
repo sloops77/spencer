@@ -16,7 +16,7 @@
     "lodash": "^4.18.1",
     "p-settle": "^4.0.1",
     "pg-types": "^4.1.0",
-    "uuid": "^11.1.0"
+    "uuid": "^14.0.0"
   },
   "devDependencies": {
     "@spencejs/spence-config": "^1.0.0",

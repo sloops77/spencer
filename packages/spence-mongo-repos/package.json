@@ -34,7 +34,7 @@
     "prettier": "~3.8.0",
     "shortid": "^2.2.15",
     "typescript": "~6.0.3",
-    "uuid": "~11.1.0"
+    "uuid": "~14.0.0"
   },
   "peerDependencies": {
     "mongodb": "^6.0.0 || ^7.0.0"
