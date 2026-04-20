@@ -58,7 +58,7 @@ const selectedImportRules = {
     },
   ],
   "import/no-absolute-path": "error",
-  "import/no-cycle": ["error", { maxDepth: "∞" }],
+  "import/no-cycle": ["error", { maxDepth: Infinity }],
 };
 
 module.exports = [
