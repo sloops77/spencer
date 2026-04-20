@@ -1,5 +1,5 @@
 const _ = require("lodash/fp");
-const { v1: uuidv1 } = require("uuid");
+const { randomUUID } = require("node:crypto");
 
 function register(name, ...args) {
   let defaultRepo;
@@ -59,7 +59,7 @@ function createdFactoryType(commonFactory) {
   return async (overrides = {}) => {
     const { item, repo } = await commonFactory("created")(overrides);
     const idKey = _.getOr("id", "collection.idKey", repo);
-    const mockIdGenerator = _.getOr(uuidv1, "collection.mockIdGenerator", repo);
+    const mockIdGenerator = _.getOr(randomUUID, "collection.mockIdGenerator", repo);
     const timestampKeys = _.getOr({ createdAt: "createdAt", updatedAt: "updatedAt" }, "collection.timestampKeys", repo);
     return {
       [idKey]: mockIdGenerator(),

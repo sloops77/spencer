@@ -1,5 +1,5 @@
 const _ = require("lodash/fp");
-const { v1: uuidv1 } = require("uuid");
+const { randomUUID } = require("node:crypto");
 const { log, env } = require("@spencejs/spence-config");
 const { knex, knexFactory } = require("../src/knex");
 const { createSchema, dropSchema } = require("../src/tables/schemas");
@@ -62,14 +62,14 @@ describe("pg table registry", () => {
     const contexts = [{ foo: "1" }, { foo: "2" }, { foo: "3" }];
     const registeredTablesArray = _.map(addContext, contexts);
     const results = await Promise.all(
-      _.map((tables) => tables.simples.insert({ id: uuidv1(), aVal: "foo" }), registeredTablesArray),
+      _.map((tables) => tables.simples.insert({ id: randomUUID(), aVal: "foo" }), registeredTablesArray),
     );
 
     expect(results).toHaveLength(3);
 
     expect(_.map("simples.callCounterRef.current", registeredTablesArray)).toEqual([1, 1, 1]);
     expect(_.map("simples.contextRef.current", registeredTablesArray)).toEqual(contexts);
-    registeredTablesArray[0].simples.insert({ id: uuidv1(), aVal: "foo" });
+    registeredTablesArray[0].simples.insert({ id: randomUUID(), aVal: "foo" });
     expect(_.map("simples.callCounterRef.current", registeredTablesArray)).toEqual([2, 1, 1]);
     expect(_.map("simples.contextRef.current", registeredTablesArray)).toEqual(contexts);
   });
