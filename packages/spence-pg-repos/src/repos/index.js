@@ -1,7 +1,6 @@
 /* eslint-disable max-lines */
 const _ = require("lodash/fp");
 const newError = require("http-errors");
-const pSettle = require("p-settle");
 const { publish } = require("@spencejs/spence-events");
 const initPrepModification = require("./prep-modification");
 const { dbifyColumn, apifyColumn } = require("../knex/transformations");
@@ -14,6 +13,14 @@ function renderArrayRemoveValue(value) {
     return `"${value}"`;
   }
   return value;
+}
+
+function normalizeSettledResult(result) {
+  if (result.status === "fulfilled") {
+    return { isFulfilled: true, isRejected: false, value: result.value };
+  }
+
+  return { isFulfilled: false, isRejected: true, reason: result.reason };
 }
 
 function init(table, extensions = []) {
@@ -89,7 +96,9 @@ function init(table, extensions = []) {
     }
 
     function insertMany(vals, selection) {
-      return pSettle(_.map((val) => applied.insert(val, selection), vals));
+      return Promise.allSettled(_.map((val) => applied.insert(val, selection), vals)).then(
+        _.map(normalizeSettledResult),
+      );
     }
 
     async function findOrInsert(val, naturalKey, returning = applied.defaultColumnsSelection) {
