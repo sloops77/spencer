@@ -25,6 +25,24 @@ function init({ collection, extensions = [] }) {
   const prepFilter = (filter) => filter;
 
   return (context = { log: console }) => {
+    const defaultSort = [
+      [collection.timestampKeys.createdAt, -1],
+      [`_id`, 1],
+    ];
+
+    function normalizeFindArgs(options) {
+      const normalizedOptions = { filter: {}, limit: 200, offset: 0, ...options };
+      const { filter, limit, offset, skip, orderBy, sort, ...otherOptions } = normalizedOptions;
+
+      return {
+        filter,
+        limit,
+        skip: skip ?? offset,
+        sort: sort ?? orderBy ?? defaultSort,
+        otherOptions,
+      };
+    }
+
     function findById(id, projection = applied.defaultColumnsSelection) {
       return applied
         .collection()
@@ -40,27 +58,15 @@ function init({ collection, extensions = [] }) {
         );
     }
 
-    function find(
-      {
-        filter = {},
-        limit = 200,
-        offset = 0,
-        skip,
-        orderBy = [
-          [collection.timestampKeys.createdAt, -1],
-          [`_id`, 1],
-        ],
-        sort,
-        ...otherOptions
-      } = {},
-      projection = applied.defaultColumnsSelection,
-    ) {
+    function find(options, projection = applied.defaultColumnsSelection) {
+      const { filter, limit, skip, sort, otherOptions } = normalizeFindArgs(options);
+
       return applied
         .collection()
         .find(applied.prepFilter(filter), {
           limit,
-          skip: skip || offset,
-          sort: sort || orderBy,
+          skip,
+          sort,
           projection,
           ...otherOptions,
         })
@@ -285,11 +291,13 @@ function init({ collection, extensions = [] }) {
       // @ts-ignore
       (acc, fn) => {
         const result = {};
+        // eslint-disable-next-line no-restricted-syntax
         for (const key of Object.keys(acc)) {
           const propertyDescriptor = Object.getOwnPropertyDescriptor(acc, key);
           if (propertyDescriptor) Object.defineProperty(result, key, propertyDescriptor);
         }
         const extension = fn(acc, context);
+        // eslint-disable-next-line no-restricted-syntax
         for (const key of Object.keys(extension)) {
           const propertyDescriptor = Object.getOwnPropertyDescriptor(extension, key);
           if (propertyDescriptor) Object.defineProperty(result, key, propertyDescriptor);

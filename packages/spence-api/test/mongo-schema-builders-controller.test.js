@@ -91,10 +91,7 @@ describe("schemaBuilder decorated controller", () => {
 
   beforeAll(async () => {
     fastify = await initFastify({ "/examples": decoratedMongoController }, mongodbPlugin, reposPlugin, {});
-    const {
-      examplesRepoFactory,
-      // eslint-disable-next-line global-require
-    } = require("../../spence-mongo-repos/test/helpers/test-tables");
+    const { examplesRepoFactory } = require("../../spence-mongo-repos/test/helpers/test-tables");
 
     examplesRepoFactory({ schemaName })();
     await ready();

@@ -1,5 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-
 const _ = require("lodash/fp");
 const shortid = require("shortid");
 const { ObjectId } = require("mongodb");
@@ -19,7 +17,7 @@ describe("autoconvert ids mongo behaviour", () => {
     const {
       // simpleTableCreator,
       simpleRepoFactory,
-    } = require("./helpers/test-tables"); // eslint-disable-line global-require
+    } = require("./helpers/test-tables");
     // await createSchema({
     //   schemaName,
     //   tableCreators: [simpleTableCreator(columnCase === "snake"), arrayTableCreator(columnCase === "snake")],

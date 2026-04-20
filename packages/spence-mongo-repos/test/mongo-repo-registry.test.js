@@ -19,7 +19,6 @@ describe("collection registry", () => {
     schemaName = shortid.generate();
     // await createDb({ dbName });
     // await createSchema({ dbName, tableCreators: [simpleTableSpec.simpleTableCreator()] });
-    // eslint-disable-next-line prefer-destructuring
     simpleRepoFactory = simpleTableSpec.simpleRepoFactory;
   });
 
