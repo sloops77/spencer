@@ -13,16 +13,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.2
+
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: yarn
+          cache: pnpm
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Lint
-        run: yarn lint:ci
+        run: pnpm lint:ci
 
   test-matrix:
     name: test-${{ matrix.peer_preset }}
@@ -64,24 +68,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.2
+
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: yarn
+          cache: pnpm
 
       - name: Configure peer preset
         run: node scripts/configure-peer-matrix.js "${{ matrix.peer_preset }}"
 
       - name: Install dependencies
-        run: yarn install
+        run: pnpm install --no-frozen-lockfile
 
       - name: Prepare test schema
-        run: yarn db:prepare:test
+        run: pnpm db:prepare:test
 
       - name: Test
         run: |
           mkdir -p reports/junit
-          yarn test:ci --watchman=false
+          pnpm test:ci --watchman=false
 
       - name: Upload coverage artifacts
         if: always()

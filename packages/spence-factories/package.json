@@ -10,9 +10,9 @@
     "lodash": "^4.18.1"
   },
   "devDependencies": {
-    "@spencejs/spence-config": "^1.0.0",
-    "@spencejs/spence-mongo-repos": "^1.0.0",
-    "@spencejs/spence-pg-repos": "^1.0.0",
+    "@spencejs/spence-config": "workspace:^",
+    "@spencejs/spence-mongo-repos": "workspace:^",
+    "@spencejs/spence-pg-repos": "workspace:^",
     "@types/lodash": "^4.14.149",
     "@types/node": "~25.6.0",
     "eslint": "~8.57.0",
