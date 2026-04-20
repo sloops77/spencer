@@ -2,6 +2,7 @@
 coverage/
 examples
 node_modules
+.pnpm-store
 reports
 yarn-error.log
 .idea

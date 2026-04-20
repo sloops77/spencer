@@ -6,6 +6,20 @@ Opinionated API Framework For Fastify and Postgres or MongoDB for FAST coding an
 
 ## Requirements
 - Node.js 22 or newer
+- `pnpm` 10.28.2 via Corepack
+
+## Installation
+```bash
+corepack enable
+pnpm install
+```
+
+## Common commands
+```bash
+pnpm lint
+pnpm test
+pnpm db:prepare:test
+```
 
 
 ## Getting started:
@@ -72,5 +86,4 @@ What is familiar but of no benefit:
 ## Testing
 - jest only
 - factories & testing
-
 

@@ -11,13 +11,13 @@
     "node": ">=22.0.0"
   },
   "dependencies": {
-    "@spencejs/spence-events": "^1.0.0",
+    "@spencejs/spence-events": "workspace:^",
     "fastify-plugin": "^5.1.0",
     "http-errors": "^2.0.0",
     "lodash": "^4.18.1"
   },
   "devDependencies": {
-    "@spencejs/spence-config": "^1.0.0",
+    "@spencejs/spence-config": "workspace:^",
     "@types/http-errors": "^2.0.1",
     "@types/lodash": "~4.17.4",
     "@types/node": "~25.6.0",
@@ -40,6 +40,7 @@
   },
   "scripts": {
     "lint": "eslint src test --fix",
+    "lint:ci": "eslint src test",
     "test": "jest test --runInBand --coverage"
   },
   "description": "Spencer - An opinionated mongo based persistence framework For nodejs",
