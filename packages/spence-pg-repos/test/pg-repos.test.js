@@ -89,9 +89,8 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
       expect(_.sortBy("id", findResults)).toEqual(_.sortBy("id", expected));
     });
 
-    (transactions ? it.skip : it)(
-      "should include rejected results when insertMany cannot insert every value",
-      async () => {
+    if (!transactions) {
+      it("should include rejected results when insertMany cannot insert every value", async () => {
         const duplicateId = uuidv1();
         const vals = [
           { id: duplicateId, aVal: "first" },
@@ -123,8 +122,8 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
             { ...vals[2], createdAt: expect.any(Date) },
           ]),
         );
-      },
-    );
+      });
+    }
 
     it("should be able to find by id", async () => {
       const val = { id: Date.now().toString(), aVal: "foo" };
