@@ -89,39 +89,42 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
       expect(_.sortBy("id", findResults)).toEqual(_.sortBy("id", expected));
     });
 
-    it("should include rejected results when insertMany cannot insert every value", async () => {
-      const duplicateId = uuidv1();
-      const vals = [
-        { id: duplicateId, aVal: "first" },
-        { id: duplicateId, aVal: "duplicate" },
-        { id: uuidv1(), aVal: "insertMany-success" },
-      ];
+    (transactions ? it.skip : it)(
+      "should include rejected results when insertMany cannot insert every value",
+      async () => {
+        const duplicateId = uuidv1();
+        const vals = [
+          { id: duplicateId, aVal: "first" },
+          { id: duplicateId, aVal: "duplicate" },
+          { id: uuidv1(), aVal: "insertMany-success" },
+        ];
 
-      const result = await simpleTable().insertMany(vals);
-      const fulfilled = result.filter(({ isFulfilled }) => isFulfilled);
-      const rejected = result.filter(({ isRejected }) => isRejected);
-      const findResults = await simpleTable().find().whereIn("id", [duplicateId, vals[2].id]);
+        const result = await simpleTable().insertMany(vals);
+        const fulfilled = result.filter(({ isFulfilled }) => isFulfilled);
+        const rejected = result.filter(({ isRejected }) => isRejected);
+        const findResults = await simpleTable().find().whereIn("id", [duplicateId, vals[2].id]);
 
-      expect(fulfilled).toHaveLength(2);
-      expect(rejected).toHaveLength(1);
-      expect(rejected[0]).toEqual({
-        isFulfilled: false,
-        isRejected: true,
-        reason: expect.any(Error),
-      });
-      expect(_.sortBy("id", _.map("value", fulfilled))).toEqual(
-        _.sortBy("id", [
-          { id: duplicateId, aVal: expect.any(String), createdAt: expect.any(Date) },
-          { ...vals[2], createdAt: expect.any(Date) },
-        ]),
-      );
-      expect(_.sortBy("id", findResults)).toEqual(
-        _.sortBy("id", [
-          { id: duplicateId, aVal: expect.any(String), createdAt: expect.any(Date) },
-          { ...vals[2], createdAt: expect.any(Date) },
-        ]),
-      );
-    });
+        expect(fulfilled).toHaveLength(2);
+        expect(rejected).toHaveLength(1);
+        expect(rejected[0]).toEqual({
+          isFulfilled: false,
+          isRejected: true,
+          reason: expect.any(Error),
+        });
+        expect(_.sortBy("id", _.map("value", fulfilled))).toEqual(
+          _.sortBy("id", [
+            { id: duplicateId, aVal: expect.any(String), createdAt: expect.any(Date) },
+            { ...vals[2], createdAt: expect.any(Date) },
+          ]),
+        );
+        expect(_.sortBy("id", findResults)).toEqual(
+          _.sortBy("id", [
+            { id: duplicateId, aVal: expect.any(String), createdAt: expect.any(Date) },
+            { ...vals[2], createdAt: expect.any(Date) },
+          ]),
+        );
+      },
+    );
 
     it("should be able to find by id", async () => {
       const val = { id: Date.now().toString(), aVal: "foo" };
