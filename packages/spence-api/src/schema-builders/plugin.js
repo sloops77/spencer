@@ -9,7 +9,6 @@ function loader(app) {
   _.flow(
     _.filter(_.endsWith(".json")),
     _.forEach((p) => {
-      // eslint-disable-next-line import/no-dynamic-require
       const schema = require(`./schemas/${p}`);
       app.addSchema(schema);
     }),

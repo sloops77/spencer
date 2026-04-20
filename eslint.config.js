@@ -4,26 +4,29 @@ const importPlugin = require("eslint-plugin-import");
 const prettierConfig = require("eslint-config-prettier");
 const prettierPlugin = require("eslint-plugin-prettier");
 
-const airbnbImportSettings = {
+const importSettings = {
   "import/resolver": {
     node: {
       extensions: [".mjs", ".js", ".json"],
     },
   },
-  "import/extensions": [".js", ".mjs", ".jsx"],
-  "import/core-modules": [],
   "import/ignore": ["node_modules", "\\.(coffee|scss|css|less|hbs|svg|json)$"],
 };
 
-const airbnbImportRules = {
-  "import/no-unresolved": ["error", { commonjs: true, caseSensitive: true }],
+const importRecommendedRules = {
+  "import/no-unresolved": "error",
   "import/named": "error",
-  "import/default": "off",
-  "import/namespace": "off",
+  "import/namespace": "error",
+  "import/default": "error",
   "import/export": "error",
-  "import/no-named-as-default": "error",
-  "import/no-named-as-default-member": "error",
-  "import/no-deprecated": "off",
+  "import/no-named-as-default": "warn",
+  "import/no-named-as-default-member": "warn",
+  "import/no-duplicates": "warn",
+};
+
+const selectedImportRules = {
+  "import/order": ["error", { groups: [["builtin", "external", "internal"]] }],
+  "import/newline-after-import": "error",
   "import/no-extraneous-dependencies": [
     "error",
     {
@@ -54,69 +57,8 @@ const airbnbImportRules = {
       optionalDependencies: false,
     },
   ],
-  "import/no-mutable-exports": "error",
-  "import/no-commonjs": "off",
-  "import/no-amd": "error",
-  "import/no-nodejs-modules": "off",
-  "import/first": "error",
-  "import/imports-first": "off",
-  "import/no-duplicates": "error",
-  "import/no-namespace": "off",
-  "import/extensions": [
-    "error",
-    "ignorePackages",
-    {
-      js: "never",
-      mjs: "never",
-      jsx: "never",
-    },
-  ],
-  "import/order": ["error", { groups: [["builtin", "external", "internal"]] }],
-  "import/newline-after-import": "error",
-  "import/prefer-default-export": "error",
-  "import/no-restricted-paths": "off",
-  "import/max-dependencies": ["off", { max: 10 }],
   "import/no-absolute-path": "error",
-  "import/no-dynamic-require": "error",
-  "import/no-internal-modules": ["off", { allow: [] }],
-  "import/unambiguous": "off",
-  "import/no-webpack-loader-syntax": "error",
-  "import/no-unassigned-import": "off",
-  "import/no-named-default": "error",
-  "import/no-anonymous-default-export": [
-    "off",
-    {
-      allowArray: false,
-      allowArrowFunction: false,
-      allowAnonymousClass: false,
-      allowAnonymousFunction: false,
-      allowLiteral: false,
-      allowObject: false,
-    },
-  ],
-  "import/exports-last": "off",
-  "import/group-exports": "off",
-  "import/no-default-export": "off",
-  "import/no-named-export": "off",
-  "import/no-self-import": "error",
   "import/no-cycle": ["error", { maxDepth: "∞" }],
-  "import/no-useless-path-segments": ["error", { commonjs: true }],
-  "import/dynamic-import-chunkname": [
-    "off",
-    {
-      importFunctions: [],
-      webpackChunknameFormat: "[0-9a-zA-Z-_/.]+",
-    },
-  ],
-  "import/no-relative-parent-imports": "off",
-  "import/no-unused-modules": [
-    "off",
-    {
-      ignoreExports: [],
-      missingExports: true,
-      unusedExports: true,
-    },
-  ],
 };
 
 module.exports = [
@@ -136,9 +78,10 @@ module.exports = [
       import: importPlugin,
       prettier: prettierPlugin,
     },
-    settings: airbnbImportSettings,
+    settings: importSettings,
     rules: {
-      ...airbnbImportRules,
+      ...importRecommendedRules,
+      ...selectedImportRules,
       complexity: ["error", 6],
       "max-depth": ["error", { max: 2 }],
       "max-lines": ["error", 150],
