@@ -1,4 +1,3 @@
-/* eslint-disable global-require */
 const env = require("./env");
 const log = require("./log");
 

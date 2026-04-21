@@ -1,7 +1,6 @@
 /* eslint-disable max-lines */
 const _ = require("lodash/fp");
 const newError = require("http-errors");
-const pSettle = require("p-settle");
 const { publish } = require("@spencejs/spence-events");
 const initPrepModification = require("./prep-modification");
 const { dbifyColumn, apifyColumn } = require("../knex/transformations");
@@ -16,11 +15,36 @@ function renderArrayRemoveValue(value) {
   return value;
 }
 
+function normalizeSettledResult(result) {
+  if (result.status === "fulfilled") {
+    return { isFulfilled: true, isRejected: false, value: result.value };
+  }
+
+  return { isFulfilled: false, isRejected: true, reason: result.reason };
+}
+
 function init(table, extensions = []) {
   const prepModification = initPrepModification(table);
   const queryContext = { transformCase: table.transformCase };
 
   return _.memoize((context = {}) => {
+    const defaultSort = [
+      [`${table.tableName}.createdAt`, "desc"],
+      [`${table.tableName}.id`, "asc"],
+    ];
+
+    function normalizeFindArgs(options) {
+      const { filter, params, limit, offset, orderBy } = options || {};
+
+      return {
+        filter,
+        params: params ?? [],
+        limit: parseInt(limit, 10) || 200,
+        offset: parseInt(offset, 10) || 0,
+        orderBy: orderBy ?? defaultSort,
+      };
+    }
+
     function buildFinderQuery({ filter, params = [] }) {
       const query = table(context).queryContext(queryContext);
       if (_.isEmpty(filter)) {
@@ -40,19 +64,9 @@ function init(table, extensions = []) {
       });
     }
 
-    function find(
-      {
-        filter,
-        params = [],
-        limit,
-        offset,
-        orderBy = [
-          [`${table.tableName}.createdAt`, "desc"],
-          [`${table.tableName}.id`, "asc"],
-        ],
-      } = {},
-      returning = applied.defaultColumnsSelection,
-    ) {
+    function find(options, returning = applied.defaultColumnsSelection) {
+      const { filter, params, limit, offset, orderBy } = normalizeFindArgs(options);
+
       let query = applied.buildFinderQuery({ filter, params });
       query = query.select(returning);
 
@@ -60,7 +74,7 @@ function init(table, extensions = []) {
         query = query.orderBy(column, dir);
       }, orderBy);
 
-      return query.limit(parseInt(limit, 10) || 200).offset(parseInt(offset, 10) || 0);
+      return query.limit(limit).offset(offset);
     }
 
     function findOne({ filter, params = [], orderBy } = {}, selection = applied.defaultColumnsSelection) {
@@ -89,7 +103,9 @@ function init(table, extensions = []) {
     }
 
     function insertMany(vals, selection) {
-      return pSettle(_.map((val) => applied.insert(val, selection), vals));
+      return Promise.allSettled(_.map((val) => applied.insert(val, selection), vals)).then(
+        _.map(normalizeSettledResult),
+      );
     }
 
     async function findOrInsert(val, naturalKey, returning = applied.defaultColumnsSelection) {
@@ -303,10 +319,12 @@ function init(table, extensions = []) {
     const applied = _.reduce(
       (acc, fn) => {
         const result = {};
+        // eslint-disable-next-line no-restricted-syntax
         for (const key of Object.keys(acc)) {
           Object.defineProperty(result, key, Object.getOwnPropertyDescriptor(acc, key));
         }
         const extension = fn(acc, context);
+        // eslint-disable-next-line no-restricted-syntax
         for (const key of Object.keys(extension)) {
           Object.defineProperty(result, key, Object.getOwnPropertyDescriptor(extension, key));
         }

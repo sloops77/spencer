@@ -11,7 +11,7 @@
     "node": ">=22.0.0"
   },
   "dependencies": {
-    "@spencejs/spence-events": "^1.0.0",
+    "@spencejs/spence-events": "workspace:^",
     "fastify-plugin": "^5.1.0",
     "http-errors": "^2.0.0",
     "lodash": "^4.18.1"
@@ -20,14 +20,13 @@
     "fastify": "^4.0.0 || ^5.0.0"
   },
   "devDependencies": {
-    "@spencejs/spence-config": "^1.0.0",
-    "@spencejs/spence-mongo-repos": "^1.0.0",
-    "@spencejs/spence-pg-repos": "^1.0.0",
+    "@spencejs/spence-config": "workspace:^",
+    "@spencejs/spence-mongo-repos": "workspace:^",
+    "@spencejs/spence-pg-repos": "workspace:^",
     "@types/lodash": "~4.17.4",
     "@types/node": "~25.6.0",
     "await-sleep": "~0.0.1",
-    "eslint": "~8.57.0",
-    "eslint-config-airbnb-base": "~15.0.0",
+    "eslint": "10.2.1",
     "eslint-config-prettier": "~10.1.1",
     "eslint-plugin-import": "~2.32.0",
     "eslint-plugin-prettier": "~5.5.0",
@@ -42,6 +41,7 @@
   },
   "scripts": {
     "lint": "eslint src test --fix",
+    "lint:ci": "eslint src test",
     "test": "jest test --runInBand --coverage"
   },
   "description": "Spencer - An opinionated API Framework For nodejs",

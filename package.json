@@ -1,24 +1,26 @@
-  {
+{
   "name": "spence",
   "version": "1.0.0",
   "private": true,
+  "packageManager": "pnpm@10.28.2",
   "dependencies": {},
   "engines": {
     "node": ">=22.0.0"
   },
-  "workspaces": ["packages/*"],
   "devDependencies": {
-    "jest-junit": "~16.0.0",
-    "lerna": "~9.0.7"
+    "@eslint/js": "9.26.0",
+    "globals": "17.5.0",
+    "jest": "30.3.0",
+    "jest-junit": "~16.0.0"
   },
   "scripts": {
-    "bootstrap": "yarn install --frozen-lockfile",
-    "db:migrate:dev": "NODE_ENV=development knex migrate:latest --env development",
-    "db:migrate:test": "NODE_ENV=test knex migrate:latest --env test",
-    "db:migrate:production": "NODE_ENV=production knex migrate:latest --env production",
-    "db:prepare:test": "yarn db:migrate:test",
-    "lint": "lerna exec -- 'eslint src test --fix'",
-    "lint:ci": "lerna exec -- 'eslint src test'",
+    "bootstrap": "pnpm install --frozen-lockfile",
+    "db:migrate:dev": "NODE_ENV=development pnpm --filter @spencejs/spence-pg-repos exec knex --knexfile ../../knexfile.js migrate:latest --env development",
+    "db:migrate:test": "NODE_ENV=test pnpm --filter @spencejs/spence-pg-repos exec knex --knexfile ../../knexfile.js migrate:latest --env test",
+    "db:migrate:production": "NODE_ENV=production pnpm --filter @spencejs/spence-pg-repos exec knex --knexfile ../../knexfile.js migrate:latest --env production",
+    "db:prepare:test": "pnpm db:migrate:test",
+    "lint": "pnpm -r --filter './packages/*' --filter '!./packages/spence' run lint",
+    "lint:ci": "pnpm -r --filter './packages/*' --filter '!./packages/spence' run lint:ci",
     "schema:create:dev": "NODE_ENV=development node scripts/create-schema",
     "schema:create:test": "NODE_ENV=test node scripts/create-schema",
     "schema:create:production": "NODE_ENV=production node scripts/create-schema",

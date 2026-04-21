@@ -20,8 +20,7 @@
     "@types/lodash": "~4.17.4",
     "@types/node": "~25.6.0",
     "@types/pino": "^7.0.5",
-    "eslint": "~8.57.0",
-    "eslint-config-airbnb-base": "~15.0.0",
+    "eslint": "10.2.1",
     "eslint-config-prettier": "~10.1.1",
     "eslint-plugin-import": "~2.32.0",
     "eslint-plugin-prettier": "~5.5.0",
@@ -33,6 +32,7 @@
   },
   "scripts": {
     "lint": "eslint src test --fix",
+    "lint:ci": "eslint src test",
     "test": "jest test --runInBand --coverage"
   },
   "description": "Spencer - An opinionated API Framework For nodejs",

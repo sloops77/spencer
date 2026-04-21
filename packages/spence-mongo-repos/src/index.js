@@ -1,4 +1,3 @@
-/* eslint-disable global-require */
 const { repoFactory, addContext, ready, clearTableRegistry, tableRegistry } = require("./repos/repo-registry");
 const autoboxIdsExtension = require("./extensions/autoboxIdsExtension");
 
