@@ -95,6 +95,28 @@ describe("knex deferred result", () => {
     expect(result).toBe(3);
   });
 
+  it("supports promise catch interop on deferred results", async () => {
+    const builder = new QueryBuilder(
+      buildClient({
+        run: () => Promise.reject(new Error("query failed")),
+      }),
+    );
+
+    const result = await builder.deferResult().catch((error) => `recovered: ${error.message}`);
+
+    expect(result).toBe("recovered: query failed");
+  });
+
+  it("supports promise finally interop on deferred results", async () => {
+    const builder = new QueryBuilder(buildClient({ run: () => Promise.resolve("ok") }));
+    const onFinally = jest.fn();
+
+    const result = await builder.deferResult().finally(onFinally);
+
+    expect(result).toBe("ok");
+    expect(onFinally).toHaveBeenCalledTimes(1);
+  });
+
   it("leaves normal then behavior untouched when deferResult is not used", async () => {
     const builder = new QueryBuilder(buildClient({ run: () => Promise.resolve(2) }));
 
