@@ -184,9 +184,9 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
         { ...olderVal, createdAt: expect.any(Date) },
       ]);
 
-      await expect(wrap((context) => simpleTable(context).find({ filter, params, limit: "1", offset: "1" }))).resolves.toEqual(
-        [{ ...olderVal, createdAt: expect.any(Date) }],
-      );
+      await expect(
+        wrap((context) => simpleTable(context).find({ filter, params, limit: "1", offset: "1" })),
+      ).resolves.toEqual([{ ...olderVal, createdAt: expect.any(Date) }]);
     });
 
     it("should be able to count", async () => {
@@ -323,11 +323,10 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
       await simpleTable().insertMany(vals);
 
       const deletedIds = await wrap((context) =>
-        simpleTable(context)
-          .delUsingFilter({
-            filter: `${columnCase === "snake" ? "a_val" : '"aVal"'} = ?`,
-            params: ["delete-using-filter"],
-          }),
+        simpleTable(context).delUsingFilter({
+          filter: `${columnCase === "snake" ? "a_val" : '"aVal"'} = ?`,
+          params: ["delete-using-filter"],
+        }),
       );
 
       expect(_.sortBy(_.identity, deletedIds)).toEqual(_.sortBy(_.identity, _.map("id", vals.slice(0, 2))));
@@ -339,11 +338,10 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
     it("delUsingFilter should return an empty array when nothing matches", async () => {
       await expect(
         wrap((context) =>
-          simpleTable(context)
-            .delUsingFilter({
-              filter: `${columnCase === "snake" ? "a_val" : '"aVal"'} = ?`,
-              params: ["notfound"],
-            }),
+          simpleTable(context).delUsingFilter({
+            filter: `${columnCase === "snake" ? "a_val" : '"aVal"'} = ?`,
+            params: ["notfound"],
+          }),
         ),
       ).resolves.toEqual([]);
     });
