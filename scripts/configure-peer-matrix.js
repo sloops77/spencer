@@ -10,12 +10,14 @@ if (!preset) {
 const presetMap = {
   lower: {
     fastify: "4.29.1",
-    mongodb: "6.19.0",
+    knex: "2.4.0",
+    mongodb: "6.0.0",
     pg: "8.19.0",
   },
   higher: {
     fastify: "5.6.0",
-    mongodb: "7.0.0",
+    knex: "3.2.9",
+    mongodb: "7.2.0",
     pg: "8.19.0",
   },
 };
@@ -45,5 +47,14 @@ for (const [relativeFile, section, dependency, version] of updates) {
   pack[section][dependency] = version;
   fs.writeFileSync(file, `${JSON.stringify(pack, null, 2)}\n`);
 }
+
+const rootPackageFile = path.join(__dirname, "..", "package.json");
+const rootPackage = JSON.parse(fs.readFileSync(rootPackageFile, "utf8"));
+
+rootPackage.pnpm = rootPackage.pnpm || {};
+rootPackage.pnpm.overrides = rootPackage.pnpm.overrides || {};
+rootPackage.pnpm.overrides.knex = selectedPreset.knex;
+
+fs.writeFileSync(rootPackageFile, `${JSON.stringify(rootPackage, null, 2)}\n`);
 
 process.stdout.write(`Configured ${preset} peer matrix preset\n`);
