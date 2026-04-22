@@ -34,7 +34,6 @@
     "typescript": "~6.0.3"
   },
   "peerDependencies": {
-    "knex": "^2.4.0 || ^3.0.1",
     "pg": "^8.0.0"
   },
   "scripts": {
