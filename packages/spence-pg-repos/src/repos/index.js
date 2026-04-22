@@ -55,13 +55,16 @@ function init(table, extensions = []) {
 
     function findById(id, returning = applied.defaultColumnsSelection) {
       const query = applied.buildFinderQuery({ filter: "id = ?", params: [id] });
-      return query.first(returning).delayThen((result) => {
-        if (_.isEmpty(result)) {
-          throw newError.NotFound(`${table.entityName} ${id} not found`);
-        }
+      return query
+        .first(returning)
+        .deferResult()
+        .mapResult((result) => {
+          if (_.isEmpty(result)) {
+            throw newError.NotFound(`${table.entityName} ${id} not found`);
+          }
 
-        return result;
-      });
+          return result;
+        });
     }
 
     function find(options, returning = applied.defaultColumnsSelection) {
@@ -79,14 +82,15 @@ function init(table, extensions = []) {
 
     function findOne({ filter, params = [], orderBy } = {}, selection = applied.defaultColumnsSelection) {
       const x = applied.find({ filter, params, limit: 1, offset: 0, orderBy }, selection);
-      return x.delayThen(_.first);
+      return x.deferResult().mapResult(_.first);
     }
 
     function count({ filter, params = [] } = {}) {
       return applied
         .buildFinderQuery({ filter, params })
         .count("id")
-        .delayThen((result) => parseInt(_.getOr(0, "[0].count", result), 10));
+        .deferResult()
+        .mapResult((result) => parseInt(_.getOr(0, "[0].count", result), 10));
     }
 
     function insert(val, returning = applied.defaultColumnsSelection) {
@@ -95,15 +99,16 @@ function init(table, extensions = []) {
         .queryContext(queryContext)
         .returning(returning)
         .insert(applied.prepModification(val))
-        .delayThen(resultTransformer)
-        .delayThen((result) => {
+        .deferResult()
+        .mapResult(resultTransformer)
+        .mapResult((result) => {
           publish(table.entityName, `created`, { state: result, changes: { kind: "new", val } }, context);
           return result;
         });
     }
 
     function insertMany(vals, selection) {
-      return Promise.allSettled(_.map((val) => applied.insert(val, selection), vals)).then(
+      return Promise.allSettled(_.map((val) => applied.insert(val, selection).resolve(), vals)).then(
         _.map(normalizeSettledResult),
       );
     }
@@ -129,7 +134,8 @@ function init(table, extensions = []) {
         .buildFinderQuery({ filter: "id = ?", params: [id] })
         .returning(returning)
         .update(_.isFunction(updateStatement) ? updateStatement() : updateStatement)
-        .delayThen((result) => {
+        .deferResult()
+        .mapResult((result) => {
           if (_.isEmpty(result)) {
             throw newError.NotFound(`${table.entityName} ${id} not found`);
           }
@@ -138,7 +144,7 @@ function init(table, extensions = []) {
     }
 
     function update(id, val, returning = applied.defaultColumnsSelection) {
-      return doUpdateById(id, applied.prepModification(val), returning).delayThen((result) => {
+      return doUpdateById(id, applied.prepModification(val), returning).mapResult((result) => {
         publish(table.entityName, `updated`, { state: result, changes: { kind: "patch", val } }, context);
         return result;
       });
@@ -167,10 +173,13 @@ function init(table, extensions = []) {
     function updateUsingFilter(filter, val, returning = applied.defaultColumnsSelection) {
       const query = applied.buildFinderQuery(filter).returning(returning);
       const updateStatement = applied.prepModification(val);
-      return query.update(_.isFunction(updateStatement) ? updateStatement() : updateStatement).delayThen((result) => {
-        publish(table.entityName, `updated`, { state: result, changes: { kind: "patch", val } }, context);
-        return result;
-      });
+      return query
+        .update(_.isFunction(updateStatement) ? updateStatement() : updateStatement)
+        .deferResult()
+        .mapResult((result) => {
+          publish(table.entityName, `updated`, { state: result, changes: { kind: "patch", val } }, context);
+          return result;
+        });
     }
 
     function touch(id, returning) {
@@ -181,26 +190,30 @@ function init(table, extensions = []) {
       const query = applied.buildFinderQuery({ filter: "id = ?", params: [id] });
       return query
         .delete()
-        .delayThen((result) => {
+        .deferResult()
+        .mapResult((result) => {
           if (result === 0) {
             throw newError.NotFound(`${table.entityName} ${id} not found`);
           }
           return id;
         })
-        .delayThen((result) => {
+        .mapResult((result) => {
           publish(table.entityName, `deleted`, { id: result }, context);
           return result;
         });
     }
 
     async function delUsingFilter({ filter, params }) {
-      // use find to get the affected id's. This is subject to race coniditions, so consumers must be aware they may receive a deleted message twice
+      // use find to get the affected id's. This is subject to race conditions, so consumers must be aware they may receive a deleted message twice
       const affectedIds = _.map("id", await find({ filter, params }, ["id"]));
       const query = applied.buildFinderQuery({ filter, params });
-      return query.delete().delayThen(() => {
-        _.forEach((id) => publish(table.entityName, `deleted`, { id }, context), affectedIds);
-        return affectedIds;
-      });
+      return query
+        .delete()
+        .deferResult()
+        .mapResult(() => {
+          _.forEach((id) => publish(table.entityName, `deleted`, { id }, context), affectedIds);
+          return affectedIds;
+        });
     }
 
     function addToArray(id, field, val, selection = [field]) {
@@ -210,7 +223,7 @@ function init(table, extensions = []) {
           [field]: table.knex.raw(`?? || ?`, [field, JSON.stringify(val)]),
         },
         selection,
-      ).delayThen((result) => {
+      ).mapResult((result) => {
         publish(
           table.entityName,
           `updated`,
@@ -238,7 +251,7 @@ function init(table, extensions = []) {
           ),
         },
         selection,
-      ).delayThen((result) => {
+      ).mapResult((result) => {
         publish(
           table.entityName,
           `updated`,
@@ -259,7 +272,7 @@ function init(table, extensions = []) {
           [field]: table.knex.raw(`?? || ?`, [field, JSON.stringify(val)]),
         },
         selection,
-      ).delayThen((result) => {
+      ).mapResult((result) => {
         publish(
           table.entityName,
           `updated`,
@@ -278,7 +291,7 @@ function init(table, extensions = []) {
           [field]: table.knex.raw(`?? - ?${typeSuffix}`, [field, _.isPlainObject(keys) ? JSON.stringify(keys) : keys]),
         },
         selection,
-      ).delayThen((result) => {
+      ).mapResult((result) => {
         publish(
           table.entityName,
           `updated`,

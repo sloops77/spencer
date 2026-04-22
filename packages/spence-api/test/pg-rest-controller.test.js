@@ -16,6 +16,10 @@ function sortExamples(examples) {
   return _.orderBy(["createdAt", "id"], ["desc", "asc"], examples);
 }
 
+async function seedExamples(schemaName, rows) {
+  await knex(`${schemaName}.examples`).insert(rows);
+}
+
 describe("rest controller", () => {
   let schemaName = null;
   let fastify = null;
@@ -97,53 +101,45 @@ describe("rest controller", () => {
   });
 
   it("find all simples", async () => {
-    const createResponses = _.map(
-      "json",
-      await Promise.all([
-        fastify.injectJson({
-          method: "POST",
-          url: "/examples",
-          payload: {
-            aVal: "test",
-          },
-        }),
-        fastify.injectJson({
-          method: "POST",
-          url: "/examples",
-          payload: {
-            aVal: "toast",
-          },
-        }),
-      ]),
-    );
+    const createResponses = [
+      {
+        id: "11111111-1111-4111-8111-111111111111",
+        aVal: "test",
+        createdAt: "2024-01-01T00:00:00.000Z",
+      },
+      {
+        id: "22222222-2222-4222-8222-222222222222",
+        aVal: "toast",
+        createdAt: "2024-01-01T00:00:01.000Z",
+      },
+    ];
+
+    await seedExamples(schemaName, createResponses);
+
     const findResponse = await fastify.injectJson({ method: "GET", url: `/examples` });
-    expect(findResponse.json).toEqual(sortExamples(createResponses));
+
+    expect(findResponse.json).toEqual(sortExamples(createResponses).map((example) => expect.objectContaining(example)));
   });
 
   it("find all simples with limit and offset", async () => {
-    const createResponses = _.map(
-      "json",
-      await Promise.all([
-        fastify.injectJson({
-          method: "POST",
-          url: "/examples",
-          payload: {
-            aVal: "test",
-          },
-        }),
-        fastify.injectJson({
-          method: "POST",
-          url: "/examples",
-          payload: {
-            aVal: "toast",
-          },
-        }),
-      ]),
-    );
+    const createResponses = [
+      {
+        id: "33333333-3333-4333-8333-333333333333",
+        aVal: "test",
+        createdAt: "2024-01-01T00:00:00.000Z",
+      },
+      {
+        id: "44444444-4444-4444-8444-444444444444",
+        aVal: "toast",
+        createdAt: "2024-01-01T00:00:01.000Z",
+      },
+    ];
+
+    await seedExamples(schemaName, createResponses);
 
     const sortedResponses = sortExamples(createResponses);
     const findResponse = await fastify.injectJson({ method: "GET", url: `/examples?limit=1&offset=1` });
-    expect(findResponse.json).toEqual([sortedResponses[1]]);
+    expect(findResponse.json).toEqual([expect.objectContaining(sortedResponses[1])]);
   });
 
   it("rejects non-integer limit and offset", async () => {

@@ -295,7 +295,7 @@ describe("test pg factories", () => {
         createdAt: expect.stringMatching(ISO_DATETIME_FORMAT),
         simpleId: expect.stringMatching(UUID_FORMAT),
       });
-      expect(await simpleTable.findById(complex.simpleId)).toEqual({
+      expect(await simpleTable.findById(complex.simpleId).resolve()).toEqual({
         id: expect.stringMatching(UUID_FORMAT),
         aVal: "totalNewSimpleVal",
         createdAt: expect.any(Date),
