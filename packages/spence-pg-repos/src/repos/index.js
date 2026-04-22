@@ -204,7 +204,7 @@ function init(table, extensions = []) {
     }
 
     async function delUsingFilter({ filter, params }) {
-      // use find to get the affected id's. This is subject to race coniditions, so consumers must be aware they may receive a deleted message twice
+      // use find to get the affected id's. This is subject to race conditions, so consumers must be aware they may receive a deleted message twice
       const affectedIds = _.map("id", await find({ filter, params }, ["id"]));
       const query = applied.buildFinderQuery({ filter, params });
       return query
