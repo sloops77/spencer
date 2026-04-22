@@ -1,33 +1,28 @@
-/* eslint-disable no-underscore-dangle */
 const QueryBuilder = require("knex/lib/query/querybuilder");
 const Raw = require("knex/lib/raw");
 const SchemaBuilder = require("knex/lib/schema/builder");
 
 const DELAY_INTERCEPTORS_AUGMENTED = Symbol.for("@spencejs/spence-pg-repos/delay-interceptors-augmented");
+const DELAY_INTERCEPTORS = Symbol.for("@spencejs/spence-pg-repos/delay-interceptors");
 
 function definePatchedThen(Target) {
+  const originalThen = Target == null || Target.prototype == null ? null : Target.prototype.then;
+
+  if (typeof originalThen !== "function") {
+    return;
+  }
+
   Object.defineProperty(Target.prototype, "then", {
     value(...args) {
-      this._interceptors = this._interceptors || [];
-      this._interceptors.push(["then", args]);
+      const interceptors = (this[DELAY_INTERCEPTORS] || []).slice();
 
-      let result = this.client.runner(this).run();
-
-      if (this.client.config.asyncStackTraces) {
-        result = result.catch((err) => {
-          const errorWithOriginalStack = err;
-          errorWithOriginalStack.originalStack = errorWithOriginalStack.stack;
-          const firstLine = errorWithOriginalStack.stack.split("\n")[0];
-          const { error, lines } = this._asyncStack;
-          const stackByLines = error.stack.split("\n");
-          const asyncStack = stackByLines.slice(lines);
-          asyncStack.unshift(firstLine);
-          errorWithOriginalStack.stack = asyncStack.join("\n");
-          throw errorWithOriginalStack;
-        });
+      if (args.length > 0) {
+        interceptors.push(["then", args]);
       }
 
-      this._interceptors.forEach((interceptor) => {
+      let result = originalThen.call(this);
+
+      interceptors.forEach((interceptor) => {
         result = result[interceptor[0]](...interceptor[1]);
       });
 
@@ -45,8 +40,8 @@ function defineDelayMethod(Target, methodName, interceptorName) {
 
   Object.defineProperty(Target.prototype, methodName, {
     value(...args) {
-      this._interceptors = this._interceptors || [];
-      this._interceptors.push([interceptorName, args]);
+      this[DELAY_INTERCEPTORS] = this[DELAY_INTERCEPTORS] || [];
+      this[DELAY_INTERCEPTORS].push([interceptorName, args]);
       return this;
     },
     configurable: true,

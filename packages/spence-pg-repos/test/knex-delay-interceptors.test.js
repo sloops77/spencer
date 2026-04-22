@@ -81,6 +81,19 @@ describe("knex delay interceptors", () => {
     expect(result).toBe("boom");
   });
 
+  it("preserves standard then handlers after delayed interceptors", async () => {
+    const builder = new QueryBuilder(buildClient({ run: () => Promise.resolve(2) }));
+
+    const result = await builder
+      .delayThen((value) => value + 1)
+      .then(
+        (value) => value * 3,
+        () => "unexpected rejection",
+      );
+
+    expect(result).toBe(9);
+  });
+
   it("patches consumer knex instances when the package entrypoint is loaded", async () => {
     expect(pkg.knexFactory).toBeInstanceOf(Function);
 
