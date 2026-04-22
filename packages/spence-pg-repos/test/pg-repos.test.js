@@ -145,6 +145,50 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
       expect(result).toEqual({ ...val, createdAt: expect.any(Date) });
     });
 
+    it("should be able to find one by filter", async () => {
+      const val = { id: Date.now().toString(), aVal: "unique-find-one" };
+
+      const result = await wrap(async (context) => {
+        await simpleTable(context).insert(val).resolve();
+        return simpleTable(context)
+          .findOne({ filter: `${columnCase === "snake" ? "a_val" : '"aVal"'} = ?`, params: [val.aVal] })
+          .resolve();
+      });
+
+      expect(result).toEqual({ ...val, createdAt: expect.any(Date) });
+    });
+
+    it("findOne should return undefined when the filter matches nothing", async () => {
+      await expect(
+        wrap((context) =>
+          simpleTable(context)
+            .findOne({ filter: `${columnCase === "snake" ? "a_val" : '"aVal"'} = ?`, params: ["notfound"] })
+            .resolve(),
+        ),
+      ).resolves.toBeUndefined();
+    });
+
+    it("should apply default sort and normalize limit and offset", async () => {
+      const olderVal = { id: "aaa", aVal: "older", createdAt: new Date("2024-01-01T00:00:00.000Z") };
+      const newerVal = { id: "bbb", aVal: "newer", createdAt: new Date("2024-01-01T00:00:01.000Z") };
+      const filter = `id in (?, ?)`;
+      const params = [olderVal.id, newerVal.id];
+
+      await wrap(async (context) => {
+        await simpleTable(context).insert(olderVal).resolve();
+        await simpleTable(context).insert(newerVal).resolve();
+      });
+
+      await expect(wrap((context) => simpleTable(context).find({ filter, params }))).resolves.toEqual([
+        { ...newerVal, createdAt: expect.any(Date) },
+        { ...olderVal, createdAt: expect.any(Date) },
+      ]);
+
+      await expect(wrap((context) => simpleTable(context).find({ filter, params, limit: "1", offset: "1" }))).resolves.toEqual(
+        [{ ...olderVal, createdAt: expect.any(Date) }],
+      );
+    });
+
     it("should be able to count", async () => {
       const val = () => ({ id: randomUUID(), aVal: "foo" });
       const vals = [val(), val(), val()];
@@ -216,6 +260,44 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
       const updatedVal = await wrap(async (context) => simpleTable(context).update(val.id, { aVal: "bar" }).resolve());
       expect(updatedVal).toEqual({ ...val, createdAt: expect.any(Date), aVal: "bar" });
     });
+
+    it("should be able to update using a filter", async () => {
+      const val = { id: Date.now().toString(), aVal: "filter-update-target" };
+      await simpleTable().insert(val).resolve();
+
+      const updatedVals = await wrap((context) =>
+        simpleTable(context)
+          .updateUsingFilter(
+            { filter: `${columnCase === "snake" ? "a_val" : '"aVal"'} = ?`, params: [val.aVal] },
+            { aVal: "filter-update-result" },
+          )
+          .resolve(),
+      );
+
+      expect(updatedVals).toEqual([{ ...val, createdAt: expect.any(Date), aVal: "filter-update-result" }]);
+      await expect(
+        simpleTable()
+          .findOne({
+            filter: `${columnCase === "snake" ? "a_val" : '"aVal"'} = ?`,
+            params: ["filter-update-result"],
+          })
+          .resolve(),
+      ).resolves.toEqual({ ...val, createdAt: expect.any(Date), aVal: "filter-update-result" });
+    });
+
+    it("updateUsingFilter should return an empty array when nothing matches", async () => {
+      await expect(
+        wrap((context) =>
+          simpleTable(context)
+            .updateUsingFilter(
+              { filter: `${columnCase === "snake" ? "a_val" : '"aVal"'} = ?`, params: ["notfound"] },
+              { aVal: "unused" },
+            )
+            .resolve(),
+        ),
+      ).resolves.toEqual([]);
+    });
+
     it("update should error if cannot be found", async () => {
       await expect(
         wrap(async (context) => simpleTable(context).update("1", { aVal: "bar" }).resolve()),
@@ -230,6 +312,42 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
     it("delete should error if cannot be found", async () => {
       // await expect(simpleTable(context).del("1")).rejects.toEqual(new Error("simple 1 not found"));
     });
+
+    it("should be able to delete using a filter", async () => {
+      const vals = [
+        { id: randomUUID(), aVal: "delete-using-filter" },
+        { id: randomUUID(), aVal: "delete-using-filter" },
+        { id: randomUUID(), aVal: "keep-me" },
+      ];
+
+      await simpleTable().insertMany(vals);
+
+      const deletedIds = await wrap((context) =>
+        simpleTable(context)
+          .delUsingFilter({
+            filter: `${columnCase === "snake" ? "a_val" : '"aVal"'} = ?`,
+            params: ["delete-using-filter"],
+          }),
+      );
+
+      expect(_.sortBy(_.identity, deletedIds)).toEqual(_.sortBy(_.identity, _.map("id", vals.slice(0, 2))));
+      await expect(simpleTable().find({ filter: "id = ?", params: [vals[2].id] })).resolves.toEqual([
+        { ...vals[2], createdAt: expect.any(Date) },
+      ]);
+    });
+
+    it("delUsingFilter should return an empty array when nothing matches", async () => {
+      await expect(
+        wrap((context) =>
+          simpleTable(context)
+            .delUsingFilter({
+              filter: `${columnCase === "snake" ? "a_val" : '"aVal"'} = ?`,
+              params: ["notfound"],
+            }),
+        ),
+      ).resolves.toEqual([]);
+    });
+
     it("add to array integer primitives", async () => {
       const val = { id: Date.now().toString(), manyVals: [] };
       await arrayTable().insert(val).resolve();
