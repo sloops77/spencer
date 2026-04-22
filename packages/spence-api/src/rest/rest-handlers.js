@@ -1,13 +1,5 @@
 const RestConfigurationError = require("./RestConfigurationError");
 
-function resolveRepoResult(result) {
-  if (result != null && typeof result.resolve === "function") {
-    return result.resolve();
-  }
-
-  return result;
-}
-
 const create = {
   method: "POST",
   path: "/",
@@ -20,7 +12,7 @@ const create = {
   },
   handler({ repo }) {
     return async (req, reply) => {
-      const result = await resolveRepoResult(repo(req).insert(req.body));
+      const result = await repo(req).insert(req.body);
       reply.code(201).send(result);
     };
   },
@@ -38,7 +30,7 @@ const getById = {
   },
   handler({ repo }) {
     return async (req, reply) => {
-      reply.send(await resolveRepoResult(repo(req).findById(req.params.id)));
+      reply.send(await repo(req).findById(req.params.id));
     };
   },
 };
@@ -72,7 +64,7 @@ const update = {
   },
   handler({ repo }) {
     return async (req, reply) => {
-      const result = await resolveRepoResult(repo(req).update(req.params.id, req.body));
+      const result = await repo(req).update(req.params.id, req.body);
       reply.send(result);
     };
   },
@@ -85,7 +77,7 @@ const del = {
   },
   handler({ repo }) {
     return async (req, reply) => {
-      await resolveRepoResult(repo(req).del(req.params.id, req.body));
+      await repo(req).del(req.params.id, req.body);
       reply.code(204).send();
     };
   },

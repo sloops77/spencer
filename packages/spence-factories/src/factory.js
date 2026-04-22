@@ -1,14 +1,6 @@
 const _ = require("lodash/fp");
 const { randomUUID } = require("node:crypto");
 
-function resolveRepoResult(result) {
-  if (result != null && typeof result.resolve === "function") {
-    return result.resolve();
-  }
-
-  return result;
-}
-
 function register(name, ...args) {
   let defaultRepo;
   let baseFactory;
@@ -81,7 +73,7 @@ function createdFactoryType(commonFactory) {
 function persistFactoryType(commonFactory) {
   return async (overrides = {}) => {
     const { item, repo } = await commonFactory("persist")(overrides);
-    const value = await resolveRepoResult(repo.insert(item));
+    const value = await repo.insert(item);
     return JSON.parse(JSON.stringify(value));
   };
 }

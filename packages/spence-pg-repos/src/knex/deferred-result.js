@@ -25,6 +25,18 @@ class DeferredResult {
 
     return result;
   }
+
+  then(...args) {
+    return this.resolve().then(...args);
+  }
+
+  catch(...args) {
+    return this.resolve().catch(...args);
+  }
+
+  finally(...args) {
+    return this.resolve().finally(...args);
+  }
 }
 
 module.exports = DeferredResult;

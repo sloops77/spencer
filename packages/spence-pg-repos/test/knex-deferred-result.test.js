@@ -87,6 +87,14 @@ describe("knex deferred result", () => {
     expect(result).toBe("boom");
   });
 
+  it("is awaitable without calling resolve explicitly", async () => {
+    const builder = new QueryBuilder(buildClient({ run: () => Promise.resolve(2) }));
+
+    const result = await builder.deferResult().mapResult((value) => value + 1);
+
+    expect(result).toBe(3);
+  });
+
   it("leaves normal then behavior untouched when deferResult is not used", async () => {
     const builder = new QueryBuilder(buildClient({ run: () => Promise.resolve(2) }));
 
