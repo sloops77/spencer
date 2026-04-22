@@ -1,29 +1,40 @@
 class DeferredResult {
-  constructor(builder, interceptors = []) {
-    this.builder = builder;
+  constructor(state, interceptors = []) {
+    this.state = state;
     this.interceptors = interceptors;
+    this.promise = null;
   }
 
   mapResult(...args) {
-    return new DeferredResult(this.builder, [...this.interceptors, ["then", args]]);
+    return new DeferredResult(this.state, [...this.interceptors, ["then", args]]);
   }
 
   catchResult(...args) {
-    return new DeferredResult(this.builder, [...this.interceptors, ["catch", args]]);
+    return new DeferredResult(this.state, [...this.interceptors, ["catch", args]]);
   }
 
   toBuilder() {
-    return this.builder;
+    return this.state.builder;
   }
 
   resolve() {
-    let result = this.builder.then();
+    if (this.promise) {
+      return this.promise;
+    }
+
+    if (!this.state.basePromise) {
+      this.state.basePromise = this.state.builder.then();
+    }
+
+    let result = this.state.basePromise;
 
     this.interceptors.forEach((interceptor) => {
       result = result[interceptor[0]](...interceptor[1]);
     });
 
-    return result;
+    this.promise = result;
+
+    return this.promise;
   }
 
   then(...args) {

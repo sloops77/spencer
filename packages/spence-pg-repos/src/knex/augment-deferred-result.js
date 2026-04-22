@@ -12,7 +12,7 @@ function defineDeferResult(Target) {
 
   Object.defineProperty(Target.prototype, "deferResult", {
     value() {
-      return new DeferredResult(this);
+      return new DeferredResult({ builder: this, basePromise: null });
     },
     configurable: true,
     writable: true,

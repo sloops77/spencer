@@ -95,6 +95,43 @@ describe("knex deferred result", () => {
     expect(result).toBe(3);
   });
 
+  it("memoizes resolve() on the same deferred result instance", async () => {
+    const run = jest.fn(() => Promise.resolve(2));
+    const builder = new QueryBuilder(buildClient({ run }));
+    const deferred = builder.deferResult().mapResult((value) => value + 1);
+
+    const [first, second] = await Promise.all([deferred.resolve(), deferred.resolve()]);
+
+    expect(first).toBe(3);
+    expect(second).toBe(3);
+    expect(run).toHaveBeenCalledTimes(1);
+  });
+
+  it("shares the same execution between resolve() and await", async () => {
+    const run = jest.fn(() => Promise.resolve(2));
+    const builder = new QueryBuilder(buildClient({ run }));
+    const deferred = builder.deferResult().mapResult((value) => value + 1);
+
+    const [resolved, awaited] = await Promise.all([deferred.resolve(), deferred]);
+
+    expect(resolved).toBe(3);
+    expect(awaited).toBe(3);
+    expect(run).toHaveBeenCalledTimes(1);
+  });
+
+  it("shares one builder execution across deferred result wrappers", async () => {
+    const run = jest.fn(() => Promise.resolve(2));
+    const builder = new QueryBuilder(buildClient({ run }));
+    const deferred = builder.deferResult();
+    const mapped = deferred.mapResult((value) => value + 1);
+
+    const [original, transformed] = await Promise.all([deferred.resolve(), mapped.resolve()]);
+
+    expect(original).toBe(2);
+    expect(transformed).toBe(3);
+    expect(run).toHaveBeenCalledTimes(1);
+  });
+
   it("supports promise catch interop on deferred results", async () => {
     const builder = new QueryBuilder(
       buildClient({
