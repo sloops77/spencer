@@ -49,7 +49,7 @@ describe("pg table registry", () => {
     const repo = baseTable(context);
     const registeredTables = addContext(context);
     const val = { id: Date.now().toString(), aVal: "foo" };
-    const result = await repo.insert(val);
+    const result = await repo.insert(val).resolve();
     expect(result).toEqual({ ...val, createdAt: expect.any(Date) });
     expect(repo.callCounterRef.current).toEqual(1);
     expect(repo.contextRef.current).toBe(context);
@@ -61,14 +61,14 @@ describe("pg table registry", () => {
     const contexts = [{ foo: "1" }, { foo: "2" }, { foo: "3" }];
     const registeredTablesArray = _.map(addContext, contexts);
     const results = await Promise.all(
-      _.map((tables) => tables.simples.insert({ id: randomUUID(), aVal: "foo" }), registeredTablesArray),
+      _.map((tables) => tables.simples.insert({ id: randomUUID(), aVal: "foo" }).resolve(), registeredTablesArray),
     );
 
     expect(results).toHaveLength(3);
 
     expect(_.map("simples.callCounterRef.current", registeredTablesArray)).toEqual([1, 1, 1]);
     expect(_.map("simples.contextRef.current", registeredTablesArray)).toEqual(contexts);
-    await registeredTablesArray[0].simples.insert({ id: randomUUID(), aVal: "foo" });
+    await registeredTablesArray[0].simples.insert({ id: randomUUID(), aVal: "foo" }).resolve();
     expect(_.map("simples.callCounterRef.current", registeredTablesArray)).toEqual([2, 1, 1]);
     expect(_.map("simples.contextRef.current", registeredTablesArray)).toEqual(contexts);
   });

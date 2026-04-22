@@ -58,7 +58,7 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
 
     it("should be able to insert", async () => {
       const val = { id: Date.now().toString(), aVal: "foo" };
-      const result = await wrap((context) => simpleTable(context).insert(val));
+      const result = await wrap((context) => simpleTable(context).insert(val).resolve());
       expect(result).toEqual({ ...val, createdAt: expect.any(Date) });
     });
 
@@ -66,8 +66,8 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
       let insertedVal;
       const val = { id: Date.now().toString(), aVal: "foo" };
       const erroringStatements = wrap(async (context) => {
-        insertedVal = await simpleTable(context).insert(val);
-        await simpleTable(context).findById("1");
+        insertedVal = await simpleTable(context).insert(val).resolve();
+        await simpleTable(context).findById("1").resolve();
       });
 
       await expect(erroringStatements).rejects.toEqual(new Error("simple 1 not found"));
@@ -128,8 +128,8 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
     it("should be able to find by id", async () => {
       const val = { id: Date.now().toString(), aVal: "foo" };
       const result = await wrap(async (context) => {
-        await simpleTable(context).insert(val);
-        return simpleTable(context).findById(val.id);
+        await simpleTable(context).insert(val).resolve();
+        return simpleTable(context).findById(val.id).resolve();
       });
 
       expect(result).toEqual({ ...val, createdAt: expect.any(Date) });
@@ -138,8 +138,8 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
     it("should be able to find using knex methods", async () => {
       const val = { id: Date.now().toString(), aVal: "foo" };
       const result = await wrap(async (context) => {
-        await simpleTable(context).insert(val);
-        return simpleTable(context).findOne({}).where({ id: val.id });
+        await simpleTable(context).insert(val).resolve();
+        return simpleTable(context).find({}).where({ id: val.id }).deferResult().mapResult(_.first).resolve();
       });
 
       expect(result).toEqual({ ...val, createdAt: expect.any(Date) });
@@ -151,7 +151,12 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
 
       const result = await wrap(async (context) => {
         await simpleTable(context).insertMany(vals);
-        return simpleTable(context).count().whereIn("id", _.map("id", vals));
+        return simpleTable(context)
+          .count({
+            filter: `id in (${_.map(() => "?", vals).join(", ")})`,
+            params: _.map("id", vals),
+          })
+          .resolve();
       });
 
       expect(result).toEqual(3);
@@ -165,7 +170,7 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
     it("upsert should update if it does exist already", async () => {
       const val = { id: Date.now().toString(), aVal: "foo" };
       const result = await wrap(async (context) => {
-        await simpleTable(context).insert(val);
+        await simpleTable(context).insert(val).resolve();
         return simpleTable(context).upsert(val.id, { ...val, aVal: "boo" });
       });
       expect(result).toEqual({ ...val, aVal: "boo", createdAt: expect.any(Date) });
@@ -178,19 +183,19 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
     it("findOrInsert should find if it does exist already", async () => {
       const val = { id: Date.now().toString(), aVal: "foo" };
       const result = await wrap(async (context) => {
-        await simpleTable(context).insert(val);
+        await simpleTable(context).insert(val).resolve();
         return simpleTable(context).findOrInsert({ ...val, aVal: "boo" }, ["id"]);
       });
       expect(result).toEqual({ ...val, aVal: "foo", createdAt: expect.any(Date) });
     });
 
     it("should error if cannot be found", async () => {
-      const result = wrap((context) => simpleTable(context).findById("1"));
+      const result = wrap((context) => simpleTable(context).findById("1").resolve());
       await expect(result).rejects.toEqual(new Error("simple 1 not found"));
     });
     it("should be able to find by filter", async () => {
       const val = { id: Date.now().toString(), aVal: "unique" };
-      await simpleTable().insert(val);
+      await simpleTable().insert(val).resolve();
 
       await expect(
         wrap((context) =>
@@ -207,97 +212,95 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
     });
     it("should be able to update by id", async () => {
       const val = { id: Date.now().toString(), aVal: "foo" };
-      await simpleTable().insert(val);
-      const updatedVal = await wrap(async (context) => simpleTable(context).update(val.id, { aVal: "bar" }));
+      await simpleTable().insert(val).resolve();
+      const updatedVal = await wrap(async (context) => simpleTable(context).update(val.id, { aVal: "bar" }).resolve());
       expect(updatedVal).toEqual({ ...val, createdAt: expect.any(Date), aVal: "bar" });
     });
     it("update should error if cannot be found", async () => {
-      await expect(wrap(async (context) => simpleTable(context).update("1", { aVal: "bar" }))).rejects.toEqual(
-        new Error("simple 1 not found"),
-      );
+      await expect(
+        wrap(async (context) => simpleTable(context).update("1", { aVal: "bar" }).resolve()),
+      ).rejects.toEqual(new Error("simple 1 not found"));
     });
     it("should be able to delete by id", async () => {
       const val = { id: Date.now().toString(), aVal: "foo" };
-      await simpleTable().insert(val);
-      expect(await wrap(async (context) => simpleTable(context).del(val.id))).toEqual(val.id);
-      await expect(simpleTable().findById(val.id)).rejects.toEqual(new Error(`simple ${val.id} not found`));
+      await simpleTable().insert(val).resolve();
+      expect(await wrap(async (context) => simpleTable(context).del(val.id).resolve())).toEqual(val.id);
+      await expect(simpleTable().findById(val.id).resolve()).rejects.toEqual(new Error(`simple ${val.id} not found`));
     });
     it("delete should error if cannot be found", async () => {
       // await expect(simpleTable(context).del("1")).rejects.toEqual(new Error("simple 1 not found"));
     });
     it("add to array integer primitives", async () => {
       const val = { id: Date.now().toString(), manyVals: [] };
-      await arrayTable().insert(val);
+      await arrayTable().insert(val).resolve();
       await expect(
-        wrap(async (context) => arrayTable(context).addToArray(val.id, "manyVals", [1, 3])),
+        wrap(async (context) => arrayTable(context).addToArray(val.id, "manyVals", [1, 3]).resolve()),
       ).resolves.toEqual([1, 3]);
       await expect(
-        wrap(async (context) => arrayTable(context).addToArray(val.id, "manyVals", [7, 9])),
+        wrap(async (context) => arrayTable(context).addToArray(val.id, "manyVals", [7, 9]).resolve()),
       ).resolves.toEqual([1, 3, 7, 9]);
-      await expect(wrap(async (context) => arrayTable(context).addToArray(val.id, "manyVals", 11))).resolves.toEqual([
-        1, 3, 7, 9, 11,
-      ]);
+      await expect(
+        wrap(async (context) => arrayTable(context).addToArray(val.id, "manyVals", 11).resolve()),
+      ).resolves.toEqual([1, 3, 7, 9, 11]);
     });
 
     it("delete from array integer primitives", async () => {
       const val = { id: Date.now().toString(), manyVals: [1, 3, 5, 7, 9, 11] };
-      await arrayTable().insert(val);
+      await arrayTable().insert(val).resolve();
       await expect(
-        wrap(async (context) => arrayTable(context).deleteFromArray(val.id, "manyVals", 7)),
+        wrap(async (context) => arrayTable(context).deleteFromArray(val.id, "manyVals", 7).resolve()),
       ).resolves.toEqual([1, 3, 5, 9, 11]);
       await expect(
-        wrap(async (context) => arrayTable(context).deleteFromArray(val.id, "manyVals", [1, 9])),
+        wrap(async (context) => arrayTable(context).deleteFromArray(val.id, "manyVals", [1, 9]).resolve()),
       ).resolves.toEqual([3, 5, 11]);
       await expect(
-        wrap(async (context) => arrayTable(context).deleteFromArray(val.id, "manyVals", [11, 2, 2, 5])),
+        wrap(async (context) => arrayTable(context).deleteFromArray(val.id, "manyVals", [11, 2, 2, 5]).resolve()),
       ).resolves.toEqual([3]);
     });
 
     it("add to array string primitives", async () => {
       const val = { id: Date.now().toString(), manyVals: [] };
-      await arrayTable().insert(val);
+      await arrayTable().insert(val).resolve();
       await expect(
-        wrap(async (context) => arrayTable(context).addToArray(val.id, "manyVals", ["a", "b"])),
+        wrap(async (context) => arrayTable(context).addToArray(val.id, "manyVals", ["a", "b"]).resolve()),
       ).resolves.toEqual(["a", "b"]);
       await expect(
-        wrap(async (context) => arrayTable(context).addToArray(val.id, "manyVals", ["c", "d"])),
+        wrap(async (context) => arrayTable(context).addToArray(val.id, "manyVals", ["c", "d"]).resolve()),
       ).resolves.toEqual(["a", "b", "c", "d"]);
-      await expect(wrap(async (context) => arrayTable(context).addToArray(val.id, "manyVals", "e"))).resolves.toEqual([
-        "a",
-        "b",
-        "c",
-        "d",
-        "e",
-      ]);
+      await expect(
+        wrap(async (context) => arrayTable(context).addToArray(val.id, "manyVals", "e").resolve()),
+      ).resolves.toEqual(["a", "b", "c", "d", "e"]);
     });
 
     it("delete from array string primitives", async () => {
       const val = { id: Date.now().toString(), manyVals: ["a", "b", "c", "d", "e"] };
-      await arrayTable().insert(val);
+      await arrayTable().insert(val).resolve();
       await expect(
-        wrap(async (context) => arrayTable(context).deleteFromArray(val.id, "manyVals", "c")),
+        wrap(async (context) => arrayTable(context).deleteFromArray(val.id, "manyVals", "c").resolve()),
       ).resolves.toEqual(["a", "b", "d", "e"]);
       await expect(
-        wrap(async (context) => arrayTable(context).deleteFromArray(val.id, "manyVals", ["d", "e"])),
+        wrap(async (context) => arrayTable(context).deleteFromArray(val.id, "manyVals", ["d", "e"]).resolve()),
       ).resolves.toEqual(["a", "b"]);
     });
 
     it("add to array objects", async () => {
       const val = { id: Date.now().toString(), manyVals: [] };
-      await arrayTable().insert(val);
+      await arrayTable().insert(val).resolve();
       await expect(
         wrap(async (context) =>
-          arrayTable(context).addToArray(val.id, "manyVals", [
-            { id: 1, a: "1" },
-            { id: 2, a: "2" },
-          ]),
+          arrayTable(context)
+            .addToArray(val.id, "manyVals", [
+              { id: 1, a: "1" },
+              { id: 2, a: "2" },
+            ])
+            .resolve(),
         ),
       ).resolves.toEqual([
         { id: 1, a: "1" },
         { id: 2, a: "2" },
       ]);
       await expect(
-        wrap(async (context) => arrayTable(context).addToArray(val.id, "manyVals", { id: 3, a: "3" })),
+        wrap(async (context) => arrayTable(context).addToArray(val.id, "manyVals", { id: 3, a: "3" }).resolve()),
       ).resolves.toEqual([
         { id: 1, a: "1" },
         { id: 2, a: "2" },
@@ -314,9 +317,9 @@ describe.each([[{ columnCase: "snake", transactions: false }], [{ columnCase: "c
           { id: 3, a: "3" },
         ],
       };
-      await arrayTable().insert(val);
+      await arrayTable().insert(val).resolve();
       await expect(
-        wrap(async (context) => arrayTable(context).deleteFromArray(val.id, "manyVals", { id: 1, a: "1" })),
+        wrap(async (context) => arrayTable(context).deleteFromArray(val.id, "manyVals", { id: 1, a: "1" }).resolve()),
       ).resolves.toEqual([
         { id: 2, a: "2" },
         { id: 3, a: "3" },

@@ -19,7 +19,7 @@
     "db:migrate:test": "NODE_ENV=test pnpm --filter @spencejs/spence-pg-repos exec knex --knexfile ../../knexfile.js migrate:latest --env test",
     "db:migrate:production": "NODE_ENV=production pnpm --filter @spencejs/spence-pg-repos exec knex --knexfile ../../knexfile.js migrate:latest --env production",
     "db:prepare:test": "pnpm db:migrate:test",
-    "test:knex-compat": "jest --config ./jest.config.js --runInBand --coverage=false packages/spence-pg-repos/test/knex-delay-interceptors.test.js packages/spence-pg-repos/test/pg-repos.test.js packages/spence-pg-repos/test/pg-repos-registry.test.js packages/spence-api/test/broken-controller.test.js packages/spence-api/test/pg-rest-controller.test.js packages/spence-factories/test/factory.test.js",
+    "test:knex-compat": "jest --config ./jest.config.js --runInBand --coverage=false packages/spence-pg-repos/test/knex-deferred-result.test.js packages/spence-pg-repos/test/pg-repos.test.js packages/spence-pg-repos/test/pg-repos-registry.test.js packages/spence-api/test/broken-controller.test.js packages/spence-api/test/pg-rest-controller.test.js packages/spence-factories/test/factory.test.js",
     "lint": "pnpm -r --filter './packages/*' --filter '!./packages/spence' run lint",
     "lint:ci": "pnpm -r --filter './packages/*' --filter '!./packages/spence' run lint:ci",
     "schema:create:dev": "NODE_ENV=development node scripts/create-schema",

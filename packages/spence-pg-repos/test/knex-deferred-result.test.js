@@ -4,7 +4,7 @@ const QueryBuilder = require("knex/lib/query/querybuilder");
 const Raw = require("knex/lib/raw");
 const SchemaBuilder = require("knex/lib/schema/builder");
 const pkg = require("../src");
-const { applyKnexDelayInterceptors } = require("../src/knex/augment-delay-interceptors");
+const { applyKnexDeferredResults } = require("../src/knex/augment-deferred-result");
 
 function buildClient({ run }) {
   return {
@@ -24,36 +24,40 @@ function buildClient({ run }) {
   };
 }
 
-describe("knex delay interceptors", () => {
+describe("knex deferred result", () => {
   beforeAll(() => {
-    applyKnexDelayInterceptors();
+    applyKnexDeferredResults();
   });
 
   it.each([
     ["query builder", QueryBuilder],
     ["raw", Raw],
     ["schema builder", SchemaBuilder],
-  ])("adds delayThen and delayCatch to %s instances", (_label, Target) => {
+  ])("adds deferResult to %s instances", (_label, Target) => {
     const builder = new Target(buildClient({ run: () => Promise.resolve("ok") }));
+    const deferred = builder.deferResult();
 
-    expect(typeof builder.delayThen).toBe("function");
-    expect(typeof builder.delayCatch).toBe("function");
-    expect(builder.delayThen((value) => value)).toBe(builder);
-    expect(builder.delayCatch((error) => error)).toBe(builder);
+    expect(typeof builder.deferResult).toBe("function");
+    expect(typeof deferred.mapResult).toBe("function");
+    expect(typeof deferred.catchResult).toBe("function");
+    expect(typeof deferred.resolve).toBe("function");
+    expect(typeof deferred.toBuilder).toBe("function");
+    expect(deferred.toBuilder()).toBe(builder);
   });
 
-  it("applies delayed then interceptors in declaration order", async () => {
+  it("applies deferred map handlers in declaration order", async () => {
     const builder = new QueryBuilder(buildClient({ run: () => Promise.resolve(2) }));
 
     const result = await builder
-      .delayThen((value) => value + 1)
-      .delayThen((value) => value * 3)
-      .then();
+      .deferResult()
+      .mapResult((value) => value + 1)
+      .mapResult((value) => value * 3)
+      .resolve();
 
     expect(result).toBe(9);
   });
 
-  it("allows delayed catch interceptors to recover from runner failures", async () => {
+  it("allows deferred catch handlers to recover from runner failures", async () => {
     const builder = new QueryBuilder(
       buildClient({
         run: () => Promise.reject(new Error("query failed")),
@@ -61,37 +65,34 @@ describe("knex delay interceptors", () => {
     );
 
     const result = await builder
-      .delayCatch((error) => `recovered: ${error.message}`)
-      .delayThen((value) => value.toUpperCase())
-      .then();
+      .deferResult()
+      .catchResult((error) => `recovered: ${error.message}`)
+      .mapResult((value) => value.toUpperCase())
+      .resolve();
 
     expect(result).toBe("RECOVERED: QUERY FAILED");
   });
 
-  it("allows delayCatch to handle errors thrown by delayed then interceptors", async () => {
+  it("allows catchResult to handle errors thrown by mapResult", async () => {
     const builder = new QueryBuilder(buildClient({ run: () => Promise.resolve("ok") }));
 
     const result = await builder
-      .delayThen(() => {
+      .deferResult()
+      .mapResult(() => {
         throw new Error("boom");
       })
-      .delayCatch((error) => error.message)
-      .then();
+      .catchResult((error) => error.message)
+      .resolve();
 
     expect(result).toBe("boom");
   });
 
-  it("preserves standard then handlers after delayed interceptors", async () => {
+  it("leaves normal then behavior untouched when deferResult is not used", async () => {
     const builder = new QueryBuilder(buildClient({ run: () => Promise.resolve(2) }));
 
-    const result = await builder
-      .delayThen((value) => value + 1)
-      .then(
-        (value) => value * 3,
-        () => "unexpected rejection",
-      );
+    const result = await builder.then((value) => value * 3);
 
-    expect(result).toBe(9);
+    expect(result).toBe(6);
   });
 
   it("patches consumer knex instances when the package entrypoint is loaded", async () => {
@@ -103,8 +104,8 @@ describe("knex delay interceptors", () => {
       const builder = consumerKnex.queryBuilder();
       const raw = consumerKnex.raw("select 1");
 
-      expect(typeof builder.delayThen).toBe("function");
-      expect(typeof raw.delayCatch).toBe("function");
+      expect(typeof builder.deferResult).toBe("function");
+      expect(typeof raw.deferResult).toBe("function");
     } finally {
       await consumerKnex.destroy();
     }
