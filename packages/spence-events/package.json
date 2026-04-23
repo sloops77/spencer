@@ -3,6 +3,12 @@
   "version": "1.1.0",
   "main": "src/index.js",
   "types": "types/index.d.ts",
+  "files": [
+    "src",
+    "types",
+    "!types/**/*.test-d.ts",
+    "tsconfig.json"
+  ],
   "license": "MIT",
   "publishConfig": {
     "access": "public"

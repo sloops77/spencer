@@ -2,6 +2,9 @@
   "name": "@spencejs/spence",
   "version": "1.1.0",
   "main": "./src/index.js",
+  "files": [
+    "src"
+  ],
   "license": "MIT",
   "publishConfig": {
     "access": "public"

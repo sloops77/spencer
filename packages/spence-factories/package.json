@@ -2,6 +2,12 @@
   "name": "@spencejs/spence-factories",
   "version": "1.1.0",
   "main": "src/factory.js",
+  "files": [
+    "src",
+    "types",
+    "spencerc.js",
+    "tsconfig.json"
+  ],
   "license": "MIT",
   "engines": {
     "node": ">=22.0.0"

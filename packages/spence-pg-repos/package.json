@@ -2,6 +2,10 @@
   "name": "@spencejs/spence-pg-repos",
   "version": "1.1.0",
   "main": "./src/index.js",
+  "files": [
+    "src",
+    "spencerc.js"
+  ],
   "license": "MIT",
   "publishConfig": {
     "access": "public"
