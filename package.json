@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
-    "globals": "17.5.0",
+    "globals": "17.6.0",
     "jest": "30.3.0",
     "jest-junit": "~16.0.0"
   },
