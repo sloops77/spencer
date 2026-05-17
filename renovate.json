@@ -2,5 +2,42 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "dependencyDashboard": true,
+  "rangeStrategy": "bump",
+  "vulnerabilityAlerts": {
+    "rangeStrategy": "bump",
+    "vulnerabilityFixStrategy": "lowest"
+  },
+  "packageRules": [
+    {
+      "description": "Automerge non-major dependency updates once required checks pass.",
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "automerge": true
+    },
+    {
+      "description": "Keep test and lint tooling together.",
+      "matchManagers": [
+        "npm"
+      ],
+      "matchPackageNames": [
+        "/^@eslint\\//",
+        "/^eslint($|-)/",
+        "/^jest($|-)/",
+        "jest-junit",
+        "prettier",
+        "eslint-config-prettier",
+        "eslint-plugin-prettier",
+        "tsd",
+        "typescript"
+      ],
+      "groupName": "test and lint libraries",
+      "groupSlug": "test-and-lint-libraries"
+    }
   ]
 }
