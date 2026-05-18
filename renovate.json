@@ -64,6 +64,17 @@
       ],
       "groupName": "test libraries",
       "groupSlug": "test-libraries"
+    },
+    {
+      "description": "Keep Fastify packages together.",
+      "matchManagers": [
+        "npm"
+      ],
+      "matchPackageNames": [
+        "fastify**"
+      ],
+      "groupName": "Fastify packages",
+      "groupSlug": "fastify"
     }
   ]
 }
