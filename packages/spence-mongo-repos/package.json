@@ -24,7 +24,7 @@
   "devDependencies": {
     "@spencejs/spence-config": "workspace:^",
     "@types/http-errors": "^2.0.1",
-    "@types/lodash": "~4.17.4",
+    "@types/lodash": "~4.17.24",
     "@types/node": "~25.8.0",
     "await-sleep": "~0.0.1",
     "eslint": "10.3.0",

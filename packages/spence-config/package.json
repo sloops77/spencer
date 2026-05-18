@@ -22,7 +22,7 @@
     "pino": "^10.3.0"
   },
   "devDependencies": {
-    "@types/lodash": "~4.17.4",
+    "@types/lodash": "~4.17.24",
     "@types/node": "~25.8.0",
     "@types/pino": "^7.0.5",
     "eslint": "10.3.0",
