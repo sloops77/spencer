@@ -1,0 +1,69 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "dependencyDashboard": true,
+  "rangeStrategy": "bump",
+  "vulnerabilityAlerts": {
+    "rangeStrategy": "bump",
+    "vulnerabilityFixStrategy": "lowest"
+  },
+  "packageRules": [
+    {
+      "description": "Automerge non-major dependency updates once required checks pass.",
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "automerge": true
+    },
+    {
+      "description": "Keep lint tooling together.",
+      "matchManagers": [
+        "npm"
+      ],
+      "extends": [
+        "packages:linters"
+      ],
+      "groupName": "lint libraries",
+      "groupSlug": "lint-libraries"
+    },
+    {
+      "description": "Keep TypeScript with lint tooling.",
+      "matchManagers": [
+        "npm"
+      ],
+      "matchPackageNames": [
+        "typescript"
+      ],
+      "groupName": "lint libraries",
+      "groupSlug": "lint-libraries"
+    },
+    {
+      "description": "Keep test tooling together.",
+      "matchManagers": [
+        "npm"
+      ],
+      "extends": [
+        "packages:jsTest"
+      ],
+      "groupName": "test libraries",
+      "groupSlug": "test-libraries"
+    },
+    {
+      "description": "Keep extra test tooling together.",
+      "matchManagers": [
+        "npm"
+      ],
+      "matchPackageNames": [
+        "jest-junit",
+        "tsd"
+      ],
+      "groupName": "test libraries",
+      "groupSlug": "test-libraries"
+    }
+  ]
+}
