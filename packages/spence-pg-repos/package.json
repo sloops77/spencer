@@ -16,7 +16,7 @@
   "dependencies": {
     "@spencejs/spence-events": "workspace:^",
     "fastify-plugin": "^5.1.0",
-    "http-errors": "^2.0.0",
+    "http-errors": "^2.0.1",
     "knex": "^2.4.0 || ^3.0.1",
     "lodash": "^4.18.1",
     "pg-types": "^4.1.0"
