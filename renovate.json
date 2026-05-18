@@ -28,6 +28,14 @@
       "extends": [
         "packages:linters"
       ],
+      "groupName": "lint libraries",
+      "groupSlug": "lint-libraries"
+    },
+    {
+      "description": "Keep TypeScript with lint tooling.",
+      "matchManagers": [
+        "npm"
+      ],
       "matchPackageNames": [
         "typescript"
       ],
@@ -41,6 +49,14 @@
       ],
       "extends": [
         "packages:jsTest"
+      ],
+      "groupName": "test libraries",
+      "groupSlug": "test-libraries"
+    },
+    {
+      "description": "Keep extra test tooling together.",
+      "matchManagers": [
+        "npm"
       ],
       "matchPackageNames": [
         "jest-junit",
