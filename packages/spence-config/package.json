@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@types/lodash": "~4.17.24",
-    "@types/node": "~25.9.0",
+    "@types/node": "~25.9.1",
     "@types/pino": "^7.0.5",
     "eslint": "10.4.0",
     "eslint-config-prettier": "~10.1.8",
