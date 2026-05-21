@@ -43,7 +43,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:15.18
+        image: postgres:18.4
         env:
           POSTGRES_USER: postgres
           POSTGRES_DB: spence_test
@@ -127,7 +127,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:15.18
+        image: postgres:18.4
         env:
           POSTGRES_USER: postgres
           POSTGRES_DB: spence_test
@@ -187,7 +187,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:15.18
+        image: postgres:18.4
         env:
           POSTGRES_USER: postgres
           POSTGRES_DB: spence_test
