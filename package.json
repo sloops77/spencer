@@ -5,7 +5,7 @@
   "packageManager": "pnpm@10.33.4",
   "dependencies": {},
   "engines": {
-    "node": ">=22.22.3"
+    "node": ">=24.15.0"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
