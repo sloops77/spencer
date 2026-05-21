@@ -10,7 +10,7 @@
     "access": "public"
   },
   "engines": {
-    "node": ">=24.15.0"
+    "node": ">=24.16.0"
   },
   "dependencies": {
     "@spencejs/spence-api": "workspace:^",
