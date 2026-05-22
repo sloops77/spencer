@@ -19,7 +19,7 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: "24.15.0"
+          node-version: "24.16.0"
           cache: pnpm
 
       - name: Install dependencies
@@ -74,7 +74,7 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: "24.15.0"
+          node-version: "24.16.0"
           cache: pnpm
 
       - name: Configure peer preset
@@ -158,7 +158,7 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: "24.15.0"
+          node-version: "24.16.0"
           cache: pnpm
 
       - name: Configure knex version
@@ -218,7 +218,7 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: "24.15.0"
+          node-version: "24.16.0"
           cache: pnpm
 
       - name: Configure mongodb version
