@@ -20,7 +20,7 @@
     "@spencejs/spence-mongo-repos": "workspace:^",
     "@spencejs/spence-pg-repos": "workspace:^",
     "@types/lodash": "^4.17.24",
-    "@types/node": "~25.9.1",
+    "@types/node": "~25.9.2",
     "eslint": "10.4.1",
     "eslint-config-prettier": "~10.1.8",
     "eslint-plugin-import": "~2.32.0",
