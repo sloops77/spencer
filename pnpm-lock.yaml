@@ -88,8 +88,8 @@ importers:
         specifier: ~17.0.0
         version: 17.0.0
       mongodb:
-        specifier: ~7.4.0
-        version: 7.4.0
+        specifier: ~7.5.0
+        version: 7.5.0
       pino-pretty:
         specifier: ~13.1.3
         version: 13.1.3
@@ -244,8 +244,8 @@ importers:
         specifier: ~17.0.0
         version: 17.0.0
       mongodb:
-        specifier: ~7.4.0
-        version: 7.4.0
+        specifier: ~7.5.0
+        version: 7.5.0
       pino-pretty:
         specifier: ~13.1.3
         version: 13.1.3
@@ -750,6 +750,9 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
+
+  '@mongodb-js/saslprep@1.4.12':
+    resolution: {integrity: sha512-QAfAMwNgnYxZ2C6D1HgeP7Gc4i/uvJRim415PCIL9ptRxWMNbWeLBYb2/9R4pGKny/s1FVu2JA2cxCUBUOggrA==}
 
   '@mongodb-js/saslprep@1.4.8':
     resolution: {integrity: sha512-kpjr2jy2w71w0oqAMI8oibBmiF9lXxWkEQs5gMkW4hVE48bsqINGLxnCSYW62ck/NHXJQpQEfA9WlJ1sY0eqBg==}
@@ -2324,15 +2327,15 @@ packages:
       socks:
         optional: true
 
-  mongodb@7.4.0:
-    resolution: {integrity: sha512-giySkkdYiwoBFo/oCc8nzov3xOYZ/sB8OpAYk5GINRLEjVw0LDsm8xgQL0XMTyU4extQlDZjhdUr1ZEwKFaazw==}
+  mongodb@7.5.0:
+    resolution: {integrity: sha512-5FnrEDLnvp6ycUOGLNLLU33BfCx2qmp2mJjGPDwKLruYsVzXVSK5fsGpoDXvsXJwBfBsD7ebMRdawbDxC2814g==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
       '@aws-sdk/credential-providers': ^3.806.0
       '@mongodb-js/zstd': ^7.0.0
       gcp-metadata: ^7.0.1
       kerberos: ^7.0.0
-      mongodb-client-encryption: '>=7.0.0 <7.1.0'
+      mongodb-client-encryption: ^7.2.0
       snappy: ^7.3.2
       socks: ^2.8.6
     peerDependenciesMeta:
@@ -3648,6 +3651,10 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
+
+  '@mongodb-js/saslprep@1.4.12':
+    dependencies:
+      sparse-bitfield: 3.0.3
 
   '@mongodb-js/saslprep@1.4.8':
     dependencies:
@@ -5454,9 +5461,9 @@ snapshots:
       bson: 7.2.0
       mongodb-connection-string-url: 7.0.1
 
-  mongodb@7.4.0:
+  mongodb@7.5.0:
     dependencies:
-      '@mongodb-js/saslprep': 1.4.8
+      '@mongodb-js/saslprep': 1.4.12
       bson: 7.2.0
       mongodb-connection-string-url: 7.0.1
 
