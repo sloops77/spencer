@@ -29,7 +29,7 @@
     "@spencejs/spence-config": "workspace:^",
     "@spencejs/spence-mongo-repos": "workspace:^",
     "@spencejs/spence-pg-repos": "workspace:^",
-    "@types/lodash": "~4.17.24",
+    "@types/lodash": "~4.17.25",
     "@types/node": "~25.9.5",
     "await-sleep": "~0.0.1",
     "eslint": "10.8.0",

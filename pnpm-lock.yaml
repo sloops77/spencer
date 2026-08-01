@@ -58,8 +58,8 @@ importers:
         specifier: workspace:^
         version: link:../spence-pg-repos
       '@types/lodash':
-        specifier: ~4.17.24
-        version: 4.17.24
+        specifier: ~4.17.25
+        version: 4.17.25
       '@types/node':
         specifier: ~25.9.5
         version: 25.9.5
@@ -119,8 +119,8 @@ importers:
         version: 10.3.1
     devDependencies:
       '@types/lodash':
-        specifier: ~4.17.24
-        version: 4.17.24
+        specifier: ~4.17.25
+        version: 4.17.25
       '@types/node':
         specifier: ~25.9.5
         version: 25.9.5
@@ -165,8 +165,8 @@ importers:
         specifier: workspace:^
         version: link:../spence-config
       '@types/lodash':
-        specifier: ~4.17.24
-        version: 4.17.24
+        specifier: ~4.17.25
+        version: 4.17.25
       '@types/node':
         specifier: ~25.9.5
         version: 25.9.5
@@ -220,8 +220,8 @@ importers:
         specifier: workspace:^
         version: link:../spence-pg-repos
       '@types/lodash':
-        specifier: ^4.17.24
-        version: 4.17.24
+        specifier: ^4.17.25
+        version: 4.17.25
       '@types/node':
         specifier: ~25.9.5
         version: 25.9.5
@@ -278,8 +278,8 @@ importers:
         specifier: ^2.0.5
         version: 2.0.5
       '@types/lodash':
-        specifier: ~4.17.24
-        version: 4.17.24
+        specifier: ~4.17.25
+        version: 4.17.25
       '@types/node':
         specifier: ~25.9.5
         version: 25.9.5
@@ -345,8 +345,8 @@ importers:
         specifier: workspace:^
         version: link:../spence-config
       '@types/lodash':
-        specifier: ~4.17.24
-        version: 4.17.24
+        specifier: ~4.17.25
+        version: 4.17.25
       '@types/node':
         specifier: ~25.9.5
         version: 25.9.5
@@ -848,8 +848,8 @@ packages:
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
 
-  '@types/lodash@4.17.24':
-    resolution: {integrity: sha512-gIW7lQLZbue7lRSWEFql49QJJWThrTFFeIMJdp3eH4tKoxm1OvEPg02rm4wCCSHS0cL3/Fizimb35b7k8atwsQ==}
+  '@types/lodash@4.17.25':
+    resolution: {integrity: sha512-+K1NIO8I+F9/wNulfVvu23QYd0Pe9/OCqRrim4NoYIf1VoEDL90Ve4ClzpyqBLc7NpGGWRvYNCKZ1BE/Jpf8dQ==}
 
   '@types/minimist@1.2.5':
     resolution: {integrity: sha512-hov8bUuiLiyFPGyFPE1lwWhmzYbirOXQNNo40+y3zow8aFVTeyn3VWL0VFFfdNddA8S4Vf0Tc062rzyNr7Paag==}
@@ -3755,7 +3755,7 @@ snapshots:
 
   '@types/json5@0.0.29': {}
 
-  '@types/lodash@4.17.24': {}
+  '@types/lodash@4.17.25': {}
 
   '@types/minimist@1.2.5': {}
 
