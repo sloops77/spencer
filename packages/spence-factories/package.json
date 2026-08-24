@@ -21,7 +21,7 @@
     "@spencejs/spence-pg-repos": "workspace:^",
     "@types/lodash": "^4.17.25",
     "@types/node": "~25.9.5",
-    "eslint": "10.8.1",
+    "eslint": "10.9.0",
     "eslint-config-prettier": "~10.1.8",
     "eslint-plugin-import": "~2.32.0",
     "eslint-plugin-prettier": "~5.5.6",
