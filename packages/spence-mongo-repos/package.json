@@ -25,7 +25,7 @@
     "@spencejs/spence-config": "workspace:^",
     "@types/http-errors": "^2.0.5",
     "@types/lodash": "~4.17.25",
-    "@types/node": "~25.9.5",
+    "@types/node": "~25.9.6",
     "await-sleep": "~0.0.1",
     "eslint": "10.10.0",
     "eslint-config-prettier": "~10.1.8",
