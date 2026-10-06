@@ -91,8 +91,8 @@ importers:
         specifier: ~7.7.0
         version: 7.7.0
       pino-pretty:
-        specifier: ~13.1.3
-        version: 13.1.3
+        specifier: ~13.2.0
+        version: 13.2.0
       prettier:
         specifier: ~3.9.9
         version: 3.9.9
@@ -146,8 +146,8 @@ importers:
         specifier: ~17.0.0
         version: 17.0.0
       pino-pretty:
-        specifier: ~13.1.3
-        version: 13.1.3
+        specifier: ~13.2.0
+        version: 13.2.0
       prettier:
         specifier: ~3.9.9
         version: 3.9.9
@@ -192,8 +192,8 @@ importers:
         specifier: ~17.0.0
         version: 17.0.0
       pino-pretty:
-        specifier: ~13.1.3
-        version: 13.1.3
+        specifier: ~13.2.0
+        version: 13.2.0
       prettier:
         specifier: ~3.9.9
         version: 3.9.9
@@ -247,8 +247,8 @@ importers:
         specifier: ~7.7.0
         version: 7.7.0
       pino-pretty:
-        specifier: ~13.1.3
-        version: 13.1.3
+        specifier: ~13.2.0
+        version: 13.2.0
       prettier:
         specifier: ~3.9.9
         version: 3.9.9
@@ -308,8 +308,8 @@ importers:
         specifier: ^6.0.0 || ^7.0.0
         version: 7.2.0
       pino-pretty:
-        specifier: ~13.1.3
-        version: 13.1.3
+        specifier: ~13.2.0
+        version: 13.2.0
       prettier:
         specifier: ~3.9.9
         version: 3.9.9
@@ -375,8 +375,8 @@ importers:
         specifier: 8.23.1
         version: 8.23.1
       pino-pretty:
-        specifier: ~13.1.3
-        version: 13.1.3
+        specifier: ~13.2.0
+        version: 13.2.0
       prettier:
         specifier: ~3.9.9
         version: 3.9.9
@@ -2571,8 +2571,8 @@ packages:
   pino-abstract-transport@3.0.0:
     resolution: {integrity: sha512-wlfUczU+n7Hy/Ha5j9a/gZNy7We5+cXp8YL+X+PG8S0KXxw7n/JXA3c46Y0zQznIJ83URJiwy7Lh56WLokNuxg==}
 
-  pino-pretty@13.1.3:
-    resolution: {integrity: sha512-ttXRkkOz6WWC95KeY9+xxWL6AtImwbyMHrL1mSwqwW9u+vLp/WIElvHvCSDg0xO/Dzrggz1zv3rN5ovTRVowKg==}
+  pino-pretty@13.2.0:
+    resolution: {integrity: sha512-jjghD1ML+Di/WxjJDz6j6Y4FT7hIXOlb8h27AyJ+ohtAXJXH4PS/xkv7si+RCCIW59HMgZsMKTDgzdr0RhuRrg==}
     hasBin: true
 
   pino-std-serializers@7.0.0:
@@ -2667,8 +2667,8 @@ packages:
   process-warning@5.1.0:
     resolution: {integrity: sha512-jQSaVHsPgtyw60e1rQ/A+/ArPEj/S8pS/vFnyGa/gYFXrKk/6RuDkoqVDQ5NI5MmS01698ltlAk0NoDBNLujRw==}
 
-  pump@3.0.0:
-    resolution: {integrity: sha512-LwZy+p3SFs1Pytd/jYct4wpv49HiYCqd9Rlc5ZVdk0V+8Yzv6jR5Blk3TRmPL1ft69TxP0IMZGJ+WPFU2BFhww==}
+  pump@3.0.4:
+    resolution: {integrity: sha512-VS7sjc6KR7e1ukRFhQSY5LM2uBWAUPiOPa/A3mkKmiMwSmRFUITt0xuj+/lesgnCv+dPIEYlkzrcyXgquIHMcA==}
 
   punycode@2.3.1:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
@@ -2786,6 +2786,9 @@ packages:
   secure-json-parse@4.0.0:
     resolution: {integrity: sha512-dxtLJO6sc35jWidmLxo7ij+Eg48PM/kleBsxpC8QJE0qJICe+KawkDQmvCMZUr9u7WKVHgMW6vy3fQ7zMiFZMA==}
 
+  secure-json-parse@4.1.0:
+    resolution: {integrity: sha512-l4KnYfEyqYJxDwlNVyRfO2E4NTHfMKAWdUuA8J0yve2Dz/E/PdBepY03RvyJpssIpRFwJoCD55wA+mEDs6ByWA==}
+
   semver@5.7.2:
     resolution: {integrity: sha512-cBznnQ9KjJqU67B52RMC65CMarK2600WFnbkcaiwWq3xy/5haFJlshgnpjovMVJ+Hff49d8GEn0b87C5pDQ10g==}
     hasBin: true
@@ -2857,6 +2860,9 @@ packages:
 
   sonic-boom@4.0.1:
     resolution: {integrity: sha512-hTSD/6JMLyT4r9zeof6UtuBDpjJ9sO08/nmS5djaA9eozT9oOlNdpXSnzcgj4FTqpk3nkLrs61l4gip9r1HCrQ==}
+
+  sonic-boom@5.0.1:
+    resolution: {integrity: sha512-I1E9tHuKe6SdS/Uab4bl2o1ZUBm2SCTDFF9eQ66ehyVcFIBixfecy9DlwXCtnRF8CUzPw7Q4Dn6JQE/8iVl/FQ==}
 
   source-map-support@0.5.13:
     resolution: {integrity: sha512-SHSKFHadjVA5oR4PPqhtAVdcBWwRYVd6g6cAXnIbRiIwc2EhPrTuKUBdSLvlEKyIP3GCf89fltvcZiP9MMFA1w==}
@@ -2951,8 +2957,8 @@ packages:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
 
-  strip-json-comments@5.0.2:
-    resolution: {integrity: sha512-4X2FR3UwhNUE9G49aIsJW5hRRR3GXGTBTZRMfv568O60ojM8HcWjV/VxAxCDW3SUND33O6ZY66ZuRcdkj73q2g==}
+  strip-json-comments@5.0.3:
+    resolution: {integrity: sha512-1tB5mhVo7U+ETBKNf92xT4hrQa3pm0MZ0PQvuDnWgAAGHDsfp4lPSpiS6psrSiet87wyGPh9ft6wmhOMQ0hDiw==}
     engines: {node: '>=14.16'}
 
   supports-color@7.2.0:
@@ -5789,7 +5795,7 @@ snapshots:
     dependencies:
       split2: 4.2.0
 
-  pino-pretty@13.1.3:
+  pino-pretty@13.2.0:
     dependencies:
       colorette: 2.0.20
       dateformat: 4.6.3
@@ -5800,10 +5806,10 @@ snapshots:
       minimist: 1.2.8
       on-exit-leak-free: 2.1.2
       pino-abstract-transport: 3.0.0
-      pump: 3.0.0
-      secure-json-parse: 4.0.0
-      sonic-boom: 4.0.1
-      strip-json-comments: 5.0.2
+      pump: 3.0.4
+      secure-json-parse: 4.1.0
+      sonic-boom: 5.0.1
+      strip-json-comments: 5.0.3
 
   pino-std-serializers@7.0.0: {}
 
@@ -5896,7 +5902,7 @@ snapshots:
 
   process-warning@5.1.0: {}
 
-  pump@3.0.0:
+  pump@3.0.4:
     dependencies:
       end-of-stream: 1.4.4
       once: 1.4.0
@@ -6019,6 +6025,8 @@ snapshots:
 
   secure-json-parse@4.0.0: {}
 
+  secure-json-parse@4.1.0: {}
+
   semver@5.7.2: {}
 
   semver@6.3.1: {}
@@ -6096,6 +6104,10 @@ snapshots:
   slash@3.0.0: {}
 
   sonic-boom@4.0.1:
+    dependencies:
+      atomic-sleep: 1.0.0
+
+  sonic-boom@5.0.1:
     dependencies:
       atomic-sleep: 1.0.0
 
@@ -6199,7 +6211,7 @@ snapshots:
 
   strip-json-comments@3.1.1: {}
 
-  strip-json-comments@5.0.2: {}
+  strip-json-comments@5.0.3: {}
 
   supports-color@7.2.0:
     dependencies:
