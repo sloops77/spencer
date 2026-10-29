@@ -11,7 +11,7 @@
     "access": "public"
   },
   "engines": {
-    "node": ">=24.22.1"
+    "node": ">=26.13.0"
   },
   "dependencies": {
     "@spencejs/spence-events": "workspace:^",
@@ -24,7 +24,7 @@
   "devDependencies": {
     "@spencejs/spence-config": "workspace:^",
     "@types/lodash": "~4.17.27",
-    "@types/node": "~25.9.9",
+    "@types/node": "~26.6.6",
     "await-sleep": "~0.0.1",
     "eslint": "10.13.0",
     "eslint-config-prettier": "~10.1.8",
